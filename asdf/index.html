@@ -15,24 +15,24 @@ echo "env:" | stderrNotice
 echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | stderrNotice
 
 echo "Install asdf to \"~/.asdf\"" | stderrNotice
-test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}" | stderrinfo
+test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}" | stderrInfo
 
 echo "Append codes for asdf to \"~/.bashrc\"" | stderrNotice
 # shellcheck disable=SC2016,SC2088
 grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrNotice
 # shellcheck disable=SC1090
-. ~/.asdf/asdf.sh | stderrinfo
+. ~/.asdf/asdf.sh | stderrInfo
 # shellcheck disable=SC1090
-. ~/.asdf/completions/asdf.bash | stderrinfo
+. ~/.asdf/completions/asdf.bash | stderrInfo
 
 echo "Update asdf" | stderrNotice
-asdf update | stderrinfo
+asdf update | stderrInfo
 
 echo "Update asdf plugins" | stderrNotice
-asdf plugin-update --all | stderrinfo
+asdf plugin-update --all | stderrInfo
 
 echo "Show asdf plugins current versions" | stderrNotice
-asdf current | stderrinfo
+asdf current | stderrInfo
 
 echo "正常にインストールされました。" | stderrOK
 
