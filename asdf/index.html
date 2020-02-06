@@ -14,10 +14,10 @@ asdf_version=${ASDF_VERSION:=v0.7.4}
 echo "env:" | stderrDebug
 echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | stderrDebug
 
-echo "Install asdf to \"~/.asdf\"" | stderrDebug
+echo "install asdf to \"~/.asdf\"" | stderrDebug
 test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}"
 
-echo "Append codes for asdf to \"~/.bashrc\"" | stderrDebug
+echo "append codes for asdf to \"~/.bashrc\"" | stderrDebug
 # shellcheck disable=SC2016,SC2088
 grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrDebug
 # shellcheck disable=SC1090
@@ -25,13 +25,13 @@ grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.a
 # shellcheck disable=SC1090
 . ~/.asdf/completions/asdf.bash
 
-echo "Update asdf" | stderrDebug
+echo "update asdf" | stderrDebug
 asdf update
 
-echo "Update asdf plugins" | stderrDebug
+echo "update asdf plugins" | stderrDebug
 asdf plugin-update --all
 
-echo "Show asdf plugins current versions" | stderrDebug
+echo "show asdf plugins current versions" | stderrDebug
 asdf current
 
 echo "正常にインストールされました。" | stderrOK
