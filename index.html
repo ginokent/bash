@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090
+cat >/dev/null <<'# djeeno.github.io'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+# djeeno.github.io
+##
+
+cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
+
+!!注意!!
+  このファイルを実行しないでください。
+  このファイルは実行されることを想定して作成されていません。
+
+よく使うかもしれないコマンド群の個人用チートシートです。
+
+以下のように curl コマンドなどの CLI から参照されることを想定しています。
+
+$ curl https://djeeno.github.io/
+
+(C) 2018 djeeno
+
+DOCUMENT
+
+# 正常終了
+exit 0
+
+# ====================================================================================================
+#   ここから
+# ====================================================================================================
+
+# cdiff : diff と sed だけで作られた色付き diff
+cdiff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(printf '\e[1m');N=$(printf '\e[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
+
+# du : ルートディレクトリより 1 階層掘って使用量を出力する
+du -h -d 1 --exclude=/proc /
+
+# docker : 全部 kill & rm
+{ docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
+
+# git : git-completion & git-prompt プロンプトに各種情報を表示
+test -f ~/.git-completion.bash || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash; test -f ~/.git-completion.bash && source "$_"
+test -f ~/.git-prompt.sh || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh; test -f ~/.git-prompt.sh && source "$_"
+export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1
+if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
+
+
+# kubectl : kubectl is a function that wraps kubectl commands and checks the Kubernetes context at run-time.
+kubectl() {
+  # if has 1 argument || has -h --help --dry-run option || Sub-commands that are not dangerous if executed without confirmation; then
+  if [ $# -le 1 ] || { echo " $* " | grep -Eq -- ' -h | --help | --dry-run '; } \
+    || { echo " $* " | grep -Eq ' api-resources | api-version | cluster-info | completion | config | describe | diff | explain | get | logs | top | version | wait '; }; then
+    command kubectl "$@"
+    return $?
+  fi
+  printf "\e[01;33m%s\n%s\e[0m" "# CurrentContext: " "#   "
+  command kubectl config current-context
+  printf "\e[01;33m%s\e[0m" "# Press Enter key to continue... "
+  read -r
+  command kubectl "$@"
+}
+
+
+# ====================================================================================================
+#   ここまで
+# ====================================================================================================
+
+# (C) 2018 djeeno </code></pre>

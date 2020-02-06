@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+cat >/dev/null <<'# djeeno.github.io'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+# djeeno.github.io
+##
+
+# 色
+export green='\033[32m'
+export blue='\033[34m'
+export normal='\033[0m'
+
+# 関数
+stderrError ()  { awk '{print "\033[31m[  error]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrNotice () { awk '{print "\033[01m[ notice]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrInfo ()   { awk '{print "\033[34m[   info]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrOK ()     { awk '{print "\033[32m[     ok]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrWarn ()   { awk '{print "\033[33m[warning]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+
+# CPUアーキテクチャ判定用
+export envIsAMD64=false
+
+# カーネル判定用
+export envIsDarwin=false
+export envIsLinux=false
+
+# Ubuntu
+export envIsUbuntu=false
+export envIsUbuntu1404=false
+export envIsUbuntu1604=false
+export envIsUbuntu1804=false
+
+# CentOS
+export envIsCentOS=false
+export envIsCentOS6=false
+export envIsCentOS7=false
+export envIsCentOS8=false
+
+# CPUアーキテクチャ判定
+if { uname -m | grep -q ^x86_64$; }; then
+  envIsAMD64=true
+fi
+
+# カーネル判定
+if { uname -s | grep -q ^Darwin$; }; then
+  envIsDarwin=true
+elif { uname -s | grep -q ^Linux$; }; then
+  envIsLinux=true
+fi
+
+# ディストリビューション及びバージョン判定
+if { grep -q "\"Ubuntu 14\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+  envIsUbuntu=true
+  envIsUbuntu1404=true
+elif { grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+  envIsUbuntu=true
+  envIsUbuntu1604=true
+elif { grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+  envIsUbuntu=true
+  envIsUbuntu1804=true
+elif { grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; }; then
+  envIsCentOS=true
+  envIsCentOS6=true
+elif { grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; }; then
+  envIsCentOS=true
+  envIsCentOS7=true
+elif { grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; }; then
+  envIsCentOS=true
+  envIsCentOS8=true
+fi
+
+# 読み込み判定用
+export envIsLoaded=true
+
+# ログ出力
+{ echo 'envs:'; env | grep ^envIs | sort | awk '{print "  - "$0}'; } | stderrInfo
+
+
+# (C) 2018 djeeno </code></pre>
