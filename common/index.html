@@ -73,7 +73,7 @@ fi
 export envIsLoaded=true
 
 # ログ出力
-{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  - "$0}'; } | stderrDebug
+{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | stderrDebug
 
 
 # (C) 2018 djeeno </code></pre>
