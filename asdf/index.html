@@ -12,22 +12,24 @@ export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "cur
 
 asdf_version=${ASDF_VERSION:=v0.7.4}
 echo "env:" | stderrNotice
-echo "  - ASDF_VERSION: ${ASDF_VERSION:-USE_DEFAULT}" | stderrNotice
+echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | stderrNotice
 
 echo "Install asdf to \"~/.asdf\"" | stderrNotice
-test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}"
+test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}" | stderrinfo
 
 echo "Append codes for asdf to \"~/.bashrc\"" | stderrNotice
 # shellcheck disable=SC2016,SC2088
 grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrNotice
 # shellcheck disable=SC1090
-. ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
+. ~/.asdf/asdf.sh | stderrinfo
+# shellcheck disable=SC1090
+. ~/.asdf/completions/asdf.bash | stderrinfo
 
 echo "Update asdf" | stderrNotice
-asdf update
+asdf update | stderrinfo
 
 echo "Update asdf plugins" | stderrNotice
-asdf plugin-update --all
+asdf plugin-update --all | stderrinfo
 
 echo "Show asdf plugins current versions" | stderrNotice
 asdf current | stderrinfo
