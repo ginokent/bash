@@ -30,6 +30,8 @@ echo "Update asdf plugins" | stderrNotice
 asdf plugin-update --all
 
 echo "Show asdf plugins current versions" | stderrNotice
-asdf current
+asdf current | stderrStdout
+
+echo "正常にインストールされました。" | stderrOK
 
 # (C) 2018 djeeno </code></pre></div>
