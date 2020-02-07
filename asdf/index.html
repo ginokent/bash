@@ -11,27 +11,27 @@ export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "cur
 [ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
 
 asdf_version=${ASDF_VERSION:=v0.7.4}
-echo "env:" | stderrDebug
-echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | stderrDebug
+echo "env:" | stderrInfo
+echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | stderrInfo
 
-echo "install asdf to \"~/.asdf\"" | stderrDebug
+echo "install asdf to \"~/.asdf\"" | stderrInfo
 test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}"
 
-echo "append codes for asdf to \"~/.bashrc\"" | stderrDebug
+echo "append codes for asdf to \"~/.bashrc\"" | stderrInfo
 # shellcheck disable=SC2016,SC2088
-grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrDebug
+grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrInfo
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh
 # shellcheck disable=SC1090
 . ~/.asdf/completions/asdf.bash
 
-echo "update asdf" | stderrDebug
+echo "update asdf" | stderrInfo
 asdf update
 
-echo "update asdf plugins" | stderrDebug
+echo "update asdf plugins" | stderrInfo
 asdf plugin-update --all
 
-echo "show asdf plugins current versions" | stderrDebug
+echo "show asdf plugins current versions" | stderrInfo
 asdf current
 
 echo "正常にインストールされました。" | stderrOK
