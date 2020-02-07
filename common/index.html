@@ -15,7 +15,7 @@ stderrNotice () { awk '{print "\033[01m[ notice]: "$0"\033[0m"}' /dev/stdin 1>&2
 stderrError ()  { awk '{print "\033[31m[  error]: "$0"\033[0m"}' /dev/stdin 1>&2; }
 stderrOK ()     { awk '{print "\033[32m[     ok]: "$0"\033[0m"}' /dev/stdin 1>&2; }
 stderrWarn ()   { awk '{print "\033[33m[warning]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrInfo ()   { awk '{print "\033[34m[  debug]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrInfo ()   { awk '{print "\033[34m[   info]: "$0"\033[0m"}' /dev/stdin 1>&2; }
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
