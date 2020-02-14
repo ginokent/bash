@@ -34,15 +34,6 @@ cdiff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(pr
 # du : ルートディレクトリより 1 階層掘って使用量を出力する
 du -h -d 1 --exclude=/proc /
 
-# docker : 全部 kill & rm
-{ docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
-
-# git : git-completion & git-prompt プロンプトに各種情報を表示
-test -f ~/.git-completion.bash || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash; test -f ~/.git-completion.bash && source "$_"
-test -f ~/.git-prompt.sh || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh; test -f ~/.git-prompt.sh && source "$_"
-export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1
-if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
-
 
 # ==================================================
 # git Git
@@ -51,10 +42,20 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[
 # git リポジトリのルートディレクトリを出力する。
 git rev-parse --show-toplevel
 
+# git : git-completion & git-prompt プロンプトに各種情報を表示
+test -f ~/.git-completion.bash || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash; test -f ~/.git-completion.bash && source "$_"
+test -f ~/.git-prompt.sh || curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh; test -f ~/.git-prompt.sh && source "$_"
+export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1
+if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
+
+
 
 # ==================================================
 # docker Docker
 # ==================================================
+
+# docker : 全部 kill & rm
+{ docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
 
 # docker を root ユーザー以外でも実行できるように。
 sudo usermod -aG docker "$USER"
@@ -73,8 +74,44 @@ sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && su
 docker-compose down --rmi local
 docker-compose down --rmi all
 
-# Git リポジトリをボリュームとしてマウントして docker コンテナを起動する。
+# djeeno/ubuntu:18.04 の docker コンテナを起動する。
+docker run -it --rm djeeno/ubuntu:18.04 bash
+
+# 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
 docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$(git rev-parse --show-toplevel):/workspace" djeeno/ubuntu:18.04 bash
+
+# docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
+docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
+
+# よく使いそうな docker image たち
+docker run -it --rm debian:10.2     bash
+docker run -it --rm debian:9.11     bash
+docker run -it --rm debian:8.11     bash
+docker run -it --rm ubuntu:18.04    bash
+docker run -it --rm ubuntu:16.04    bash
+docker run -it --rm ubuntu:14.04    bash
+docker run -it --rm centos:8.1.1911 bash
+docker run -it --rm centos:7.7.1908 bash
+docker run -it --rm centos:6.10     bash
+
+# docker MySQL Server のコンテナを起動する。
+docker network create common
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:8.0
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:5.7
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:5.6
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:8.0
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:5.7
+# docker MySQL Server への接続コマンド。
+docker run -it --rm --network common mysql:8.0 mysql -h mysql -u root -p"password"
+docker run -it --rm --network common mysql:5.7 mysql -h mysql -u root -p"password"
+docker run -it --rm --network common mysql:5.6 mysql -h mysql -u root -p"password"
+# ローカルから docker 上の mysql への接続コマンド。
+mysql -h127.0.0.1 -P3306 -uroot -ppassword
+
+#
+docker run -di --rm --network common --name postgres -p 5432:5432 -e POSTGRES_PASSWORD="password" postgres:9.6.17
+#
+docker run -it --rm --network common postgres:9.6.17 -e PGPASSWORD="password" psql -h postgres -U postgres
 
 # kubectl : kubectl is a function that wraps kubectl commands and checks the Kubernetes context at run-time.
 kubectl() {
