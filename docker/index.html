@@ -1,0 +1,54 @@
+#!/bin/bash
+# shellcheck disable=SC1041,SC1042,SC1090
+#!/usr/bin/env bash
+# shellcheck disable=SC1090
+cat >/dev/null <<'# djeeno.github.io'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+# djeeno.github.io
+##
+
+export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
+
+# shellcheck disable=SC2154
+[ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
+
+##
+# https://hub.docker.com/repository/docker/djeeno/ubuntu
+# $ docker pull djeeno/ubuntu:18.04
+##
+docker_djeeno_ubuntu_1804 () { (
+  echo 'docker_djeeno_ubuntu_1804 () を実行します。' | stderrPipeInfo
+  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
+  TMPDIR="/tmp/docker_djeeno_ubuntu_1804"
+  trap 'rm -rf "${TMPDIR:?}"' EXIT
+  rm -rf "${TMPDIR:?}"
+  mkdir -p "${TMPDIR:?}"
+  cd "${TMPDIR:?}"
+  
+  cat <<"EOF" >Dockerfile
+FROM ubuntu:18.04
+
+LABEL maintainer="djeeno <djeeno@localhost>"
+
+RUN apt-get update && apt-get -y install bash-completion curl git vim
+
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
+EOF
+  echo 'docker build を実行します。' | stderrPipeInfo
+  docker build --tag djeeno_ubuntu_1804 .
+  
+  echo 'docker run をテスト実行します。' | stderrPipeInfo
+  docker run --rm --name test_djeeno_ubuntu_1804 djeeno_ubuntu_1804
+  
+  echo 'docker tag を実行します。' | stderrPipeInfo
+  docker tag djeeno_ubuntu_1804 djeeno/ubuntu:18.04
+  
+  echo 'docker push を実行します。 (事前に"docker login" を実行する必要があります)' | stderrPipeInfo
+  docker push djeeno/ubuntu:18.04
+)} && docker_djeeno_ubuntu_1804
+
+
+
+# (C) 2018 djeeno </code></pre></div>

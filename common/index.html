@@ -10,12 +10,12 @@ export blue='\033[34m'
 export normal='\033[0m'
 
 # 関数
-stderrDebug ()  { awk '{print "\033[00m[  debug]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrNotice () { awk '{print "\033[01m[ notice]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrError ()  { awk '{print "\033[31m[  error]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrOK ()     { awk '{print "\033[32m[     ok]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrWarn ()   { awk '{print "\033[33m[warning]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrInfo ()   { awk '{print "\033[34m[   info]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeDebug ()  { awk '{print "\033[00m[  debug]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeNotice () { awk '{print "\033[01m[ notice]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeError ()  { awk '{print "\033[31m[  error]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeOK ()     { awk '{print "\033[32m[     ok]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeWarn ()   { awk '{print "\033[33m[warning]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeInfo ()   { awk '{print "\033[34m[   info]: "$0"\033[0m"}' /dev/stdin 1>&2; }
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
@@ -73,7 +73,7 @@ fi
 export envIsLoaded=true
 
 # ログ出力
-{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | stderrInfo
+{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | stderrPipeInfo
 
 
 # (C) 2018 djeeno </code></pre>
