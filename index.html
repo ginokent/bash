@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1090
 cat >/dev/null <<'# djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 # djeeno.github.io
@@ -43,6 +44,13 @@ export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILE
 if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
 
 
+# ==================================================
+# git Git
+# ==================================================
+
+# git リポジトリのルートディレクトリを出力する。
+git rev-parse --show-toplevel
+
 
 # ==================================================
 # docker Docker
@@ -50,6 +58,12 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[
 
 # docker を root ユーザー以外でも実行できるように。
 sudo usermod -aG docker "$USER"
+
+# Docker for Windows を WSL1 から利用できるようにするための設定。
+command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
+
+# Docker for Mac の LinuxKit の tty に接続する。
+screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 # 最新の docker-compose をインストールする。
 DOCKER_COMPOSE_URL="$(echo "https://github.com$(curl -LRsS https://github.com/docker/compose/releases | grep -Eo "/docker/compose/releases/download/[0-9\.]+/docker-compose-$(uname -s)-$(uname -m)" | head -n 1)" | tee /dev/stderr)"
@@ -59,11 +73,8 @@ sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && su
 docker-compose down --rmi local
 docker-compose down --rmi all
 
-# Docker for Windows を WSL1 から利用できるようにするための設定。
-command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
-
-# Docker for Mac の LinuxKit の tty に接続する。
-screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
+# Git リポジトリをボリュームとしてマウントして docker コンテナを起動する。
+docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$(git rev-parse --show-toplevel):/workspace" djeeno/ubuntu:18.04 bash
 
 # kubectl : kubectl is a function that wraps kubectl commands and checks the Kubernetes context at run-time.
 kubectl() {

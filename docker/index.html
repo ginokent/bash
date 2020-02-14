@@ -31,19 +31,22 @@ FROM ubuntu:18.04
 
 LABEL maintainer="djeeno <djeeno@localhost>"
 
-RUN apt-get update && apt-get -y install bash-completion curl git vim
+RUN set -x \
+  && apt-get update && apt-get -y install bash-completion curl git locales vim \
+  && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
+  && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
+  && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
+  && echo 'test -f ~/.git-completion.bash && source "$_"' >> ~/.bashrc \
+  && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
+  && set +x
 
-RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
-  docker build --tag djeeno_ubuntu_1804 .
+  docker build --tag djeeno/ubuntu:18.04 .
   
   echo 'docker run をテスト実行します。' | stderrPipeInfo
-  docker run --rm --name test_djeeno_ubuntu_1804 djeeno_ubuntu_1804
-  
-  echo 'docker tag を実行します。' | stderrPipeInfo
-  docker tag djeeno_ubuntu_1804 djeeno/ubuntu:18.04
+  docker run --rm --name test_djeeno_ubuntu_1804 djeeno/ubuntu:18.04 date
   
   echo 'docker push を実行します。 (事前に"docker login" を実行する必要があります)' | stderrPipeInfo
   docker push djeeno/ubuntu:18.04
