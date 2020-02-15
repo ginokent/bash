@@ -1,15 +1,15 @@
-#!/bin/bash
-# shellcheck disable=SC1041,SC1042,SC1090
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
+set -E -o pipefail
 cat >/dev/null <<'# djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 # djeeno.github.io
 ##
 
+# Run the following command to execute this script:
+#   $ curl https://djeeno.github.io/docker/ | bash
+
 export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
-
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
 
@@ -19,7 +19,7 @@ export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "cur
 ##
 docker_djeeno_ubuntu_1804 () { (
   set -E -o pipefail
-  echo 'docker_djeeno_ubuntu_1804 () を実行します。' | stderrPipeInfo
+  echo 'docker_djeeno_ubuntu_1804 を実行します。' | stderrPipeInfo
   command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
   TMPDIR="/tmp/docker_djeeno_ubuntu_1804"
   trap 'rm -rf "${TMPDIR:?}"' EXIT
@@ -50,9 +50,12 @@ EOF
   echo 'docker run をテスト実行します。' | stderrPipeInfo
   docker run --rm --name test_djeeno_ubuntu_1804 djeeno/ubuntu:18.04 date
   
-  echo 'docker push を実行します。 (事前に"docker login" を実行する必要があります)' | stderrPipeInfo
+  echo 'docker push を実行します。 (事前に "docker login" を実行する必要があります)' | stderrPipeInfo
   docker push djeeno/ubuntu:18.04
+  
+  echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_ubuntu_1804
+
 
 
 
