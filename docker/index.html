@@ -18,6 +18,7 @@ export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "cur
 # $ docker pull djeeno/ubuntu:18.04
 ##
 docker_djeeno_ubuntu_1804 () { (
+  set -E -o pipefail
   echo 'docker_djeeno_ubuntu_1804 () を実行します。' | stderrPipeInfo
   command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
   TMPDIR="/tmp/docker_djeeno_ubuntu_1804"
@@ -32,7 +33,8 @@ FROM ubuntu:18.04
 LABEL maintainer="djeeno <djeeno@localhost>"
 
 RUN set -x \
-  && apt-get update && apt-get -y install bash-completion curl git locales vim \
+  && bash -cx 'apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version' \
+  && apt-get -y install bash-completion curl locales vim \
   && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
@@ -40,7 +42,7 @@ RUN set -x \
   && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
   && set +x
 
-ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
+ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8" PATH="/usr/local/bin:$PATH"
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
   docker build --tag djeeno/ubuntu:18.04 .
