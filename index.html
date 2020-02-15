@@ -35,6 +35,16 @@ exit 0
 # cdiff : diff と sed だけで作られた色付き diff
 cdiff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(printf '\e[1m');N=$(printf '\e[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
 
+# tac :ファイルの内容や標準入力の内容を逆順に出力する。 cat の逆。
+tac() {
+  awk_script="{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}"
+  if [ $# -ge 1 ]; then
+    cat "$@" | awk "${awk_script}"
+  else
+    awk "${awk_script}" /dev/stdin
+  fi
+}
+
 # CoreOS で tc コマンドを使う。
 # ref. tc コマンドでネットワーク遅延やパケットロスを疑似的に発生させるメモ - ようへいの日々精進XP https://inokara.hateblo.jp/entry/2016/02/14/191853
 toolbox
