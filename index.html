@@ -42,6 +42,9 @@ ssh-keygen -E md5 -l -f _path_to_public_key_
 # rsync : 網羅的なコマンド例。
 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
 
+# du : ルートディレクトリより 1 階層掘って使用量を出力する。
+du -h -d 1 --exclude=/proc /
+
 # cdiff : diff と sed だけで作られた色付き diff 。
 cdiff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(printf '\e[1m');N=$(printf '\e[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
 
@@ -205,11 +208,11 @@ kubectl() {
 }
 
 # ==================================================
-# Linux
+# vim
 # ==================================================
 
-# du : ルートディレクトリより 1 階層掘って使用量を出力する
-du -h -d 1 --exclude=/proc /
+# ${hoge} を ${hoge:?} に変換する。
+# :%s/\(\${[^:{}]*[^\?"]\)}/\1:?}/gc
 
 
 
