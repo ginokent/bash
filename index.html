@@ -56,26 +56,6 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[
 # docker Docker
 # ==================================================
 
-# docker : 全部 kill & rm
-{ docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
-
-# docker : docker を root ユーザー以外でも実行できるように。
-sudo usermod -aG docker "$USER"
-
-# docker : Docker for Windows を WSL1 から利用できるようにするための設定。
-command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
-
-# docker : Docker for Mac の LinuxKit の tty に接続する。
-screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
-
-# docker-compose : 最新の docker-compose をインストールする。
-DOCKER_COMPOSE_URL="$(echo "https://github.com$(curl -LRsS https://github.com/docker/compose/releases | grep -Eo "/docker/compose/releases/download/[0-9\.]+/docker-compose-$(uname -s)-$(uname -m)" | head -n 1)" | tee /dev/stderr)"
-sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
-
-# docker-compose : `ERROR: readlink /var/lib/docker/overlay2: invalid argument` が出た時に実行する。
-docker-compose down --rmi local
-docker-compose down --rmi all
-
 # docker : djeeno/ubuntu:18.04 の docker コンテナを起動する。
 docker run -it --rm djeeno/ubuntu:18.04 bash
 
@@ -98,22 +78,54 @@ docker run -it --rm centos:6.10     bash
 
 # docker : MySQL Server のコンテナを起動する。
 docker network create common
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:8.0
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:5.7
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="password" mysql:5.6
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:8.0
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.7
+docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.6
 docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:8.0
 docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:5.7
 # docker : MySQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm --network common mysql:8.0 mysql -h mysql -u root -p"password"
-docker run -it --rm --network common mysql:5.7 mysql -h mysql -u root -p"password"
-docker run -it --rm --network common mysql:5.6 mysql -h mysql -u root -p"password"
+docker run -it --rm --network common mysql:8.0 sh -c "mysql -h mysql -P 3306 -u root --password=password"
+docker run -it --rm --network common mysql:5.7 sh -c "mysql -h mysql -P 3306 -u root --password=password"
+docker run -it --rm --network common mysql:5.6 sh -c "mysql -h mysql -P 3306 -u root --password=password"
 # docker : ローカルから docker 上の mysql への接続コマンド。
-mysql -h127.0.0.1 -P3306 -uroot -ppassword
+mysql -h 127.0.0.1 -P 3306 -u root --password=password
 
 # docker : PostgreSQL Server のコンテナを起動する。
-docker run -di --rm --network common --name postgres -p 5432:5432 -e POSTGRES_PASSWORD="password" postgres:9.6.17
+docker run -di --rm --network common --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6.17
 # docker : PostgreSQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm --network common postgres:9.6.17 -e PGPASSWORD="password" psql -h postgres -U postgres
+docker run -it --rm --network common postgres:9.6.17 sh -c "PGPASSWORD=password psql -h postgres -U postgres"
+
+# docker : Redis Server のコンテナを起動する。
+docker run -di --rm --network common --name redis -p 6379:6379 redis:2.8
+# docker : Redis Server への接続コマンドをコンテナ上で実行する。
+docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis"
+
+# docker : ビルド時に作成された不要な中間イメージを掃除する。
+docker image ls --filter "dangling=true" -aq | xargs docker image rm
+
+# docker : 全部 kill して rm する。
+{ docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
+
+# docker : 掃除する。
+{ docker container prune -f; docker volume prune -f; docker image prune -f; }
+docker system prune
+
+# docker : docker を root ユーザー以外でも実行できるように。
+sudo usermod -aG docker "$USER"
+
+# docker : Docker for Windows を WSL1 から利用できるようにするための設定。
+command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
+
+# docker : Docker for Mac の LinuxKit の tty に接続する。
+screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
+
+# docker-compose : 最新の docker-compose をインストールする。
+DOCKER_COMPOSE_URL="$(echo "https://github.com$(curl -LRsS https://github.com/docker/compose/releases | grep -Eo "/docker/compose/releases/download/[0-9\.]+/docker-compose-$(uname -s)-$(uname -m)" | head -n 1)" | tee /dev/stderr)"
+sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+
+# docker-compose : `ERROR: readlink /var/lib/docker/overlay2: invalid argument` が出た時に実行する。
+docker-compose down --rmi local
+docker-compose down --rmi all
 
 
 
