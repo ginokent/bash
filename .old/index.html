@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090
+cat >/dev/null <<'# djeeno.github.io'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+# djeeno.github.io
+##
+
+cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
+
+!!注意!!
+  このファイルを実行しないでください。
+  このファイルは実行されることを想定して作成されていません。
+
+よく使うかもしれないコマンド群の個人用チートシートです。
+
+以下のように curl コマンドなどの CLI から参照されることを想定しています。
+
+$ curl https://djeeno.github.io/
+
+(C) 2018 djeeno
+
+DOCUMENT
+
+# 正常終了
+exit 0
+
+# ====================================================================================================
+#   ここから
+# ====================================================================================================
+
+# Vagrant
+mkdir -p ubuntu14.04 && cd "$_" && vagrant init ubuntu/trusty64 && vagrant up && vagrant ssh
+mkdir -p ubuntu16.04 && cd "$_" && vagrant init ubuntu/xenial64 && vagrant up && vagrant ssh
+mkdir -p centos7     && cd "$_" && vagrant init centos/7        && vagrant up && vagrant ssh
+
+
+
+# ====================================================================================================
+#   ここまで
+# ====================================================================================================
+
+# (C) 2018 djeeno </code></pre>
