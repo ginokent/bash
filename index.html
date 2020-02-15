@@ -78,27 +78,33 @@ docker run -it --rm centos:6.10     bash
 
 # docker : MySQL Server のコンテナを起動する。
 docker network create common
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:8.0
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.7
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.6
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:8.0
-docker run -di --rm --network common --name mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:5.7
+docker run -di --rm --network common --name mysql_8_0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:8.0
+docker run -di --rm --network common --name mysql_5_7 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.7
+docker run -di --rm --network common --name mysql_5_6 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:5.6
+docker run -di --rm --network common --name mysql_8_0 -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:8.0
+docker run -di --rm --network common --name mysql_5_7 -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" mysql:5.7
 # docker : MySQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm --network common mysql:8.0 sh -c "mysql -h mysql -P 3306 -u root --password=password"
-docker run -it --rm --network common mysql:5.7 sh -c "mysql -h mysql -P 3306 -u root --password=password"
-docker run -it --rm --network common mysql:5.6 sh -c "mysql -h mysql -P 3306 -u root --password=password"
+docker run -it --rm --network common mysql:8.0 sh -c "mysql -h mysql_8_0 -P 3306 -u root --password=password"
+docker run -it --rm --network common mysql:5.7 sh -c "mysql -h mysql_5_7 -P 3306 -u root --password=password"
+docker run -it --rm --network common mysql:5.6 sh -c "mysql -h mysql_5_6 -P 3306 -u root --password=password"
 # docker : ローカルから docker 上の mysql への接続コマンド。
 mysql -h 127.0.0.1 -P 3306 -u root --password=password
 
 # docker : PostgreSQL Server のコンテナを起動する。
-docker run -di --rm --network common --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6.17
+docker run -di --rm --network common --name postgres_9_6 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6
 # docker : PostgreSQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm --network common postgres:9.6.17 sh -c "PGPASSWORD=password psql -h postgres -U postgres"
+docker run -it --rm --network common postgres:9.6 sh -c "PGPASSWORD=password psql -h postgres_9_6 -U postgres"
 
 # docker : Redis Server のコンテナを起動する。
-docker run -di --rm --network common --name redis -p 6379:6379 redis:2.8
+docker run -di --rm --network common --name redis_5_0 -p 6379:6379 redis:5.0
+docker run -di --rm --network common --name redis_4_0 -p 6379:6379 redis:4.0
+docker run -di --rm --network common --name redis_3_2 -p 6379:6379 redis:3.2
+docker run -di --rm --network common --name redis_2_8 -p 6379:6379 redis:2.8
 # docker : Redis Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis"
+docker run -it --rm --network common redis:5.0 sh -c "redis-cli -h redis_5_0 -p 6379"
+docker run -it --rm --network common redis:4.0 sh -c "redis-cli -h redis_4_0 -p 6379"
+docker run -it --rm --network common redis:3.2 sh -c "redis-cli -h redis_3_2 -p 6379"
+docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis_2_8 -p 6379"
 
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
