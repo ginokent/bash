@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -E -o pipefail
+cat >/dev/null <<'# djeeno.github.io'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+# djeeno.github.io
+##
+
+# Run the following command to install:
+#   $ curl https://djeeno.github.io/direnv/ | bash
+
+export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
+# shellcheck disable=SC2154
+[ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
+
+echo "env:" | stderrPipeInfo
+echo "  DIRENV_VERSION: ${DIRENV_VERSION:-USE_DEFAULT}" | stderrPipeInfo
+direnv_version=${DIRENV_VERSION:=2.20.0}
+
+if ! command -v direnv 1>/dev/null; then
+  commands_for_install="
+    curl -LR \"https://github.com/direnv/direnv/releases/download/v${direnv_version}/direnv.\$(uname -s | tr A-Z a-z)-amd64\" -o /usr/local/bin/direnv
+    chmod +x /usr/local/bin/direnv
+  "
+
+  if [ ! -w /usr/local/bin ] || [ ! -w /usr/local/bin/direnv ]; then
+    sudo -E bash -c "eval ${commands_for_install}"
+  else
+    eval "${commands_for_install}"
+  fi
+
+  if ! command -v direnv 1>/dev/null; then
+    echo "direnv not installed" | stderrPipeError
+    exit 1
+  fi
+fi
+
+echo "direnv installed" | stderrPipeOK
+
+
+
+# (C) 2018 djeeno </code></pre></div>

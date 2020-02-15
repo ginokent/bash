@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
+set -E -o pipefail
 cat >/dev/null <<'# djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 # djeeno.github.io
 ##
 
+# Run the following command to install:
+#   $ curl https://djeeno.github.io/asdf/ | bash
+
 export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
-
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
 
@@ -34,6 +37,8 @@ asdf plugin-update --all
 echo "show asdf plugins current versions" | stderrPipeInfo
 asdf current
 
-echo "正常にインストールされました。" | stderrPipeOK
+echo "asdf installed" | stderrPipeOK
+
+
 
 # (C) 2018 djeeno </code></pre></div>
