@@ -63,6 +63,11 @@ openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | grep -E 'Cer
 find . -name "*.html" -exec wc -l {} \+
 find . -name "*.html" -exec wc -l {} \;
 
+_readline_history() {
+  READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]][[:space:]]*//' | peco --layout bottom-up)
+  READLINE_POINT=${#READLINE_LINE}
+} && bind -x '"\C-r":_readline_history'
+
 # tac :ファイルの内容や標準入力の内容を逆順に出力する。 cat の逆。
 tac() {
   awk_script="{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}"
