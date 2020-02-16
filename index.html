@@ -48,6 +48,12 @@ du -h -d 1 --exclude=/proc /
 # cdiff : diff と sed だけで作られた色付き diff 。
 cdiff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(printf '\e[1m');N=$(printf '\e[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
 
+# ps.sh : ps コマンドの代わり。
+ps_sh() { _piddirs=$(find /proc -maxdepth 1 -type d -name '[0-9]*'); printf 'UID\tPID\tPPID\tCMD\n'; echo "$_piddirs" | sed s@/proc/@@ | while read -r PID; do if [ -d "/proc/$PID" ]; then printf '%s\t%d\t%d\t%s\n' "$(stat -c '%U' "/proc/$PID")" "$PID" "$(cut -d' ' -f4 "/proc/$PID/stat")" "$(cat -e "/proc/$PID/cmdline" | sed 's/\^@$//; s/\^@/ /g')"; fi; done; } && ps_sh
+
+# alias : Linux 用よく使う alias 詰め合わせ。
+alias rm='rm -i'; alias cp='cp -i'; alias mv='mv -i'; alias ls='ls --color=auto'; alias ll='ls -alF';
+
 # openssl : 証明書期限チェック。
 openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
 # openssl : 証明書チェーンチェック。
