@@ -54,8 +54,11 @@ EOF
   docker run --rm --name test_djeeno_ubuntu_1804 ${DOCKER_TAG} date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_TAG}
+  
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
+  docker push ${DOCKER_REPOSITORY}:latest
   
   echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_ubuntu_1804
@@ -94,8 +97,11 @@ EOF
   docker run --rm --name test_djeeno_awscli ${DOCKER_TAG} date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_TAG}
+  
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
+  docker push ${DOCKER_REPOSITORY}:latest
   
   echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_awscli
