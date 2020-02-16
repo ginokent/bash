@@ -27,7 +27,8 @@ docker_djeeno_ubuntu_1804 () { (
   mkdir -p "${TMPDIR:?}"
   cd "${TMPDIR:?}"
   
-  DOCKER_TAG=djeeno/ubuntu:18.04
+  DOCKER_REPOSITORY=djeeno/ubuntu
+  DOCKER_TAG=${DOCKER_REPOSITORY}:18.04
   
   cat <<"EOF" >Dockerfile
 FROM ubuntu:18.04
@@ -53,6 +54,7 @@ EOF
   docker run --rm --name test_djeeno_ubuntu_1804 ${DOCKER_TAG} date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_TAG}
   
   echo "正常に実行が完了しました。" | stderrPipeOK
@@ -73,7 +75,8 @@ docker_djeeno_awscli() { (
   cd "${TMPDIR:?}"
   
   AWSCLI_VERSION=1.17.12
-  DOCKER_TAG=djeeno/awscli:${AWSCLI_VERSION}
+  DOCKER_REPOSITORY=djeeno/awscli
+  DOCKER_TAG=${DOCKER_REPOSITORY}:${AWSCLI_VERSION}
   
   cat <<EOF >Dockerfile
 FROM python:3.8.1
@@ -91,6 +94,7 @@ EOF
   docker run --rm --name test_djeeno_awscli ${DOCKER_TAG} date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_TAG}
   
   echo "正常に実行が完了しました。" | stderrPipeOK
