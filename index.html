@@ -171,8 +171,9 @@ docker run -it --rm --network common redis:3.2 sh -c "redis-cli -h redis_3_2 -p 
 docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis_2_8 -p 6379"
 
 # docker : コンテナから CLI を実行する（ローカル環境を汚さないため）。
-alias mysql-docker='docker run -it --rm mysql:8.0 mysql'
+alias     mysql-docker='docker run -it --rm mysql:8.0 mysql'
 alias redis-cli-docker='docker run -it --rm redis:5.0 redis-cli'
+alias       aws-docker='docker run -it --rm -v ~/.aws:/root/.aws djeeno/awscli:1.17.12 aws'
 
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
