@@ -33,6 +33,7 @@ mkdir -p ubuntu14.04 && cd "$_" && vagrant init ubuntu/trusty64 && vagrant up &&
 mkdir -p ubuntu16.04 && cd "$_" && vagrant init ubuntu/xenial64 && vagrant up && vagrant ssh
 mkdir -p centos7     && cd "$_" && vagrant init centos/7        && vagrant up && vagrant ssh
 
+alias   kubectl-docker='docker run -it --rm -e KUBECONFIG="${KUBECONFIG}" -v "${KUBECONFIG-$HOME/.kube/config}":"${KUBECONFIG-/root/.kube/config}" djeeno/kubectl kubectl'
 
 
 # ====================================================================================================

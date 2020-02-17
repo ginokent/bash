@@ -174,7 +174,6 @@ docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis_2_8 -p 
 alias     mysql-docker='docker run -it --rm mysql:8.0 mysql'
 alias redis-cli-docker='docker run -it --rm redis:5.0 redis-cli'
 alias       aws-docker='docker run -it --rm -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_PROFILE}" -v ~/.aws:/root/.aws djeeno/awscli aws'
-alias   kubectl-docker='docker run -it --rm -e KUBECONFIG="${KUBECONFIG}" -v "${KUBECONFIG-$HOME/.kube/config}":"${KUBECONFIG-/root/.kube/config}" djeeno/kubectl kubectl'
 
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
