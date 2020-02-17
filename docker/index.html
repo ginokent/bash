@@ -14,7 +14,7 @@ export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "cur
 [ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
 
 ##
-# https://hub.docker.com/repository/docker/djeeno/ubuntu
+# https://hub.docker.com/r/djeeno/ubuntu
 # $ docker pull djeeno/ubuntu:18.04
 ##
 docker_djeeno_ubuntu_1804 () { (
@@ -64,8 +64,8 @@ EOF
 )} && docker_djeeno_ubuntu_1804
 
 ##
-# https://hub.docker.com/repository/docker/djeeno/ubuntu
-# $ docker pull djeeno/ubuntu:18.04
+# https://hub.docker.com/r/djeeno/awscli
+# $ docker pull djeeno/awscli:latest
 ##
 docker_djeeno_awscli() { (
   set -E -o pipefail
@@ -77,9 +77,9 @@ docker_djeeno_awscli() { (
   mkdir -p "${TMPDIR:?}"
   cd "${TMPDIR:?}"
   
-  AWSCLI_VERSION=1.17.12
+  VERSION=1.17.12
   DOCKER_REPOSITORY=djeeno/awscli
-  DOCKER_TAG=${DOCKER_REPOSITORY}:${AWSCLI_VERSION}
+  DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
   
   cat <<EOF >Dockerfile
 FROM python:3.8.1
@@ -88,25 +88,66 @@ LABEL maintainer="djeeno <djeeno@localhost>"
 
 RUN apt-get update \
   && apt-get install -y groff-base \
-  && pip install awscli==${AWSCLI_VERSION}
+  && pip install awscli==${VERSION}
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
-  docker build --tag ${DOCKER_TAG} .
+  docker build --tag "${DOCKER_TAG}" .
   
   echo 'docker run をテスト実行します。' | stderrPipeInfo
-  docker run --rm --name test_djeeno_awscli ${DOCKER_TAG} date
+  docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker push ${DOCKER_TAG}
+  docker push "${DOCKER_TAG}"
   
   echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
-  docker push ${DOCKER_REPOSITORY}:latest
+  docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
+  docker push "${DOCKER_REPOSITORY}:latest"
   
   echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_awscli
 
+##
+# https://hub.docker.com/r/djeeno/kubectl
+# $ docker pull djeeno/kubectl:latest
+##
+docker_djeeno_kubectl() { (
+  set -E -o pipefail
+  echo "${FUNCNAME[0]} を実行します。" | stderrPipeInfo
+  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
+  TMPDIR="/tmp/${FUNCNAME[0]}"
+  trap 'rm -rf "${TMPDIR:?}"' EXIT
+  rm -rf "${TMPDIR:?}"
+  mkdir -p "${TMPDIR:?}"
+  cd "${TMPDIR:?}"
+  
+  VERSION="$(curl -fLRsS https://storage.googleapis.com/kubernetes-release/release/stable.txt)"
+  DOCKER_REPOSITORY=djeeno/kubectl
+  DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
+  
+  cat <<EOF >Dockerfile
+FROM debian:10
 
+LABEL maintainer="djeeno <djeeno@localhost>"
+
+RUN curl -o /usr/bin/kubectl -fL https://storage.googleapis.com/kubernetes-release/release/${VERSION}/bin/linux/amd64/kubectl \
+  && chmod +x /usr/bin/kubectl
+
+EOF
+  echo 'docker build を実行します。' | stderrPipeInfo
+  docker build --tag "${DOCKER_TAG}" .
+  
+  echo 'docker run をテスト実行します。' | stderrPipeInfo
+  docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
+  
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker push "${DOCKER_TAG}"
+  
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
+  docker push "${DOCKER_REPOSITORY}:latest"
+  
+  echo "正常に実行が完了しました。" | stderrPipeOK
+)} && docker_djeeno_kubectl
 
 
 
