@@ -116,6 +116,7 @@ install_git() { $(command -v sudo) bash -cx 'apt-get update && apt-get install -
 install_git() { $(command -v sudo) bash -cx 'yum makecache && yum install -y {curl,expat,gettext,openssl,zlib}-devel gcc make tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'; } && install_git
 
 
+
 # ==================================================
 # docker Docker
 # ==================================================
