@@ -37,6 +37,7 @@ LABEL maintainer="djeeno <djeeno@localhost>"
 
 # locale
 RUN set -x \
+  && apt-get update \
   && apt-get install -y locales \
   && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
   && set +x
@@ -99,9 +100,11 @@ LABEL maintainer="djeeno <djeeno@localhost>"
 RUN set -x \
   && apt-get update \
   && apt-get install -y groff-base less \
+  && set +x
 
 RUN set -x
-  && pip install awscli==${VERSION}
+  && pip install awscli==${VERSION} \
+  && set +x
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
   docker build --tag "${DOCKER_TAG}" .
