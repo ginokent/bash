@@ -37,7 +37,7 @@ LABEL maintainer="djeeno <djeeno@localhost>"
 
 RUN set -x \
   && bash -cx 'apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version' \
-  && apt-get -y install bash-completion curl locales vim \
+  && apt-get -y install bash-completion curl less locales vim wget \
   && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
