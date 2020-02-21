@@ -118,7 +118,7 @@ RUN set -x \
   && apt-get install -y groff-base less \
   && set +x
 
-RUN set -x
+RUN set -x \
   && pip install awscli==${VERSION} \
   && set +x
 EOF
