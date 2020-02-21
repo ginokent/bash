@@ -65,8 +65,6 @@ RUN set -x \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
   && echo 'test -f ~/.git-completion.bash && source "$_"' >> ~/.bashrc \
   && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
-  && curl -fLRSs https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy -o /usr/local/bin/diff-so-fancy \
-  && chmod +x /usr/local/bin/diff-so-fancy \
   && set +x
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
