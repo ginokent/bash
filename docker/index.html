@@ -75,6 +75,13 @@ EOF
 )} && docker_djeeno_ubuntu_1804
 
 ##
+# https://hub.docker.com/r/djeeno/workspace
+# $ docker pull djeeno/workspace:latest
+##
+docker tag djeeno/ubuntu:latest djeeno/workspace:latest
+docker push djeeno/workspace:latest
+
+##
 # https://hub.docker.com/r/djeeno/awscli
 # $ docker pull djeeno/awscli:latest
 ##
