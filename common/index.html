@@ -10,12 +10,13 @@ export blue='\033[34m'
 export normal='\033[0m'
 
 # 関数
-stderrPipeDebug ()  { awk '{print "\033[00m[  debug]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeNotice () { awk '{print "\033[01m[ notice]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeError ()  { awk '{print "\033[31m[  error]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeOK ()     { awk '{print "\033[32m[     ok]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeWarn ()   { awk '{print "\033[33m[warning]: "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeInfo ()   { awk '{print "\033[34m[   info]: "$0"\033[0m"}' /dev/stdin 1>&2; }
+datef () { TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00"; }
+stderrPipeDebug ()  { awk '{print "\033[00m'"$(datef)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeNotice () { awk '{print "\033[01m'"$(datef)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeError ()  { awk '{print "\033[31m'"$(datef)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeOK ()     { awk '{print "\033[32m'"$(datef)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeWarn ()   { awk '{print "\033[33m'"$(datef)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; }
+stderrPipeInfo ()   { awk '{print "\033[34m'"$(datef)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; }
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false

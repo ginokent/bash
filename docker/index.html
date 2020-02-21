@@ -35,14 +35,24 @@ FROM ubuntu:18.04
 
 LABEL maintainer="djeeno <djeeno@localhost>"
 
+# locale
 RUN set -x \
-  && bash -cx 'apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version' \
-  && apt-get -y install bash-completion curl less locales vim wget \
+  && apt-get install -y locales \
   && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
+  && set +x
+
+# git
+RUN set -x \
+  && bash -cx 'apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext less make tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version' \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
   && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
   && echo 'test -f ~/.git-completion.bash && source "$_"' >> ~/.bashrc \
   && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
+  && set +x
+
+# common
+RUN set -x \
+  && apt-get install -y bash-completion curl sudo vim wget \
   && set +x
 
 ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8" PATH="/usr/local/bin:$PATH"
@@ -86,8 +96,11 @@ FROM python:3.8.1
 
 LABEL maintainer="djeeno <djeeno@localhost>"
 
-RUN apt-get update \
-  && apt-get install -y groff-base \
+RUN set -x \
+  && apt-get update \
+  && apt-get install -y groff-base less \
+
+RUN set -x
   && pip install awscli==${VERSION}
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
@@ -105,49 +118,6 @@ EOF
   
   echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_awscli
-
-##
-# https://hub.docker.com/r/djeeno/kubectl
-# $ docker pull djeeno/kubectl:latest
-##
-docker_djeeno_kubectl() { (
-  set -E -o pipefail
-  echo "${FUNCNAME[0]} を実行します。" | stderrPipeInfo
-  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
-  TMPDIR="/tmp/${FUNCNAME[0]}"
-  trap 'rm -rf "${TMPDIR:?}"' EXIT
-  rm -rf "${TMPDIR:?}"
-  mkdir -p "${TMPDIR:?}"
-  cd "${TMPDIR:?}"
-  
-  VERSION="$(curl -fLRsS https://storage.googleapis.com/kubernetes-release/release/stable.txt)"
-  DOCKER_REPOSITORY=djeeno/kubectl
-  DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
-  
-  curl -o ./kubectl -fLR "https://storage.googleapis.com/kubernetes-release/release/${VERSION}/bin/linux/amd64/kubectl"
-  chmod +x ./kubectl
-  cat <<EOF >Dockerfile
-FROM debian:10
-
-LABEL maintainer="djeeno <djeeno@localhost>"
-
-COPY ./kubectl /usr/bin/kubectl
-EOF
-  echo 'docker build を実行します。' | stderrPipeInfo
-  docker build --tag "${DOCKER_TAG}" .
-  
-  echo 'docker run をテスト実行します。' | stderrPipeInfo
-  docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
-  
-  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker push "${DOCKER_TAG}"
-  
-  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
-  docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
-  docker push "${DOCKER_REPOSITORY}:latest"
-  
-  echo "正常に実行が完了しました。" | stderrPipeOK
-)} && docker_djeeno_kubectl
 
 
 
