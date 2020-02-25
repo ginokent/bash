@@ -32,6 +32,9 @@ exit 0
 # 共通
 # ==================================================
 
+# wget : 1 つの HTML ファイルとして保存する。
+wget --mirror --page-requisites --html-extension --convert-links https://github.com/
+
 # ssh-keygen : 秘密鍵を作成する。
 ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://djeeno.github.io/keys" -N ""
 ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://djeeno.github.io/keys" -N ""
