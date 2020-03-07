@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -E -o pipefail
-cat >/dev/null <<'# djeeno.github.io'
+cat >/dev/null <<'#djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-# djeeno.github.io
+#djeeno.github.io
 ##
 
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/docker/ | bash
 
-export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
-[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+[ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 # shellcheck disable=SC2154
-[ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
+[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://djeeno.github.io/common/)" || exit 1
 
 ##
 # https://hub.docker.com/r/djeeno/ubuntu

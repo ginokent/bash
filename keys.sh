@@ -9,12 +9,12 @@ printf '\033[34m%s\033[0m\n' "# env:"
 printf '\033[34m%s\033[0m\n' "#   PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
 public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/keys"}"
 
-: Set HTTP_CLIENT
-HTTP_CLIENT=$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )
-[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
+: Set http_get
+http_get=$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )
+[ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 
 : Set public_keys
-public_keys=$(${HTTP_CLIENT} "${public_keys_http_url}" | grep ^ssh-)
+public_keys=$(${http_get} "${public_keys_http_url}" | grep ^ssh-)
 test -n "${public_keys:?"public key not found in ${public_keys_http_url}"}" || exit 1
 
 : Add public_keys or Generate authorized_keys file

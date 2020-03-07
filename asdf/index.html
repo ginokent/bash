@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 set -E -o pipefail
-cat >/dev/null <<'# djeeno.github.io'
+cat >/dev/null <<'#djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-# djeeno.github.io
+#djeeno.github.io
 ##
 
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/asdf/ | bash
 
-export HTTP_CLIENT; HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
-[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
-# shellcheck disable=SC2154
-[ "${envIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.github.io/common/)" || exit 1
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://djeeno.github.io/common/)" || exit 1
 
 asdf_version=${ASDF_VERSION:=v0.7.4}
 echo "env:" | stderrPipeInfo
@@ -24,9 +21,7 @@ echo "append codes for asdf to \"~/.bashrc\"" | stderrPipeInfo
 # shellcheck disable=SC2016,SC2088
 grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | stderrPipeInfo
 # shellcheck disable=SC1090
-. ~/.asdf/asdf.sh
-# shellcheck disable=SC1090
-. ~/.asdf/completions/asdf.bash
+. ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
 
 echo "update asdf" | stderrPipeInfo
 asdf update
