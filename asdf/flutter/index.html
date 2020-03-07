@@ -1,53 +1,41 @@
 #!/usr/bin/env bash
-cat >/dev/null <<'# djeeno.github.io'
+set -E -o pipefail
+cat >/dev/null <<'#djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-# djeeno.github.io
+#djeeno.github.io
 ##
 
-set -e -o pipefail
-
-# 以下コマンドを実行してインストール:
 # Run the following command to install:
-#   $ curl https://djeeno.gitlab.io/asdf/flutter/ | bash
+#   $ curl https://djeeno.github.io/asdf/flutter/ | bash
+
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://djeeno.github.io/common/)" || exit 1
+
+echo "env:" | stderrPipeInfo
+echo "  FLUTTER_VERSION: ${FLUTTER_VERSION:-USE_DEFAULT}" | stderrPipeInfo
 
 lang_name="flutter"
-: Install "${lang_name}" via asdf
+echo "install ${lang_name} via asdf" | stderrPipeInfo
 
-# shellcheck disable=SC2153
-lang_version="${FLUTTER_VERSION}"
-printf '\e[32m%s\e[0m\n' "# env:"
-printf '\e[32m%s\e[0m\n' "#   FLUTTER_VERSION: ${FLUTTER_VERSION:-USE_DEFAULT}"
+command -v asdf 1>/dev/null || eval "$(${http_get} https://djeeno.gitlab.io/asdf/)" || exit 1
 
-: Set HTTP Client
-# shellcheck disable=SC2155
-export HTTP_CLIENT="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
-[ "${HTTP_CLIENT:?"curl or wget are required to run this script"}" ] || exit 1
+# shellcheck disable=SC1090
+. ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
 
-: Run common
-# shellcheck disable=SC2154
-[ "${factIsLoaded}" = true ] || eval "$(${HTTP_CLIENT} https://djeeno.gitlab.io/common/)" || exit 1
-
-: Install asdf
-command -v asdf 1>/dev/null || eval "$(${HTTP_CLIENT} https://djeeno.gitlab.io/asdf/)" || exit 1
-
-: Init asdf
-. ~/.asdf/asdf.sh
-. ~/.asdf/completions/asdf.bash
-
-: Install
-printf '\e[32m%s\e[0m\n' "# Add ${lang_name} plugin"
+echo "add ${lang_name} plugin" | stderrPipeInfo
 asdf plugin-add "${lang_name}" || true
 
-printf '\e[32m%s\e[0m\n' "# Install ${lang_name} ${lang_version:="$(asdf list-all "${lang_name}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+.*-stable$' | sort -V | tail -n 1)"}"
+lang_version="${FLUTTER_VERSION:="$(asdf list-all "${lang_name}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+.*-stable$' | sort -V | tail -n 1)"}"
+
+echo "install ${lang_name} ${lang_version}"
 asdf install "${lang_name}" "${lang_version}"
 
-printf '\e[32m%s\e[0m\n' "# Set ${lang_name} ${lang_version} to global"
+echo "set ${lang_name} ${lang_version} to global" | stderrPipeInfo
 asdf global "${lang_name}" "${lang_version}"
 
-printf '\e[32m%s\e[0m\n' "# Run asdf ${lang_name} reshim"
+echo "run asdf ${lang_name} reshim" | stderrPipeInfo
 asdf reshim "${lang_name}"
 
-printf '\e[32m%s\e[0m\n' "# Show asdf ${lang_name} current version"
+echo "show asdf ${lang_name} current version" | stderrPipeInfo
 asdf current "${lang_name}"
 
 
