@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-cat >/dev/null <<'# djeeno.github.io'
+cat >/dev/null <<'#djeeno.github.io'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-# djeeno.github.io
+#djeeno.github.io
 ##
 
 # 色
@@ -9,14 +9,14 @@ export green='\033[32m'
 export blue='\033[34m'
 export normal='\033[0m'
 
-# 関数
-datef () { TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00"; }
-stderrPipeDebug ()  { awk '{print "\033[00m'"$(datef)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeNotice () { awk '{print "\033[01m'"$(datef)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeError ()  { awk '{print "\033[31m'"$(datef)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeOK ()     { awk '{print "\033[32m'"$(datef)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeWarn ()   { awk '{print "\033[33m'"$(datef)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; }
-stderrPipeInfo ()   { awk '{print "\033[34m'"$(datef)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; }
+# 関数 export
+datef () { TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00"; } && export -f datef
+stderrPipeDebug ()  { awk '{print "\033[00m'"$(datef)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
+stderrPipeNotice () { awk '{print "\033[01m'"$(datef)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
+stderrPipeError ()  { awk '{print "\033[31m'"$(datef)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
+stderrPipeOK ()     { awk '{print "\033[32m'"$(datef)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
+stderrPipeWarn ()   { awk '{print "\033[33m'"$(datef)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
+stderrPipeInfo ()   { awk '{print "\033[34m'"$(datef)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
@@ -37,35 +37,35 @@ export envIsCentOS6=false
 export envIsCentOS7=false
 export envIsCentOS8=false
 
-# CPUアーキテクチャ判定
-if { uname -m | grep -q ^x86_64$; }; then
+# CPU アーキテクチャ判定
+if uname -m | grep -q ^x86_64$; then
   envIsAMD64=true
 fi
 
 # カーネル判定
-if { uname -s | grep -q ^Darwin$; }; then
+if name -s | grep -q ^Darwin$; then
   envIsDarwin=true
-elif { uname -s | grep -q ^Linux$; }; then
+elif uname -s | grep -q ^Linux$; then
   envIsLinux=true
 fi
 
-# ディストリビューション及びバージョン判定
-if { grep -q "\"Ubuntu 14\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+# ディストリビューション及び OS バージョン判定
+if grep -q "\"Ubuntu 14\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
   envIsUbuntu=true
   envIsUbuntu1404=true
-elif { grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+elif grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
   envIsUbuntu=true
   envIsUbuntu1604=true
-elif { grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; }; then
+elif grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
   envIsUbuntu=true
   envIsUbuntu1804=true
-elif { grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; }; then
+elif grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; then
   envIsCentOS=true
   envIsCentOS6=true
-elif { grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; }; then
+elif grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; then
   envIsCentOS=true
   envIsCentOS7=true
-elif { grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; }; then
+elif grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; then
   envIsCentOS=true
   envIsCentOS8=true
 fi
@@ -75,6 +75,7 @@ export envIsLoaded=true
 
 # ログ出力
 { echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | stderrPipeInfo
+
 
 
 # (C) 2018 djeeno </code></pre>
