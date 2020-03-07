@@ -6,7 +6,7 @@ cat >/dev/null <<'#djeeno.github.io'
 ##
 
 # Run the following command to install:
-#   $ curl https://djeeno.github.io/asdf/golang/ | bash
+#   $ curl https://djeeno.github.io/asdf/python/ | bash
 
 export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://djeeno.github.io/common/)" || exit 1
 
