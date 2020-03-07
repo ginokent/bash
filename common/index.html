@@ -49,7 +49,7 @@ if uname -m | grep -q ^x86_64$; then
 fi
 
 # カーネル判定
-if name -s | grep -q ^Darwin$; then
+if uname -s | grep -q ^Darwin$; then
   envIsDarwin=true
 elif uname -s | grep -q ^Linux$; then
   envIsLinux=true
