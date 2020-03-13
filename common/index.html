@@ -16,13 +16,12 @@ export blue='\033[34m'
 export normal='\033[0m'
 
 # 関数 export
-datef () { TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00"; } && export -f datef
-stderrPipeDebug ()  { awk '{print "\033[00m'"$(datef)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
-stderrPipeNotice () { awk '{print "\033[01m'"$(datef)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
-stderrPipeError ()  { awk '{print "\033[31m'"$(datef)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
-stderrPipeOK ()     { awk '{print "\033[32m'"$(datef)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
-stderrPipeWarn ()   { awk '{print "\033[33m'"$(datef)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
-stderrPipeInfo ()   { awk '{print "\033[34m'"$(datef)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
+stderrPipeDebug ()  { awk '{print "\033[00m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
+stderrPipeNotice () { awk '{print "\033[01m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
+stderrPipeError ()  { awk '{print "\033[31m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
+stderrPipeOK ()     { awk '{print "\033[32m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
+stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
+stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
