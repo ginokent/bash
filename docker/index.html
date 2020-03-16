@@ -145,6 +145,57 @@ EOF
   echo "正常に実行が完了しました。" | stderrPipeOK
 )} && docker_djeeno_awscli
 
+##
+# https://hub.docker.com/r/djeeno/terraform
+# $ docker pull djeeno/terraform:latest
+##
+docker_djeeno_terraform() { (
+  set -E -o pipefail
+  echo "${FUNCNAME[0]} を実行します。" | stderrPipeInfo
+  if ! command -v docker 1>/dev/null; then
+    echo "docker がインストールされている必要があります。" | stderrPipeError
+    return 1
+  fi
+  TMPDIR="/tmp/${FUNCNAME[0]}"
+  trap 'rm -rf "${TMPDIR:?}"' EXIT
+  rm -rf "${TMPDIR:?}"
+  mkdir -p "${TMPDIR:?}"
+  cd "${TMPDIR:?}"
+  
+  VERSION=0.12.23
+  DOCKER_REPOSITORY=djeeno/terraform
+  DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
+  
+  cat << EOF >Dockerfile
+FROM alpine:3.11.3
+
+LABEL maintainer="djeeno <djeeno@localhost>"
+
+RUN set -x \
+  && apk add --no-cache curl unzip \
+  && curl -fLRsS https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip -o terraform.zip \
+  && unzip terraform.zip \
+  && rm -f terraform.zip \
+  && mv ./terraform /usr/local/bin \
+  && terraform version \
+  && set +x
+EOF
+  echo 'docker build を実行します。' | stderrPipeInfo
+  docker build --tag "${DOCKER_TAG}" .
+  
+  echo 'docker run をテスト実行します。' | stderrPipeInfo
+  docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
+  
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker push "${DOCKER_TAG}"
+  
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | stderrPipeInfo
+  docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
+  docker push "${DOCKER_REPOSITORY}:latest"
+  
+  echo "正常に実行が完了しました。" | stderrPipeOK
+)} && docker_djeeno_terraform
+
 
 
 # (C) 2018 djeeno </code></pre></div>

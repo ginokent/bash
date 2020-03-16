@@ -157,10 +157,13 @@ install_git() { $(command -v sudo) bash -cx 'yum makecache && yum install -y {cu
 docker run -it --rm djeeno/ubuntu:18.04 bash
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
-docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/workspace:latest bash -c "cd $(git rev-parse --show-toplevel) && bash -l"
+docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/workspace:latest bash -c "cd $(pwd) && bash -l"
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
+
+# docker : terraform
+docker run -it -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
 
 # docker : よく使いそうな docker image たち
 docker run -it --rm debian:10.2     bash
