@@ -66,7 +66,7 @@ RUN set -x \
   && echo 'test -f ~/.git-completion.bash && source "$_"' >> ~/.bashrc \
   && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
   && set +x
-  #&& echo 'export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi' >> ~/.bashrc \
+  #&& echo 'export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi' >> ~/.bashrc
 EOF
   echo 'docker build を実行します。' | stderrPipeInfo
   docker build --tag ${DOCKER_TAG} .
@@ -85,11 +85,11 @@ EOF
 )} && docker_djeeno_ubuntu_1804
 
 ##
-# https://hub.docker.com/r/djeeno/workspace
-# $ docker pull djeeno/workspace:latest
+# https://hub.docker.com/r/djeeno/sandbox
+# $ docker pull djeeno/sandbox:latest
 ##
-docker tag djeeno/ubuntu:latest djeeno/workspace:latest
-docker push djeeno/workspace:latest
+docker tag djeeno/ubuntu:latest djeeno/sandbox:latest
+docker push djeeno/sandbox:latest
 
 ##
 # https://hub.docker.com/r/djeeno/awscli
