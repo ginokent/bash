@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
-cat >/dev/null <<'#djeeno.github.io'
+cat >/dev/null <<'#sh.djeeno.com'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}pre{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io
+#sh.djeeno.com
 ##
 
 cat <<DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
@@ -33,9 +33,9 @@ exit 0
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
 # ssh-keygen : 秘密鍵を作成する。
-ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://djeeno.github.io/keys" -N ""
-ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://djeeno.github.io/keys" -N ""
-ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://djeeno.github.io/keys" -N ""
+ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://sh.djeeno.com/keys" -N ""
+ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://sh.djeeno.com/keys" -N ""
+ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://sh.djeeno.com/keys" -N ""
 # ssh-keygen : 公開鍵のフィンガープリントを表示する。
 ssh-keygen -E md5 -l -f _path_to_public_key_
 

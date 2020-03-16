@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -E -o pipefail
-cat >/dev/null <<'#djeeno.github.io'
+cat >/dev/null <<'#sh.djeeno.com'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io
+#sh.djeeno.com
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/direnv/ | bash
+#   $ curl https://sh.djeeno.com/direnv/ | bash
 
 export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 # shellcheck disable=SC2154
-[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://djeeno.github.io/common/)" || exit 1
+[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
 echo "env:" | stderrPipeInfo
 echo "  DIRENV_VERSION: ${DIRENV_VERSION:-USE_DEFAULT}" | stderrPipeInfo

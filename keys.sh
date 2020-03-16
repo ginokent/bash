@@ -7,7 +7,7 @@ export LANG=C LC_ALL=C
 # shellcheck disable=SC2153
 printf '\033[34m%s\033[0m\n' "# env:"
 printf '\033[34m%s\033[0m\n' "#   PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
-public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/keys"}"
+public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://sh.djeeno.com/keys"}"
 
 : Set http_get
 http_get=$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )
