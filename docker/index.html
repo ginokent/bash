@@ -20,7 +20,10 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs
 docker_djeeno_ubuntu_1804 () { (
   set -E -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | stderrPipeInfo
-  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
+  if ! command -v docker 1>/dev/null; then
+    echo "docker がインストールされている必要があります。" | stderrPipeError
+    return 1
+  fi
   TMPDIR="/tmp/${FUNCNAME[0]}"
   trap 'rm -rf "${TMPDIR:?}"' EXIT
   rm -rf "${TMPDIR:?}"
@@ -98,7 +101,10 @@ docker push djeeno/sandbox:latest
 docker_djeeno_awscli() { (
   set -E -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | stderrPipeInfo
-  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | stderrPipeError; return 1; }
+  if ! command -v docker 1>/dev/null; then
+    echo "docker がインストールされている必要があります。" | stderrPipeError
+    return 1
+  fi
   TMPDIR="/tmp/${FUNCNAME[0]}"
   trap 'rm -rf "${TMPDIR:?}"' EXIT
   rm -rf "${TMPDIR:?}"
