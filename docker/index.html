@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -E -o pipefail
-cat >/dev/null <<'#sh.djeeno.com'
+cat >/dev/null << '#sh.djeeno.com'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #sh.djeeno.com
 ##
@@ -30,7 +30,7 @@ docker_djeeno_ubuntu_1804 () { (
   DOCKER_REPOSITORY=djeeno/ubuntu
   DOCKER_TAG=${DOCKER_REPOSITORY}:18.04
   
-  cat <<"EOF" >Dockerfile
+  cat << "EOF" >Dockerfile
 FROM ubuntu:18.04
 
 LABEL maintainer="djeeno <djeeno@localhost>"
@@ -109,7 +109,7 @@ docker_djeeno_awscli() { (
   DOCKER_REPOSITORY=djeeno/awscli
   DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
   
-  cat <<EOF >Dockerfile
+  cat << EOF >Dockerfile
 FROM python:3.8.1
 
 LABEL maintainer="djeeno <djeeno@localhost>"
