@@ -5,8 +5,7 @@ cat >/dev/null << '#sh.djeeno.com'
 #sh.djeeno.com
 ##
 
-cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
-
+cat << DOCUMENT | stderrPipeNotice
 +--!!注意!!----------------------------------------------------------------------------+
 | この index.html をシェルスクリプトとして実行しないでください。                       |
 | この index.html はシェルスクリプトとして実行されることを想定して作成されていません。 |
@@ -15,10 +14,7 @@ cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
 個人用コマンドチートシート。
 
 (C) 2018 djeeno
-
 DOCUMENT
-
-# 正常終了
 exit 0
 
 # ====================================================================================================
@@ -28,6 +24,14 @@ exit 0
 # ==================================================
 # 共通
 # ==================================================
+
+# stderrPipe : いい感じログを出す。
+stderrPipeDebug ()  { awk '{print "\033[00m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
+stderrPipeNotice () { awk '{print "\033[01m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
+stderrPipeError ()  { awk '{print "\033[31m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
+stderrPipeOK ()     { awk '{print "\033[32m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
+stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
+stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
@@ -43,7 +47,7 @@ ssh-keygen -E md5 -l -f _path_to_public_key_
 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
 
 # difff : diff と sed だけで作られた色付き diff 。
-difff() { (R=$(printf '\e[31m');G=$(printf '\e[32m');B=$(printf '\e[36m');W=$(printf '\e[1m');N=$(printf '\e[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
+difff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');W=$(printf '\033[1m');N=$(printf '\033[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")}
 
 # openssl : 証明書期限チェック。
 openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
@@ -55,11 +59,18 @@ find . -name "*.html" -exec wc -l {} \+
 find . -name "*.html" -exec wc -l {} \;
 
 _readline_history() {
+  if command -v brew >/dev/null; then
+    brew install peco
+  elif command -v apt-get >/dev/null; then
+    apt-get update && apt-get install -y peco
+  else
+    echo "error: requires peco"
+  fi
   READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]][[:space:]]*//' | peco --layout bottom-up)
   READLINE_POINT=${#READLINE_LINE}
 } && bind -x '"\C-r":_readline_history'
 
-# tac :ファイルの内容や標準入力の内容を逆順に出力する。 cat の逆。
+# tac : ファイルの内容や標準入力の内容を逆順に出力する。 cat の逆。
 tac() {
   awk_script="{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}"
   if [ $# -ge 1 ]; then
@@ -73,6 +84,9 @@ tac() {
 ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.dump(YAML.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
+
+# gcloud : Google Cloud SDK をインストールする。
+bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)" && command -v gcloud
 
 
 
@@ -107,7 +121,7 @@ tc qdisc del    dev eth0 root
 # ==================================================
 
 # brew : Homebrew をインストールする。 ref. https://brew.sh/
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" && command -v brew
 
 
 
@@ -117,6 +131,9 @@ tc qdisc del    dev eth0 root
 
 # git : リポジトリのルートディレクトリを出力する。
 git rev-parse --show-toplevel
+
+# git : ブランチ名を出力する。
+git rev-parse --abbrev-ref HEAD
 
 # git : git-completion git コマンドの保管 ＆ git-prompt プロンプトに git の status などを表示
 test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
