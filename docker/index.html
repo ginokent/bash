@@ -167,12 +167,15 @@ docker_djeeno_terraform() { (
   DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
   
   cat << EOF >Dockerfile
-FROM alpine:3.11.3
+FROM djeeno/ubuntu:18.04
 
 LABEL maintainer="djeeno <djeeno@localhost>"
 
 RUN set -x \
-  && apk add --no-cache curl unzip \
+  && apt-get update \
+  && apt-get install -y curl unzip \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
   && curl -fLRsS https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip -o terraform.zip \
   && unzip terraform.zip \
   && rm -f terraform.zip \
