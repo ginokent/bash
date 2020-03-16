@@ -85,9 +85,6 @@ ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.dump(YAML.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 
-# gcloud : Google Cloud SDK をインストールする。
-bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)" && command -v gcloud
-
 
 
 # ==================================================
@@ -267,6 +264,9 @@ kubectl() {
 # ==================================================
 # GCP
 # ==================================================
+
+# gcloud : Google Cloud SDK をインストールする。
+bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)" && command -v gcloud
 
 # gcloud : 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
