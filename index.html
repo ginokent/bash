@@ -217,6 +217,9 @@ sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && su
 docker-compose down --rmi local
 docker-compose down --rmi all
 
+# api コンテナから db コンテナに MySQL 接続する。
+docker-compose exec api bash -c 'mysql -h db -P 3306 -u root --password=password'
+
 
 
 # ==================================================
