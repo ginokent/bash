@@ -160,7 +160,7 @@ docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.gitconfig:/root/.gi
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
 
 # docker : terraform
-docker run -it -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
+docker run -it -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOOGLE_APPLICATION_CREDENTIALS:?}":/credential.json:ro  -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
 
 # docker : よく使いそうな docker image たち
 docker run -it --rm debian:10.2     bash
