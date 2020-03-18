@@ -43,6 +43,11 @@ ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://sh.djeeno.com/keys" -N ""
 # ssh-keygen : 公開鍵のフィンガープリントを表示する。
 ssh-keygen -E md5 -l -f _path_to_public_key_
 
+# ssh
+ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
+ssh -fN -L 3306:"${MYSQL_HOSTNAME:?}":3306 "${BASTION_HOST:?}"
+ssh -fN -L 6379:"${REDIS_HOSTNAME:?}":6379 "${BASTION_HOST:?}"
+
 # rsync : 網羅的なコマンド例。
 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
 
@@ -268,8 +273,59 @@ kubectl() {
 # gcloud : Google Cloud SDK をインストールする。
 bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)" && command -v gcloud
 
+# gcloud : 各種コンポーネントをアップデートする。
+gcloud components update
+
+# gcloud : TL;DR
+gcloud config configurations create "${GCP_CONFIG:?}"
+gcloud auth login
+gcloud config set project "${GCP_PROJECT:?}"
+gcloud config configurations list
+# gcloud : 初期化
+gcloud init --console-only
+# gcloud : 現在利用している configuration の内容を表示する。
+gcloud config list
+# gcloud : configuration 一覧を表示する。
+gcloud config configurations list
+# gcloud : configuration を新規作成する ( 初期状態では 'default' が使用される )
+gcloud config configurations create "${GCP_CONFIG:?}"
+# gcloud : アカウントを設定する。
+gcloud config set account "${GCP_ACCOUNT:?}"
+# gcloud : アカウントを認証する - IAM アカウントの場合
+gcloud auth login
+# MEMO: gcloud auth application-default login
+# gcloud : アカウントを認証する - サービスアカウントの場合
+gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
+# gcloud : プロジェクトを設定する。
+gcloud config set project "${GCP_PROJECT:?}"
+# gcloud : 利用する configuration を切り替える。
+gcloud config configurations activate "${GCP_CONFIG:?}"
+# gcloud : peco で選択可能形式で configuration を切り替える。
+gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
+
+# gcloud : compute ssh
+gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GCP_PROJECT:?}" "${GCE_INSTANCE:?}"
 # gcloud : 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
+gcloud compute operations list --sort-by=TIMESTAMP --project "${GCP_PROJECT:?}"
+
+# gcloud : kubernetes cluster を作成する。
+gcloud container clusters create "${GKE_CLUSTER:?}"
+# gcloud : kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
+# gcloud : `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
+gcloud container clusters get-credentials --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
+gcloud container clusters get-credentials --zone "${GCP_ZONE:?}" --project "${GCP_PROJECT:?}" "${GKE_CLUSTER:?}"
+
+
+
+# ==================================================
+# CircleCI
+# ==================================================
+
+# circleci : local で CircleCI を実行する。
+circleci local execute
+
+
 
 
 
@@ -277,8 +333,8 @@ gcloud compute operations list --sort-by=TIMESTAMP
 # vim
 # ==================================================
 
-# vim : ${hoge} を ${hoge:?} に変換する。
-# vim :%s/\(\${[^:{}]*[^\?"]\)}/\1:?}/gc
+# vim ${hoge} を ${hoge:?} に変換する。
+# vim %s/\(\${[^:{}]*[^\?"]\)}/\1:?}/gc
 
 
 
