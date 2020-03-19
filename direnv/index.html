@@ -23,7 +23,7 @@ if ! command -v direnv 1>/dev/null; then
     chmod +x /usr/local/bin/direnv
   "
 
-  if [ ! -w /usr/local/bin ] || [ ! -w /usr/local/bin/direnv ]; then
+  if command -v sudo 1>/dev/null && { [ ! -w /usr/local/bin ] || [ ! -w /usr/local/bin/direnv ]; }; then
     sudo -E bash -cx "${commands_for_install}"
   else
     bash -cx "${commands_for_install}"
