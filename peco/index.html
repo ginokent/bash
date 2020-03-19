@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -E -o pipefail
+cat >/dev/null << '#sh.djeeno.com'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#sh.djeeno.com
+##
+
+# Run the following command to execute this script:
+#   $ curl https://sh.djeeno.com/peco/ | bash
+
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+[ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
+# shellcheck disable=SC2154
+[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
+
+if ! command -v peco 1>/dev/null; then
+  # shellcheck disable=SC2154
+  if command -v brew 1>/dev/null; then
+    commands_for_install="brew install peco"
+  elif command -v apt-get 1>/dev/null; then
+    commands_for_install="apt-get update && apt-get install -y peco"
+  elif [ "${envIsAMD64}" = true ]; then
+    commands_for_install="
+        ${http_get} $(curl -fLRsS https://github.com/peco/peco/releases | grep -o "href=\"[^\"]*linux_amd64[^\"]*" | sed 's@href=.@https://github.com@' | head -n 1) >/tmp/peco.tar.gz && (cd /tmp && tar xfz /tmp/peco.tar.gz '*/peco' && mv -v /tmp/peco_linux_amd64/peco /usr/local/bin/peco)
+    "
+  fi
+
+  # shellcheck disable=SC2154
+  if [ "${envIsLinux}" = true ]; then
+    sudo -E bash -c "eval ${commands_for_install}"
+  else
+    eval "${commands_for_install}"
+  fi
+
+  if ! command -v peco 1>/dev/null; then
+    echo "peco not installed" | stderrPipeError
+    exit 1
+  fi
+fi
+
+echo "peco installed" | stderrPipeOK
+
+
+
+# (C) 2018 djeeno </code></pre></div>
