@@ -15,7 +15,7 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs
 
 echo "env:" | stderrPipeInfo
 echo "  DIRENV_VERSION: ${DIRENV_VERSION:-USE_DEFAULT}" | stderrPipeInfo
-direnv_version=${DIRENV_VERSION:=2.20.0}
+direnv_version=${DIRENV_VERSION:=2.21.2}
 
 if ! command -v direnv 1>/dev/null; then
   commands_for_install="
