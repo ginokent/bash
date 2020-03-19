@@ -96,6 +96,9 @@ ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.dump(YAML.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 
+# python 3 を探す
+echo "$PATH" | tr : "\n" | xargs -I@ file @/python @/python3 | grep -Ev "cannot.open" | awk -F"[:[:space:]]" '$0=$1' | while read -r LINE; do if [ "$("${LINE}" -c 'import sys; v=sys.version_info; print(str(v.major)+str(v.minor))' 2>/dev/null)" -ge 30 ] 2>/dev/null; then echo "${LINE}"; fi; done
+
 
 
 # ==================================================
