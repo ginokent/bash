@@ -132,23 +132,29 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 # git Git
 # ==================================================
 
-# git : リポジトリのルートディレクトリを出力する。
-git rev-parse --show-toplevel
-
-# git : ブランチ名を出力する。
-git rev-parse --abbrev-ref HEAD
-
-# git : git-completion git コマンドの保管 ＆ git-prompt プロンプトに git の status などを表示
-test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
-test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
-export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
-
 # git : 最新版をソースからインストールする。 ref. https://www.kernel.org/pub/software/scm/git/
 # shellcheck disable=SC2016
 install_git() { $(command -v sudo) bash -cx 'apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'; } && install_git
 # shellcheck disable=SC2016
 install_git() { $(command -v sudo) bash -cx 'yum makecache && yum install -y {curl,expat,gettext,openssl,zlib}-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'; } && install_git
 
+# git : git-completion git コマンドの保管 ＆ git-prompt プロンプトに git の status などを表示
+test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
+test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
+export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
+
+# git : auther / commiter を更新する。
+git config --global user.name djeeno
+git config --global user.email 29125616+djeeno@users.noreply.github.com
+
+# git : リポジトリのルートディレクトリを出力する。
+git rev-parse --show-toplevel
+
+# git : ブランチ名を出力する。
+git rev-parse --abbrev-ref HEAD
+
+# git : [DANGER] 過去の commiter と auther を変更する。
+git filter-branch -f --env-filter "GIT_AUTHOR_NAME='djeeno'; GIT_AUTHOR_EMAIL='29125616+djeeno@users.noreply.github.com'; GIT_COMMITTER_NAME='djeeno'; GIT_COMMITTER_EMAIL='29125616+djeeno@users.noreply.github.com';" HEAD
 
 
 # ==================================================
