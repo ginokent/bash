@@ -129,6 +129,111 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 
 # ==================================================
+# mysql MySQL
+# ==================================================
+
+# mysqldump : 指定した DATABASE を backup
+DUMP_GZ="./${MYSQL_DB:?}_$(date +%Y%m%d_%H%M%S).dump.gz"
+mysqldump --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --single-transaction "${MYSQL_DB:?}" | gzip - >"${DUMP_GZ:?}"
+zcat "${DUMP_GZ:?}" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" "${MYSQL_DB:?}"
+# mysqldump : 全 DATABASE を backup
+mysqldump --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --single-transaction --all-databases | gzip - >"${DUMP_GZ:?}"
+zcat all_databases.dump.gz | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}"
+
+# mysql ユーザを追加する
+mysql -e "GRANT ALL PRIVILEGES ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' IDENTIFIED BY '${MYSQL_PWD:?}' WITH GRANT OPTION;"
+mysql -e "GRANT ALL PRIVILEGES ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' IDENTIFIED BY PASSWORD '${MYSQL_PWD_HASH:?}' WITH GRANT OPTION;"
+
+# mysql ユーザーの権限を表示する
+mysql -e "SHOW GRANTS;"
+mysql -e "SHOW GRANTS FOR '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}';"
+# mysql ユーザーの権限を追加する
+mysql -e "GRANT ALL PRIVILEGES ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' WITH GRANT OPTION;"
+mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, SHUTDOWN, PROCESS, FILE, REFERENCES, INDEX, ALTER, SHOW DATABASES, SUPER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE TABLESPACE ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' WITH GRANT OPTION;"
+mysql -e "GRANT ALL ON *.* TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}';"
+mysql -e "GRANT FILE ON *.* TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:-192.168.0.0/255.255.0.0}';"
+# mysql ユーザーの権限を削除する
+mysql -e "REVOKE FILE ON *.* FROM '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}';"
+# mysql 権限テーブルをリロードする
+mysql -e "FLUSH PRIVILEGES;"
+
+# mysql ユーザー一覧を表示する
+mysql -e "SELECT host,user,password,plugin FROM mysql.user;"
+
+# mysql 現在の接続数を表示する
+mysql -e "SHOW STATUS LIKE 'Threads_connected';"
+
+# mysql innodb status log を出力する設定を確認する
+mysql -e "SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';"
+
+# mysql 現在接続しているユーザー一覧を表示する
+mysql -e "SELECT * FROM information_schema.PROCESSLIST;"
+# mysql 60 秒以上経過している接続を表示する
+mysql -e "SELECT * FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin';"
+mysql -e "SELECT GROUP_CONCAT(id) FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin';"
+# mysql 処理中の接続を表示する
+mysql -e "SHOW PROCESSLIST;"
+mysql -e "SHOW FULL PROCESSLIST;"
+# mysql 接続を殺す
+mysql -e "KILL ${MYSQL_CONNECTION_ID:?};"
+# mysql 起動してからの累計接続数を表示する
+mysql -e "SHOW STATUS LIKE 'Conn%';"
+# mysql Master か Replica か判定 (Master は OFF, Replica は ON)
+mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only';"
+
+# mysql create database データベースを作成する
+mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4;"
+# mysql db_for_test データベースが存在しなければ, CREATE DATABASE する
+MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?}" -e "CREATE DATABASE IF NOT EXISTS '${MYSQL_DB:?}';";
+# mysql データベース一覧を表示する
+mysql -e "SHOW DATABASES;"
+# mysql データベース詳細を表示する
+mysql -e "SHOW CREATE DATABASE ${TABLE:?}\G"
+# mysql 使用するデータベースを指定する
+mysql -e "USE ${MYSQL_DB:?};"
+
+# mysql テーブル一覧を表示する
+mysql -e "SHOW TABLES;"
+# mysql テーブル詳細を表示する
+mysql -e "DESCRIBE ${TABLE:?};"
+mysql -e "DESC ${TABLE:?};"
+mysql -e "SHOW COLUMNS FROM ${TABLE:?};"
+mysql -e "SHOW CREATE TABLE ${TABLE:?}\G"
+# mysql 使用するテーブルを指定する
+mysql -e "USE ${TABLE:?};"
+
+# mysql Oracle で言うところの UPSERT. INSERTする時にユニークキーを含まないと複数行ヒットしてしまい、しかし内1行しか更新されないらしい（伝聞）
+mysql -e "INSERT INTO ${TABLE:?} (__uniquekey__, __column1__) VALUES ('myAwesomeUniqueKey', 'myAwesomeValue') ON DUPLICATE KEY UPDATE __column1__ = 'myGreatValue', __column2__ = 100;"
+mysql -e "SELECT * FROM employees LIMIT 3; INSERT INTO employees VALUES (10000, '1970-01-01', 'John', 'Due', 'M', '2000-01-01') ON DUPLICATE KEY UPDATE hire_date = UTC_TIMESTAMP(); SELECT * FROM employees LIMIT 3; INSERT INTO employees VALUES (10000, '1970-01-01', 'John', 'Due', 'M', '2000-01-01') ON DUPLICATE KEY UPDATE hire_date = UTC_TIMESTAMP(); SELECT * FROM employees LIMIT 3; DELETE FROM employees WHERE emp_no = 10000;"
+
+# mysql db database データベースのサイズを表示する
+mysql -e "SELECT table_schema, SUM(data_length+index_length)/1024/1024/1024 AS GiB FROM information_schema.tables GROUP BY table_schema ORDER BY SUM(data_length+index_length) DESC;"
+
+# mysql table テーブルのサイズを表示する
+mysql -e "SELECT table_name, engine, table_rows, avg_row_length, FLOOR((data_length+index_length)/1024/1024/1024) AS AllGiB, FLOOR((data_length)/1024/1024/1024) AS DataGiB, FLOOR((index_length)/1024/1024/1024) AS IndexGiB FROM information_schema.tables WHERE table_schema=DATABASE() ORDER BY (data_length+index_length) DESC;"
+
+# mysql INNODB STATUS を表示する
+mysql -e "SHOW ENGINE INNODB STATUS;"
+
+# mysql ~/.my.cnf の設定
+tee -a "${MY_CNF:-/dev/null}" << MY_CNF
+[client]
+user                        = ${MYSQL_USER:?}
+host                        = ${MYSQL_HOST:?}
+port                        = 3306
+password                    = ${MYSQL_PWD:?}
+database                    = ${MYSQL_DB:?}
+loose-default-character-set = utf8mb4
+init_command                = 'SET NAMES utf8mb4;'
+MY_CNF
+
+# mysql : サンプルデータベース
+curl -fLRsSs http://downloads.mysql.com/docs/world.sql.gz | gunzip - | mysql
+git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && cd /tmp/test_db && mysql <./employees.sql
+
+
+
+# ==================================================
 # git Git
 # ==================================================
 
