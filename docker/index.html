@@ -36,7 +36,7 @@ docker_djeeno_ubuntu_1804 () { (
   cat << "EOF" >Dockerfile
 FROM ubuntu:18.04
 
-LABEL maintainer="djeeno <djeeno@localhost>"
+LABEL maintainer="djeeno <29125616+djeeno@users.noreply.github.com>"
 
 ##
 # locale
@@ -125,7 +125,7 @@ docker_djeeno_terraform() { (
   cat << EOF >Dockerfile
 FROM djeeno/ubuntu:18.04
 
-LABEL maintainer="djeeno <djeeno@localhost>"
+LABEL maintainer="djeeno <29125616+djeeno@users.noreply.github.com>"
 
 RUN set -x \
   && apt-get update \
@@ -179,7 +179,7 @@ docker_djeeno_awscli() { (
   cat << EOF >Dockerfile
 FROM python:3.8.2-buster
 
-LABEL maintainer="djeeno <djeeno@localhost>"
+LABEL maintainer="djeeno <29125616+djeeno@users.noreply.github.com>"
 
 RUN set -x \
   && apt-get update \
