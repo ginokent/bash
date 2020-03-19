@@ -33,6 +33,12 @@ stderrPipeOK ()     { awk '{print "\033[32m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
 stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
+# peco
+brew install peco
+apt-get update && apt-get install -y peco
+wget -cSv "$(curl -fLRsS https://github.com/peco/peco/releases | grep -o "href=\"[^\"]*linux_amd64[^\"]*" | sed 's@href=.@https://github.com@' | head -n 1)" -O /tmp/peco.tar.gz && (cd /tmp && tar xfz /tmp/peco.tar.gz '*/peco' && mv -v /tmp/peco_linux_amd64/peco /usr/local/bin/peco)
+curl -fLRsS https://sh.djeeno.com/ | peco
+
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
