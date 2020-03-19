@@ -27,9 +27,9 @@ if ! command -v peco 1>/dev/null; then
 
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ] || ! command -v sudo 1>/dev/null; then
-    eval "${commands_for_install}"
+    bash -cx "eval ${commands_for_install}"
   else
-    sudo -E bash -c "eval ${commands_for_install}"
+    sudo -E bash -cx "eval ${commands_for_install}"
   fi
 
   if ! command -v peco 1>/dev/null; then
