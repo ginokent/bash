@@ -45,9 +45,13 @@ stderrPipeOK ()     { awk '{print "\033[32m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
 stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
-# peco
+# https://sh.djeeno.com/ 一撃インストール系
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)" && command -v asdf
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)" && command -v go
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)" && command -v kubectl
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)" && command -v kubetail
+bash -c "$(curl -fLRsS https://sh.djeeno.com/direnv/)" && command -v direnv
 bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)" && command -v peco
-curl -fLRsS https://sh.djeeno.com/ | peco
 
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
