@@ -395,15 +395,13 @@ alias       aws-docker='docker run -it --rm -e AWS_PROFILE="${AWS_PROFILE}" -e A
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
 
-# docker : 全部 kill して rm する。
+# docker : 全部 kill して rm する。掃除する。
 { docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
-
-# docker : 掃除する。
 { docker container prune -f; docker volume prune -f; docker image prune -f; }
-docker system prune
+docker system prune -f
 
 # docker : docker を root ユーザー以外でも実行できるように。
-sudo usermod -aG docker "$USER"
+sudo usermod -aG docker "$(whoami)"
 
 # docker : Docker for Windows を WSL1 から利用できるようにするための設定。
 command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
