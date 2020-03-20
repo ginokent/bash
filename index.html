@@ -184,6 +184,9 @@ apt-get update && apt-get install -y whois
 apt-get update && apt-get install -y zip
 apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# apt まとめてインストールするためのコマンドを生成する。
+curl -fLRsS https://sh.djeeno.com/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
+
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /
 
