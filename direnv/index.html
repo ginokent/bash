@@ -19,7 +19,7 @@ direnv_version=${DIRENV_VERSION:=2.21.2}
 
 if ! command -v direnv 1>/dev/null; then
   commands_for_install="
-    curl -LR \"https://github.com/direnv/direnv/releases/download/v${direnv_version}/direnv.\$(uname -s | tr A-Z a-z)-amd64\" -o /usr/local/bin/direnv
+    ${http_get} \"https://github.com/direnv/direnv/releases/download/v${direnv_version}/direnv.\$(uname -s | tr A-Z a-z)-amd64\" >/usr/local/bin/direnv
     chmod +x /usr/local/bin/direnv
   "
 
