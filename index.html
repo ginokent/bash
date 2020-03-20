@@ -5,13 +5,25 @@ cat >/dev/null << '#sh.djeeno.com'
 #sh.djeeno.com
 ##
 
-cat << DOCUMENT | stderrPipeNotice
+cat << "DOCUMENT" | stderrPipeNotice
 +--!!注意!!----------------------------------------------------------------------------+
 | このページをシェルスクリプトとして実行しないでください。                             |
 | この index.html はシェルスクリプトとして実行されることを想定して作成されていません。 |
 +--------------------------------------------------------------------------------------+
 
 個人用コマンドチートシート。
+
+  curl -fLRsS https://sh.djeeno.com/
+
+や
+
+  _readline_helpme() {
+    command -v peco 1>/dev/null || bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
+    READLINE_LINE=$(curl -fLRsS https://sh.djeeno.com/ | cat -n | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up | sed 's/^[^0-9]*[0-9]*[^0-9]//')
+    READLINE_POINT=${#READLINE_LINE}
+  } && bind -x '"\C-n":_readline_helpme'
+
+的に参照されることを期待しています。
 
 (C) 2018 djeeno
 DOCUMENT
