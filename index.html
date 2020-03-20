@@ -138,6 +138,35 @@ git filter-branch -f --env-filter "GIT_AUTHOR_NAME='djeeno'; GIT_AUTHOR_EMAIL='2
 # Linux
 # ==================================================
 
+# apt
+apt-get () { if [ "$1" = update ]; then [ 43200 -ge $(($(date +%s)-$( { date -d"$(stat /var/lib/apt/lists/* | awk -F": " "/Change/ {print \$2}" | sort | tail -n 1)" +%s; } 2>/dev/null)+0)) ] || command apt-get update; else command apt-get "$@"; fi; }
+apt-get update && apt-get install -y bsdmainutils   # column
+apt-get update && apt-get install -y coreutils      # tail
+apt-get update && apt-get install -y dnsutils       # dig
+apt-get update && apt-get install -y expect
+apt-get update && apt-get install -y htop
+apt-get update && apt-get install -y iftop
+apt-get update && apt-get install -y lsof
+apt-get update && apt-get install -y mailutils      # mailx
+apt-get update && apt-get install -y net-tools      # netstat
+apt-get update && apt-get install -y nmap
+apt-get update && apt-get install -y openssh-client # ssh
+apt-get update && apt-get install -y parted
+apt-get update && apt-get install -y perl
+apt-get update && apt-get install -y procps         # ps
+apt-get update && apt-get install -y smartmontools
+apt-get update && apt-get install -y tcpdump
+apt-get update && apt-get install -y telnet
+apt-get update && apt-get install -y traceroute
+apt-get update && apt-get install -y tree
+apt-get update && apt-get install -y unzip
+apt-get update && apt-get install -y util-linux     # fdisk
+apt-get update && apt-get install -y vim
+apt-get update && apt-get install -y wget
+apt-get update && apt-get install -y whois
+apt-get update && apt-get install -y zip
+apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /
 
@@ -281,6 +310,9 @@ git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && c
 # ==================================================
 # docker Docker
 # ==================================================
+
+# docker : latest の stable をインストール ( 非 root ユーザーで docker デーモンと対話するには usermod の後にリログが必要 )
+bash -c "$(curl -fLRsS https://get.docker.com/)" && sudo usermod -aG docker "$(whoami)" && command -v docker
 
 # docker : djeeno/ubuntu:18.04 の docker コンテナを起動する。
 docker run -it --rm djeeno/ubuntu:18.04 bash
