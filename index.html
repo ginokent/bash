@@ -46,10 +46,10 @@ stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # 一撃インストール系
-command -v brew     || bash -c "$(curl -fLRsS https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+command -v brew     || bash -c "$(curl -fLRsS https://sh.djeeno.com/brew/)"
 command -v gcloud   || bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)"
+command -v git      || bash -c "$(curl -fLRsS https://sh.djeeno.com/git/)"
 command -v asdf     || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)"
-command -v git      || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/git/)"
 command -v go       || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)"
 command -v kubectl  || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)"
 command -v kubetail || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
