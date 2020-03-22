@@ -20,7 +20,8 @@ prog_version=${DIRENV_VERSION:=2.21.2}
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
-  if command -v brew 1>/dev/null; then
+  if [ "${envIsDarwin}" = true ]; then
+    eval "$(${http_get} https://sh.djeeno.com/brew/)"
     commands_for_install="brew install ${prog_name:?}"
   elif [ "${envIsAMD64}" = true ]; then
     url="https://github.com/direnv/direnv/releases/download/v${prog_version:?}/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"
