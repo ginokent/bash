@@ -28,6 +28,9 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     commands_for_install="
       ${http_get:?} \"${url:?}\" >/tmp/peco.tar.gz && (cd /tmp && tar xfz /tmp/peco.tar.gz '*/peco' && mv -v /tmp/peco_linux_amd64/peco /usr/local/bin/peco)
     "
+  else
+    echo "OS not supported" | stderrPipeError
+    exit 1
   fi
 
   # shellcheck disable=SC2154

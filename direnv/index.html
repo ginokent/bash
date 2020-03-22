@@ -27,6 +27,9 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     commands_for_install="
       ${http_get:?} \"${url:?}\" >/usr/local/bin/direnv && chmod +x /usr/local/bin/direnv
     "
+  else
+    echo "OS not supported" | stderrPipeError
+    exit 1
   fi
 
   # shellcheck disable=SC2154
