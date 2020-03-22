@@ -46,16 +46,17 @@ stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # 一撃インストール系
-command -v brew     || bash -c "$(curl -fLRsS https://sh.djeeno.com/brew/)"
-command -v gcloud   || bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)"
-command -v git      || bash -c "$(curl -fLRsS https://sh.djeeno.com/git/)"
-command -v asdf     || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)"
-command -v go       || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)"
-command -v kubectl  || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)"
-command -v kubetail || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
-command -v direnv   || bash -c "$(curl -fLRsS https://sh.djeeno.com/direnv/)"
-command -v peco     || bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
-command -v docker   || { uname -s | grep -q Linux && bash -c "$(curl -fLRsS https://get.docker.com/)" && sudo usermod -aG docker "$(whoami)"; }
+xcode-select --install
+bash -c "$(curl -fLRsS https://sh.djeeno.com/brew/)"
+bash -c "command -v gcloud || curl -fLRsS https://sdk.cloud.google.com/ | bash"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/git/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/direnv/)"
+bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
+bash -c "uname -s | grep -q Linux && curl -fLRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
 
 # sudoeradd
 sudoeradd() {(set -e; SDR="${1:?}"; SDRF=/etc/sudoers.d/administrators; ROW="${SDR} ALL=(ALL) NOPASSWD:ALL"; if ! id "${SDR}" 1>/dev/null 2>&1; then sudo useradd -m -s /bin/bash -b /home "${SDR}"; yes "Password.${SDR}" | sudo passwd "${SDR}" 2>/dev/null || true; fi; if ! sudo grep -q "${ROW}" "${SDRF}" 2>/dev/null; then echo "${ROW}" | sudo tee -a "${SDRF}" 1>/dev/null; fi; sudo chmod 0600 "${SDRF}")}
