@@ -34,7 +34,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   fi
 
   # shellcheck disable=SC2154
-  if command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; } && [ "${envIsDarwin}" != true ] ; then
+  if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
     sudo -E bash -cx "${commands_for_install:?}"
   else
     bash -cx "${commands_for_install:?}"
