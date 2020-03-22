@@ -49,6 +49,7 @@ stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 command -v brew     || bash -c "$(curl -fLRsS https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 command -v gcloud   || bash -c "$(curl -fLRsS https://sdk.cloud.google.com/)"
 command -v asdf     || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)"
+command -v git      || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/git/)"
 command -v go       || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)"
 command -v kubectl  || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)"
 command -v kubetail || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
