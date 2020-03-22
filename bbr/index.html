@@ -8,7 +8,7 @@ cat >/dev/null << '#sh.djeeno.com'
 # Run the following command to execute this script:
 #   $ curl https://sh.djeeno.com/bbr/ | bash
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
@@ -21,7 +21,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     ##
     # 更新用コマンド
     ##
-    # curl -fLRsS https://raw.githubusercontent.com/teddysun/across/master/bbr.sh -o ~/sh.djeeno.com/bbr/bbr.sh
+    # curl -LRsS https://raw.githubusercontent.com/teddysun/across/master/bbr.sh -o ~/sh.djeeno.com/bbr/bbr.sh
     ##
     commands_for_install="
       ${http_get:?} https://sh.djeeno.com/bbr/bbr.sh

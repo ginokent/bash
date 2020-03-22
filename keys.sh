@@ -2,7 +2,7 @@
 set -e
 export LANG=C LC_ALL=C
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 
 printf "\033[34m$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00") [   info] %s\033[0m\n" "env:"

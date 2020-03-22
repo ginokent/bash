@@ -8,7 +8,7 @@ cat >/dev/null << '#sh.djeeno.com'
 # Run the following command to execute this script:
 #   $ curl https://sh.djeeno.com/docker/ | bash
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
@@ -71,8 +71,8 @@ RUN set -x \
   && set +x
 
 RUN set -x \
-  && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
-  && curl -fLRSs https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
+  && curl -LRsS https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
+  && curl -LRsS https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh \
   && echo 'test -f ~/.git-completion.bash && source "$_"' >> ~/.bashrc \
   && echo 'test -f ~/.git-prompt.sh && source "$_"' >> ~/.bashrc \
   && set +x
@@ -132,7 +132,7 @@ RUN set -x \
   && apt-get install -y curl ssh unzip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
-  && curl -fLRsS https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip -o terraform.zip \
+  && curl -LRsS https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip -o terraform.zip \
   && unzip terraform.zip \
   && rm -f terraform.zip \
   && mv ./terraform /usr/local/bin \

@@ -13,13 +13,13 @@ cat << "DOCUMENT" | stderrPipeNotice
 
 個人用コマンドチートシート。
 
-  curl -fLRsS https://sh.djeeno.com/
+  curl -LRsS https://sh.djeeno.com/
 
 や
 
   _readline_helpme() {
-    command -v peco 1>/dev/null || bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
-    READLINE_LINE=$(curl -fLRsS https://sh.djeeno.com/ | cat -n | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up | sed 's/^[^0-9]*[0-9]*[^0-9]//')
+    command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://sh.djeeno.com/peco/)"
+    READLINE_LINE=$(curl -LRsS https://sh.djeeno.com/ | cat -n | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up | sed 's/^[^0-9]*[0-9]*[^0-9]//')
     READLINE_POINT=${#READLINE_LINE}
   } && bind -x '"\C-n":_readline_helpme'
 
@@ -47,16 +47,16 @@ stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:
 
 # 一撃インストール系
 xcode-select --install
-bash -c "$(curl -fLRsS https://sh.djeeno.com/brew/)"
-bash -c "command -v gcloud || curl -fLRsS https://sdk.cloud.google.com/ | bash"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/git/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/golang/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/direnv/)"
-bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
-bash -c "uname -s | grep -q Linux && curl -fLRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/brew/)"
+bash -c "command -v gcloud || curl -LRsS https://sdk.cloud.google.com/ | bash"
+bash -c "$(curl -LRsS https://sh.djeeno.com/git/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/asdf/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/asdf/golang/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/asdf/kubectl/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/asdf/kubetail/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/direnv/)"
+bash -c "$(curl -LRsS https://sh.djeeno.com/peco/)"
+bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
 
 # sudoeradd
 sudoeradd() {(set -e; SDR="${1:?}"; SDRF=/etc/sudoers.d/administrators; ROW="${SDR} ALL=(ALL) NOPASSWD:ALL"; if ! id "${SDR}" 1>/dev/null 2>&1; then sudo useradd -m -s /bin/bash -b /home "${SDR}"; yes "Password.${SDR}" | sudo passwd "${SDR}" 2>/dev/null || true; fi; if ! sudo grep -q "${ROW}" "${SDRF}" 2>/dev/null; then echo "${ROW}" | sudo tee -a "${SDRF}" 1>/dev/null; fi; sudo chmod 0600 "${SDRF}")}
@@ -193,7 +193,7 @@ apt-get update && apt-get install -y zip
 apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # apt まとめてインストールするためのコマンドを生成する。
-curl -fLRsS https://sh.djeeno.com/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
+curl -LRsS https://sh.djeeno.com/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
 
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /
@@ -327,7 +327,7 @@ init_command                = 'SET NAMES utf8mb4;'
 MY_CNF
 
 # mysql : サンプルデータベース
-curl -fLRsSs http://downloads.mysql.com/docs/world.sql.gz | gunzip - | mysql
+curl -LRsS http://downloads.mysql.com/docs/world.sql.gz | gunzip - | mysql
 git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && cd /tmp/test_db && mysql <./employees.sql
 
 
