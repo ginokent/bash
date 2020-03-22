@@ -13,15 +13,14 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLR
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  DIRENV_VERSION: latest" | stderrPipeInfo
+echo "  DIRENV_VERSION=latest" | stderrPipeInfo
 prog_name=direnv
 bin_dir=/usr/local/bin
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
-    eval "$(${http_get} https://sh.djeeno.com/brew/)"
+    bash -c "$(${http_get} https://sh.djeeno.com/brew/)"
     commands_for_install="brew install ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
     url=$(curl -fLRsS https://github.com/direnv/direnv/releases/ | grep -o "href=\"/direnv/direnv/releases/download/v[0-9]*\.[0-9]*\.[0-9]*/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64" | sed "s|href=\"|https://github.com|" | head -n 1)

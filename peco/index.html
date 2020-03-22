@@ -13,15 +13,14 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLR
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  PECO_VERSION: latest" | stderrPipeInfo
+echo "  PECO_VERSION=latest" | stderrPipeInfo
 prog_name=peco
 bin_dir=/usr/local/bin
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
-    eval "$(${http_get} https://sh.djeeno.com/brew/)"
+    bash -c "$(${http_get} https://sh.djeeno.com/brew/)"
     commands_for_install="brew install ${prog_name:?}"
   elif command -v apt-get 1>/dev/null; then
     commands_for_install="apt-get update && apt-get install -y ${prog_name:?}"

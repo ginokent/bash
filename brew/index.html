@@ -13,8 +13,7 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLR
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  BREW_VERSION: latest" | stderrPipeInfo
+echo "  BREW_VERSION=latest" | stderrPipeInfo
 prog_name=brew
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then

@@ -10,9 +10,8 @@ cat >/dev/null << '#sh.djeeno.com'
 
 export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  PYTHON_PATH: ${PYTHON_PATH:-USE_DEFAULT}" | stderrPipeInfo
-echo "  VIRTUALENV_NAME: ${VIRTUALENV_NAME:-USE_DEFAULT}" | stderrPipeInfo
+echo "  PYTHON_PATH=${PYTHON_PATH:-USE_DEFAULT}" | stderrPipeInfo
+echo "  VIRTUALENV_NAME=${VIRTUALENV_NAME:-USE_DEFAULT}" | stderrPipeInfo
 
 python3_path="${PYTHON_PATH:="$(echo "$PATH" | tr : "\n" | xargs -I@ file @/python @/python3 | grep -Ev "cannot[[:space:]]open" | tee /dev/stderr | awk -F"[:[:space:]]" '$0=$1' | while read -r LINE; do if [ "$("${LINE}" -c 'import sys; v=sys.version_info; print(str(v.major)+str(v.minor))')" -ge 35 ] 2>/dev/null; then echo "${LINE}"; fi; done | awk '$0=$1' | head -n 1)"}"
 virtualenv_name="${VIRTUALENV_NAME:="mitmproxy"}"

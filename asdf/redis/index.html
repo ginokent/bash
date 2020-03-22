@@ -10,8 +10,7 @@ cat >/dev/null << '#sh.djeeno.com'
 
 export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  REDIS_VERSION: ${REDIS_VERSION:-USE_DEFAULT}" | stderrPipeInfo
+echo "  REDIS_VERSION=${REDIS_VERSION:-USE_DEFAULT}" | stderrPipeInfo
 
 lang_name="redis"
 echo "install ${lang_name} via asdf" | stderrPipeInfo
