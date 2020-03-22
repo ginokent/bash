@@ -13,45 +13,37 @@ export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -fLR
 # shellcheck disable=SC2154
 [ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
 
-echo "env:" | stderrPipeInfo
-echo "  GIT_VERSION: latest" | stderrPipeInfo
+echo "  GIT_VERSION=latest" | stderrPipeInfo
 prog_name=git
 bin_dir=/usr/local/bin
 
-if ! command -v "${prog_name:?}" 1>/dev/null; then
-  # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" = true ]; then
-    eval "$(${http_get} https://sh.djeeno.com/brew/)"
-    commands_for_install="brew install ${prog_name:?}"
-  elif [ "${envIsCentOS}" = true ]; then
-    # shellcheck disable=SC2016
-    commands_for_install='apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
-  elif [ "${envIsUbuntu}" = true ]; then
-    # shellcheck disable=SC2016
-    commands_for_install='yum makecache && yum install -y {curl,expat,gettext,openssl,zlib}-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
-  else
-    echo "OS not supported" | stderrPipeError
-    exit 1
-  fi
+# shellcheck disable=SC2154
+if [ "${envIsDarwin}" = true ]; then
+  bash -c "$(${http_get} https://sh.djeeno.com/brew/)"
+  commands_for_install="brew install ${prog_name:?}"
+elif [ "${envIsCentOS}" = true ]; then
+  # shellcheck disable=SC2016
+  commands_for_install='apt-get update && apt-get install -y lib{curl4-gnutls,expat1,ssl,z}-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
+elif [ "${envIsUbuntu}" = true ]; then
+  # shellcheck disable=SC2016
+  commands_for_install='yum makecache && yum install -y {curl,expat,gettext,openssl,zlib}-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
+else
+  echo "OS not supported" | stderrPipeError
+  exit 1
+fi
 
-  # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
-    sudo -E bash -cx "${commands_for_install:?}"
-  else
-    bash -cx "${commands_for_install:?}"
-  fi
-
-  if ! command -v "${prog_name:?}" 1>/dev/null; then
-    echo "${prog_name:?} not installed" | stderrPipeError
-    exit 1
-  fi
+# shellcheck disable=SC2154
+if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
+  sudo -E bash -cx "${commands_for_install:?}"
+else
+  bash -cx "${commands_for_install:?}"
 fi
 
 
 
-echo "add git-completion.bash settings to ~/.bashrc" | stderrPipeInfo
 if ! grep -q git-completion.bash ~/.bashrc; then
-cat >>~/.bashrc << "BASHRC"
+  echo "add git-completion.bash settings to ~/.bashrc" | stderrPipeInfo
+  cat >>~/.bashrc << "BASHRC"
 # git
 test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
 test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
