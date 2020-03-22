@@ -55,7 +55,7 @@ command -v kubectl  || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubectl
 command -v kubetail || bash -c "$(curl -fLRsS https://sh.djeeno.com/asdf/kubetail/)"
 command -v direnv   || bash -c "$(curl -fLRsS https://sh.djeeno.com/direnv/)"
 command -v peco     || bash -c "$(curl -fLRsS https://sh.djeeno.com/peco/)"
-command -v docker   || bash -c "$(curl -fLRsS https://get.docker.com/)""; command -v docker && sudo usermod -aG docker $(whoami)"
+command -v docker   || { uname -s | grep -q Linux && bash -c "$(curl -fLRsS https://get.docker.com/)" && sudo usermod -aG docker "$(whoami)"; }
 
 # sudoeradd
 sudoeradd() {(set -e; SDR="${1:?}"; SDRF=/etc/sudoers.d/administrators; ROW="${SDR} ALL=(ALL) NOPASSWD:ALL"; if ! id "${SDR}" 1>/dev/null 2>&1; then sudo useradd -m -s /bin/bash -b /home "${SDR}"; yes "Password.${SDR}" | sudo passwd "${SDR}" 2>/dev/null || true; fi; if ! sudo grep -q "${ROW}" "${SDRF}" 2>/dev/null; then echo "${ROW}" | sudo tee -a "${SDRF}" 1>/dev/null; fi; sudo chmod 0600 "${SDRF}")}
