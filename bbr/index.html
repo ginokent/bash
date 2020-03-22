@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -E -o pipefail
+cat >/dev/null << '#sh.djeeno.com'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#sh.djeeno.com
+##
+
+# Run the following command to execute this script:
+#   $ curl https://sh.djeeno.com/bbr/ | bash
+
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LSs "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
+[ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
+# shellcheck disable=SC2154
+[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
+
+echo "env:" | stderrPipeInfo
+echo "  BBR_VERSION: latest" | stderrPipeInfo
+
+if ! command -v "${prog_name:?}" 1>/dev/null; then
+  # shellcheck disable=SC2154
+  if [ "${envIsLinux}" = true ]; then
+    ##
+    # 更新用コマンド
+    ##
+    # curl -LRSs https://raw.githubusercontent.com/teddysun/across/master/bbr.sh -O ~/sh.djeeno.com/bbr
+    ##
+    commands_for_install="
+      ${http_get:?} https://sh.djeeno.com/bbr/bbr.sh
+    "
+  else
+    echo "OS not supported" | stderrPipeError
+    exit 1
+  fi
+
+  # shellcheck disable=SC2154
+  if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
+    sudo -E bash -cx "${commands_for_install:?}"
+  else
+    bash -cx "${commands_for_install:?}"
+  fi
+fi
+
+
+
+# (C) 2018 djeeno </code></pre></div>
