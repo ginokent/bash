@@ -121,6 +121,11 @@ ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 # python 3 を探す
 echo "$PATH" | tr : "\n" | xargs -I@ sh -c 'file @/python*' | grep -v cannot | grep -o "^/[^:]*" | xargs -I@ sh -c "@ -c 'import sys; v=sys.version_info; print(sys.executable) if v.major >= 3 and v.minor >= 0 else sys.exit()'" 2>/dev/null | grep "^/[^[:blank:]]*$"
 
+# String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
+node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
+python -c "import dateutil.parser; print dateutil.parser.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
+ruby -e "require 'time'; puts Time.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
+
 
 
 # ==================================================
