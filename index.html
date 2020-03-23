@@ -38,12 +38,12 @@ exit 0
 # ==================================================
 
 # stderrPipe : いい感じログを出す。
-stderrPipeDebug ()  { awk '{print "\033[00m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
-stderrPipeNotice () { awk '{print "\033[01m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
-stderrPipeError ()  { awk '{print "\033[31m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
-stderrPipeOK ()     { awk '{print "\033[32m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
-stderrPipeWarn ()   { awk '{print "\033[33m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
-stderrPipeInfo ()   { awk '{print "\033[34m'"$(TZ=Asia/Tokyo date +"%Y-%m-%dT%H:%M:%S+09:00")"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
+stderrPipeDebug ()  { awk '{print "\033[00m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
+stderrPipeNotice () { awk '{print "\033[01m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
+stderrPipeError ()  { awk '{print "\033[31m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
+stderrPipeOK ()     { awk '{print "\033[32m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
+stderrPipeWarn ()   { awk '{print "\033[33m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
+stderrPipeInfo ()   { awk '{print "\033[34m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # 一撃インストール系
 xcode-select --install
