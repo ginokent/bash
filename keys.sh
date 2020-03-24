@@ -2,14 +2,13 @@
 set -e
 export LANG=C LC_ALL=C
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
-[ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
+{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet
 
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "env:"
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "  PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
 public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/sh/keys"}"
 
-public_keys=$(${http_get} "${public_keys_http_url}" | grep ^ssh-)
+public_keys=$(HttpGet "${public_keys_http_url}" | grep ^ssh-)
 test -n "${public_keys:?"public key not found in ${public_keys_http_url}"}" || exit 1
 
 if [ -f "$HOME/.ssh/authorized_keys" ]; then

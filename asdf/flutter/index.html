@@ -8,14 +8,14 @@ cat >/dev/null << '#sh.djeeno.com'
 # Run the following command to install:
 #   $ curl https://djeeno.github.io/sh/asdf/flutter/ | bash
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://djeeno.github.io/sh/common/)" || exit 1
+{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet
 
 echo "  FLUTTER_VERSION=${FLUTTER_VERSION:-USE_DEFAULT}" | stderrPipeInfo
 
 lang_name="flutter"
 echo "install ${lang_name} via asdf" | stderrPipeInfo
 
-command -v asdf 1>/dev/null || eval "$(${http_get} https://djeeno.github.io/sh/asdf/)" || exit 1
+command -v asdf 1>/dev/null || eval "$(HttpGet https://djeeno.github.io/sh/asdf/)" || exit 1
 
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
