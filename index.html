@@ -144,8 +144,8 @@ test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com
 export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
 
 # git : auther / commiter を更新する。
-git config --global user.name djeeno
-git config --global user.email 29125616+djeeno@users.noreply.github.com
+git config --local user.name djeeno
+git config --local user.email 29125616+djeeno@users.noreply.github.com
 
 # git tag タグ作成＆リモートにプッシュ
 git tag -a 0.0.1 && git push origin 0.0.1
