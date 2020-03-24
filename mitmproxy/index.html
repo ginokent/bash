@@ -6,9 +6,9 @@ cat >/dev/null << '#sh.djeeno.com'
 ##
 
 # Run the following command to install:
-#   $ curl https://sh.djeeno.com/mitmproxy/ | bash
+#   $ curl https://djeeno.github.io/sh/mitmproxy/ | bash
 
-export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
+export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${http_get:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(${http_get} https://djeeno.github.io/sh/common/)" || exit 1
 
 echo "  PYTHON_PATH=${PYTHON_PATH:-USE_DEFAULT}" | stderrPipeInfo
 echo "  VIRTUALENV_NAME=${VIRTUALENV_NAME:-USE_DEFAULT}" | stderrPipeInfo

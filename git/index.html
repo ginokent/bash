@@ -6,12 +6,12 @@ cat >/dev/null << '#sh.djeeno.com'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://sh.djeeno.com/direnv/ | bash
+#   $ curl https://djeeno.github.io/sh/direnv/ | bash
 
 export http_get; http_get="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"
 [ "${http_get:?"curl or wget are required to run this script"}" ] || exit 1
 # shellcheck disable=SC2154
-[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://sh.djeeno.com/common/)" || exit 1
+[ "${envIsLoaded}" = true ] || eval "$(${http_get} https://djeeno.github.io/sh/common/)" || exit 1
 
 echo "  GIT_VERSION=latest" | stderrPipeInfo
 prog_name=git
@@ -19,7 +19,7 @@ bin_dir=/usr/local/bin
 
 # shellcheck disable=SC2154
 if [ "${envIsDarwin}" = true ]; then
-  bash -c "$(${http_get} https://sh.djeeno.com/brew/)"
+  bash -c "$(${http_get} https://djeeno.github.io/sh/brew/)"
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${envIsCentOS}" = true ]; then
   # shellcheck disable=SC2016
