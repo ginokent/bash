@@ -433,8 +433,9 @@ docker-compose exec api bash -c 'mysql -h db -P 3306 -u root --password=password
 # Kubernetes
 # ==================================================
 
-# kubectl : kubectl is a function that wraps kubectl commands and checks the Kubernetes context at run-time.
-kubectl() {
+# kubect-wrapper displays the current-context and prompts for user confirmation
+# when trying to execute kubectl's subcommands that can update the cluster's state.
+kubectl() { (
   # if has 1 argument || has -h --help --dry-run option || Sub-commands that are not dangerous if executed without confirmation; then
   if [ $# -le 1 ] || { echo " $* " | grep -Eq -- ' -h | --help | --dry-run '; } \
     || { echo " $* " | grep -Eq ' api-resources | api-version | cluster-info | completion | config | describe | diff | explain | get | logs | top | version | wait '; }; then
@@ -446,7 +447,7 @@ kubectl() {
   printf "\e[01;33m%s\e[0m" "# Press Enter key to continue... "
   read -r
   command kubectl "$@"
-}
+)}
 
 
 
