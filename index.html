@@ -230,6 +230,16 @@ tc qdisc del    dev eth0 root
 # Mac
 # ==================================================
 
+# mac Mac / brew
+brew install coreutils
+
+# mac Mac で DNS キャッシュクリア
+sudo killall -HUP mDNSResponder
+
+# mac Mac のホスト名変更
+scutil --get ComputerName ; scutil --get LocalHostName ; scutil --get HostName
+scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostname:?}"
+
 
 
 # ==================================================
