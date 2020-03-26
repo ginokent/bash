@@ -5,7 +5,7 @@ cat >/dev/null << '#sh.djeeno.com'
 #sh.djeeno.com
 ##
 
-cat << "DOCUMENT" | stderrPipeNotice
+cat << "DOCUMENT" | sh -c "exec ${stderrPipeNotice:?}"
 +--!!注意!!----------------------------------------------------------------------------+
 | このページをシェルスクリプトとして実行しないでください。                             |
 | この index.html はシェルスクリプトとして実行されることを想定して作成されていません。 |
