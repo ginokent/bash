@@ -8,8 +8,8 @@ printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "env:"
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "  PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
 public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/sh/keys"}"
 
-public_keys=$(HttpGet "${public_keys_http_url}" | grep ^ssh-)
-test -n "${public_keys:?"public key not found in ${public_keys_http_url}"}" || exit 1
+public_keys=$(sh -c "exec ${httpGet:?} ${public_keys_http_url:?}" | grep ^ssh-)
+test -n "${public_keys:?"public key not found in ${public_keys_http_url:?}"}" || exit 1
 
 if [ -f "$HOME/.ssh/authorized_keys" ]; then
   echo "${public_keys}" | while read -r LINE; do

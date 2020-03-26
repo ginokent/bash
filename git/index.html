@@ -16,7 +16,7 @@ bin_dir=/usr/local/bin
 
 # shellcheck disable=SC2154
 if [ "${envIsDarwin}" = true ]; then
-  bash -c "$(HttpGet https://djeeno.github.io/sh/brew/)"
+  bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${envIsCentOS}" = true ]; then
   # shellcheck disable=SC2016

@@ -21,7 +21,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     # curl -LRsS https://raw.githubusercontent.com/teddysun/across/master/bbr.sh -o ~/djeeno.github.io/sh/bbr/bbr.sh
     ##
     commands_for_install="
-      ${http_get:?} https://djeeno.github.io/sh/bbr/bbr.sh
+      ${httpGet:?} https://djeeno.github.io/sh/bbr/bbr.sh
     "
   else
     echo "OS not supported" | stderrPipeError

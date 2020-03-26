@@ -17,14 +17,14 @@ bin_dir=/usr/local/bin
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
-    bash -c "$(HttpGet https://djeeno.github.io/sh/brew/)"
+    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
     commands_for_install="brew install ${prog_name:?}"
   elif command -v apt-get 1>/dev/null; then
     commands_for_install="apt-get update && apt-get install -y ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
     url=$(curl -LRsS https://github.com/peco/peco/releases | grep -o "href=\"[^\"]*linux_amd64[^\"]*" | sed "s|href=\"|https://github.com|" | head -n 1)
     commands_for_install="
-      ${http_get:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz 'peco_*/${prog_name:?}' && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
+      ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz 'peco_*/${prog_name:?}' && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
     "
   else
     echo "OS not supported" | stderrPipeError
