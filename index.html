@@ -355,6 +355,7 @@ git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && c
 docker run -it --rm djeeno/ubuntu:18.04 bash
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
+docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(pwd):$(pwd)" djeeno/workspace:latest bash -c "cd $(pwd) && bash -l"
 docker run -it --rm -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/workspace:latest bash -c "cd $(pwd) && bash -l"
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
