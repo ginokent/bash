@@ -18,3 +18,8 @@ stderrPipeInfo ()   { awk '{print "\033[34m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [   
 
 echo "\"<\" と文字列が隣接すると HTML タグとして解釈される問題。以下コマンドで、ヒアドキュメントの \"<<\" の後ろにスペースを追加するよう置換する。" | stderrPipeInfo
 echo '$ git grep -l "<<[^[:space:]]" | grep -v "lint\.sh" | xargs -I{} perl -pe "s/(<<)([^[:space:]])/\1 \2/g" -i {}' | tee /dev/stderr | sed "s/^\$ //" | bash
+
+
+
+# memo
+# git grep -l "##HttpGet##" | xargs -I{} perl -0pe 's@\n.*##HttpGet##@\nexport httpGet; httpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -LRsS "; } || { command -v wget 1>/dev/null \&\& printf "wget -qO- "; } )"; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${envIsLoaded:-false}" = true ] || eval "\$(sh -c "exec \${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##@g' -i {}
