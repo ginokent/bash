@@ -8,7 +8,7 @@ cat >/dev/null << '#sh.djeeno.com'
 # Run the following command to install:
 #   $ curl https://djeeno.github.io/sh/asdf/kubetail/ | bash
 
-{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet; [[ ${envIsLoaded:-false} = true ]] || source <(HttpGet https://djeeno.github.io/sh/common/) || exit 1
+{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet;[[ ${envIsLoaded:-false} = true ]]||{ eval "$(HttpGet https://djeeno.github.io/sh/common/)"; }||exit 1 ##HttpGet##
 
 echo "  KUBETAIL_VERSION=${KUBETAIL_VERSION:-USE_DEFAULT}" | stderrPipeInfo
 

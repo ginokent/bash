@@ -2,7 +2,7 @@
 set -e
 export LANG=C LC_ALL=C
 
-{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet; [[ ${envIsLoaded:-false} = true ]] || source <(HttpGet https://djeeno.github.io/sh/common/) || exit 1
+{ { { command -v curl&&HttpGet() { curl -LRsS "$1"; }; }||{ command -v wget&&HttpGet() { wget -qO- "$1"; }; }; }; }>/dev/null||{ printf "\033[31m%s\033[0m\n" "$(date +%Y-%m-%dT%H:%M:%S%z) [  error] curl or wget are required.";exit 1; }&&export HttpGet;[ "${envIsLoaded:-false}" = true ]||{ eval "$(HttpGet https://djeeno.github.io/sh/common/)"; }||exit 1 ##HttpGet##
 
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "env:"
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "  PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
