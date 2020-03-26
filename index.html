@@ -5,6 +5,23 @@ cat >/dev/null << '#sh.djeeno.com'
 #sh.djeeno.com
 ##
 
+
+
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeDebug=' awk "{print \"\\033[00m$(date +%Y-%m-%dT%H:%M:%S%z) [  debug] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeDebug
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeNotice='awk "{print \"\\033[01m$(date +%Y-%m-%dT%H:%M:%S%z) [ notice] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeNotice
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeError=' awk "{print \"\\033[31m$(date +%Y-%m-%dT%H:%M:%S%z) [  error] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeError
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeOK='    awk "{print \"\\033[32m$(date +%Y-%m-%dT%H:%M:%S%z) [     ok] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeOK
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeWarn='  awk "{print \"\\033[33m$(date +%Y-%m-%dT%H:%M:%S%z) [warning] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeWarn
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeInfo='  awk "{print \"\\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeInfo
+
+
+
 cat << "DOCUMENT" | sh -c "exec ${stderrPipeNotice:?}"
 +--!!注意!!----------------------------------------------------------------------------+
 | このページをシェルスクリプトとして実行しないでください。                             |
@@ -36,14 +53,6 @@ exit 0
 # ==================================================
 # 共通
 # ==================================================
-
-# stderrPipe : いい感じログを出す。
-stderrPipeDebug ()  { awk '{print "\033[00m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
-stderrPipeNotice () { awk '{print "\033[01m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
-stderrPipeError ()  { awk '{print "\033[31m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
-stderrPipeOK ()     { awk '{print "\033[32m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
-stderrPipeWarn ()   { awk '{print "\033[33m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
-stderrPipeInfo ()   { awk '{print "\033[34m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
 
 # 一撃インストール系
 xcode-select --install
