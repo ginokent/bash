@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -E -o pipefail
+set -e -E -o pipefail
 # このリポジトリ向け lint
 
 # check bash version
