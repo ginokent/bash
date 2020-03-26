@@ -1,22 +1,22 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 cat >/dev/null << '#sh.djeeno.com'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #sh.djeeno.com
 ##
 
-# check bash version
-if ! test "${BASH_VERSINFO[0]}" -ge 3; then
-  printf '\033[1;31m%s\033[0m\n' "bash 3.x or later is required" 1>&2
-  exit 1
-fi
-
 # 関数 export
-stderrPipeDebug ()  { awk '{print "\033[00m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  debug] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeDebug
-stderrPipeNotice () { awk '{print "\033[01m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [ notice] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeNotice
-stderrPipeError ()  { awk '{print "\033[31m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [  error] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeError
-stderrPipeOK ()     { awk '{print "\033[32m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [     ok] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeOK
-stderrPipeWarn ()   { awk '{print "\033[33m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [warning] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeWarn
-stderrPipeInfo ()   { awk '{print "\033[34m'"$(date +%Y-%m-%dT%H:%M:%S%z)"' [   info] "$0"\033[0m"}' /dev/stdin 1>&2; } && export -f stderrPipeInfo
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeDebug=' awk "{print \"\\033[00m$(date +%Y-%m-%dT%H:%M:%S%z) [  debug] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeDebug
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeNotice='awk "{print \"\\033[01m$(date +%Y-%m-%dT%H:%M:%S%z) [ notice] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeNotice
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeError=' awk "{print \"\\033[31m$(date +%Y-%m-%dT%H:%M:%S%z) [  error] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeError
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeOK='    awk "{print \"\\033[32m$(date +%Y-%m-%dT%H:%M:%S%z) [     ok] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeOK
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeWarn='  awk "{print \"\\033[33m$(date +%Y-%m-%dT%H:%M:%S%z) [warning] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeWarn
+# shellcheck disable=SC2016,SC2089,SC2090
+stderrPipeInfo='  awk "{print \"\\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] \"\$0\"\\033[0m\"}" /dev/stdin 1>&2' && export stderrPipeInfo
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
@@ -74,7 +74,7 @@ fi
 export envIsLoaded=true
 
 # ログ出力
-{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | stderrPipeInfo
+{ echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}'; } | sh -c "exec ${stderrPipeInfo:?}"
 
 
 
