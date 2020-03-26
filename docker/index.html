@@ -16,9 +16,9 @@ export httpGet; httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS 
 ##
 docker_djeeno_ubuntu_1804 () { (
   set -e -E -o pipefail
-  echo "${FUNCNAME[0]} を実行します。" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "${FUNCNAME[0]} を実行します。" | sh -c "${stderrPipeInfo:?}"
   if ! command -v docker 1>/dev/null; then
-    echo "docker がインストールされている必要があります。" | sh -c "exec ${stderrPipeError:?}"
+    echo "docker がインストールされている必要があります。" | sh -c "${stderrPipeError:?}"
     return 1
   fi
   TMPDIR="/tmp/${FUNCNAME[0]}"
@@ -75,20 +75,20 @@ RUN set -x \
   && set +x
   #&& echo 'export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi' >> ~/.bashrc
 EOF
-  echo 'docker build を実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker build を実行します。' | sh -c "${stderrPipeInfo:?}"
   docker build --tag ${DOCKER_TAG} .
   
-  echo 'docker run をテスト実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker run をテスト実行します。' | sh -c "${stderrPipeInfo:?}"
   docker run --rm --name test_djeeno_ubuntu_1804 ${DOCKER_TAG} date
   
-  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker push ${DOCKER_TAG}
   
-  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_REPOSITORY}:latest
   
-  echo "正常に実行が完了しました。" | sh -c "exec ${stderrPipeOK:?}"
+  echo "正常に実行が完了しました。" | sh -c "${stderrPipeOK:?}"
 )} && docker_djeeno_ubuntu_1804
 
 ##
@@ -104,9 +104,9 @@ docker push djeeno/sandbox:latest
 ##
 docker_djeeno_terraform() { (
   set -e -E -o pipefail
-  echo "${FUNCNAME[0]} を実行します。" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "${FUNCNAME[0]} を実行します。" | sh -c "${stderrPipeInfo:?}"
   if ! command -v docker 1>/dev/null; then
-    echo "docker がインストールされている必要があります。" | sh -c "exec ${stderrPipeError:?}"
+    echo "docker がインストールされている必要があります。" | sh -c "${stderrPipeError:?}"
     return 1
   fi
   TMPDIR="/tmp/${FUNCNAME[0]}"
@@ -136,20 +136,20 @@ RUN set -x \
   && terraform version \
   && set +x
 EOF
-  echo 'docker build を実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker build を実行します。' | sh -c "${stderrPipeInfo:?}"
   docker build --tag "${DOCKER_TAG}" .
   
-  echo 'docker run をテスト実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker run をテスト実行します。' | sh -c "${stderrPipeInfo:?}"
   docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
   
-  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker push "${DOCKER_TAG}"
   
-  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
   docker push "${DOCKER_REPOSITORY}:latest"
   
-  echo "正常に実行が完了しました。" | sh -c "exec ${stderrPipeOK:?}"
+  echo "正常に実行が完了しました。" | sh -c "${stderrPipeOK:?}"
 )} && docker_djeeno_terraform
 
 ##
@@ -158,9 +158,9 @@ EOF
 ##
 docker_djeeno_awscli() { (
   set -e -E -o pipefail
-  echo "${FUNCNAME[0]} を実行します。" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "${FUNCNAME[0]} を実行します。" | sh -c "${stderrPipeInfo:?}"
   if ! command -v docker 1>/dev/null; then
-    echo "docker がインストールされている必要があります。" | sh -c "exec ${stderrPipeError:?}"
+    echo "docker がインストールされている必要があります。" | sh -c "${stderrPipeError:?}"
     return 1
   fi
   TMPDIR="/tmp/${FUNCNAME[0]}"
@@ -189,20 +189,20 @@ RUN set -x \
   && pip install awscli==${VERSION} \
   && set +x
 EOF
-  echo 'docker build を実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker build を実行します。' | sh -c "${stderrPipeInfo:?}"
   docker build --tag "${DOCKER_TAG}" .
   
-  echo 'docker run をテスト実行します。' | sh -c "exec ${stderrPipeInfo:?}"
+  echo 'docker run をテスト実行します。' | sh -c "${stderrPipeInfo:?}"
   docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
   
-  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker push "${DOCKER_TAG}"
   
-  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "exec ${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
   docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
   docker push "${DOCKER_REPOSITORY}:latest"
   
-  echo "正常に実行が完了しました。" | sh -c "exec ${stderrPipeOK:?}"
+  echo "正常に実行が完了しました。" | sh -c "${stderrPipeOK:?}"
 )} && docker_djeeno_awscli
 
 

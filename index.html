@@ -22,7 +22,7 @@ stderrPipeInfo='  awk "{print \"\\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] 
 
 
 
-cat << "DOCUMENT" | sh -c "exec ${stderrPipeNotice:?}"
+cat << "DOCUMENT" | sh -c "${stderrPipeNotice:?}"
 +--!!注意!!----------------------------------------------------------------------------+
 | このページをシェルスクリプトとして実行しないでください。                             |
 | この index.html はシェルスクリプトとして実行されることを想定して作成されていません。 |
