@@ -527,6 +527,13 @@ circleci local execute
 
 
 
+# ==================================================
+# Unity
+# ==================================================
+
+# unity
+curl -LsS https://unity3d.com/get-unity/download/archive | grep -Eo "href=\"unityhub://[^\"]+\"" | sed "s|^.*\"unityhub://\([^/]*\)/\([^\"]*\)\".*$|https://download.unity3d.com/download_unity/\2/UnitySetup-\1|"
+
 
 
 # ==================================================
