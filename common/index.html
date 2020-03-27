@@ -31,6 +31,10 @@ export envIsUbuntu1404=false
 export envIsUbuntu1604=false
 export envIsUbuntu1804=false
 
+# Amazon Linux
+export envIsAmazonLinux
+export envIsAmazonLinux2
+
 # CentOS
 export envIsCentOS=false
 export envIsCentOS6=false
@@ -59,6 +63,9 @@ elif grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
 elif grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
   envIsUbuntu=true
   envIsUbuntu1804=true
+elif grep -q "\"Amazon Linux 2\"" /etc/lsb-release 2>/dev/null; then
+  envIsAmazonLinux=true
+  envIsAmazonLinux2=true
 elif grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; then
   envIsCentOS=true
   envIsCentOS6=true

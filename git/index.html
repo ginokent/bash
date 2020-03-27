@@ -18,7 +18,7 @@ bin_dir=/usr/local/bin
 if [ "${envIsDarwin}" = true ]; then
   bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
   commands_for_install="brew install ${prog_name:?}"
-elif [ "${envIsCentOS}" = true ]; then
+elif [ "${envIsCentOS}" = true ] || [ "${envIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016
   commands_for_install='yum makecache && yum install -y {curl,expat,gettext,openssl,zlib}-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
 elif [ "${envIsUbuntu}" = true ]; then
