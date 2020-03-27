@@ -36,7 +36,7 @@ cat << "DOCUMENT" | sh -c "${stderrPipeNotice:?}"
 
   _readline_helpme() {
     command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
-    READLINE_LINE=$(curl -LRsS https://djeeno.github.io/sh/ | cat -n | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up | sed 's/^[^0-9]*[0-9]*[^0-9]//')
+    READLINE_LINE=$(curl -LRsS https://djeeno.github.io/sh/ | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up)
     READLINE_POINT=${#READLINE_LINE}
   } && bind -x '"\C-n":_readline_helpme'
 
