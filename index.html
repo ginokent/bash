@@ -177,7 +177,7 @@ git filter-branch -f --env-filter "GIT_AUTHOR_NAME='djeeno'; GIT_AUTHOR_EMAIL='2
 # ==================================================
 
 # apt
-apt-get () { if [ "$1" = update ]; then [ 43200 -ge $(($(date +%s)-$( { date -d "$(stat /var/lib/apt/lists/* | awk -F"Change:" "/Change:/ {print \$2}" | sort | tail -n 1)" +%s; } 2>/dev/null)+0)) ] || command apt-get update; else command apt-get "$@"; fi; } && export -f apt-get
+apt-get () { if [ "$1" = update ]; then last=$(stat /var/lib/apt/lists/*|awk -F"Change:" "/Change:/ {print \$2}"|sort|tail -n 1) 2>/dev/null; [ 43200 -ge $(($(date +%s)-$(date -d"${last:=1970-1-1}" +%s))) ] || command apt-get update; else command apt-get "$@"; fi; } && export -f apt-get
 apt-get update && apt-get install -y bsdmainutils   # column
 apt-get update && apt-get install -y coreutils      # tail
 apt-get update && apt-get install -y dnsutils       # dig
