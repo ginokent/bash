@@ -504,6 +504,8 @@ gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GCP_PROJECT:?}" "${GCE_IN
 # gcloud : 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
 gcloud compute operations list --sort-by=TIMESTAMP --project "${GCP_PROJECT:?}"
+gcloud compute operations list --sort-by=TIMESTAMP | grep -i hostError
+gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 
 # gcloud : kubernetes cluster を作成する。
 gcloud container clusters create "${GKE_CLUSTER:?}"
