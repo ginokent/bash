@@ -8,7 +8,7 @@ cat >/dev/null << '#sh.djeeno.com'
 # Run the following command to install:
 #   $ curl https://djeeno.github.io/sh/asdf/python/ | bash
 
-export httpGet; httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
 echo "  PYTHON_VERSION=${PYTHON_VERSION:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
 
