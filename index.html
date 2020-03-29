@@ -7,18 +7,12 @@ cat >/dev/null << '#sh.djeeno.com'
 
 
 
-# shellcheck disable=SC2089,SC2090
-stderrPipeDebug=" exec awk \"{print \\\"\\\\033[00m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [  debug] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeDebug
-# shellcheck disable=SC2089,SC2090
-stderrPipeNotice="exec awk \"{print \\\"\\\\033[01m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [ notice] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeNotice
-# shellcheck disable=SC2089,SC2090
-stderrPipeError=" exec awk \"{print \\\"\\\\033[31m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [  error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeError
-# shellcheck disable=SC2089,SC2090
-stderrPipeOK="    exec awk \"{print \\\"\\\\033[32m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [     ok] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeOK
-# shellcheck disable=SC2089,SC2090
-stderrPipeWarn="  exec awk \"{print \\\"\\\\033[33m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [warning] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeWarn
-# shellcheck disable=SC2089,SC2090
-stderrPipeInfo="  exec awk \"{print \\\"\\\\033[34m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [   info] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2" && export stderrPipeInfo
+export  stderrPipeDebug="awk \"{print \\\"\\\\033[00m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [  debug] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
+export stderrPipeNotice="awk \"{print \\\"\\\\033[01m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [ notice] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
+export  stderrPipeError="awk \"{print \\\"\\\\033[31m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [  error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
+export     stderrPipeOK="awk \"{print \\\"\\\\033[32m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [     ok] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
+export   stderrPipeWarn="awk \"{print \\\"\\\\033[33m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [warning] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
+export   stderrPipeInfo="awk \"{print \\\"\\\\033[34m\\\$(date +%Y-%m-%dT%H:%M:%S%z) [   info] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
 
 
 
