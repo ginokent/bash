@@ -121,8 +121,8 @@ ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.dump(YAML.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 
-# python 3 を探す
-echo "$PATH" | tr : "\n" | xargs -I@ sh -c 'file @/python*' | grep -v cannot | grep -o "^/[^:]*" | xargs -I@ sh -c "@ -c 'import sys; v=sys.version_info; print(sys.executable) if v.major >= 3 and v.minor >= 0 else sys.exit()'" 2>/dev/null | grep "^/[^[:blank:]]*$"
+# python 3.4 or later を探す
+echo "$PATH" | tr : "\n" | xargs -I@ sh -c "exec ls -1 \"@/python\"*" 2>/dev/null | grep -o "^/[^:]*" | xargs -I@ sh -c "@ -c \"import sys; v=sys.version_info; print(sys.executable) if v.major >= 3 and v.minor >= 4 else sys.exit()\"" 2>/dev/null | grep "^/[^[:blank:]]*$"
 
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
