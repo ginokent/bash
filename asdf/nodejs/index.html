@@ -50,4 +50,17 @@ asdf current "${lang_name}"
 
 
 
+if ! which yarn 1>/dev/null; then
+  # shellcheck disable=SC2154
+  if [ "${envIsDarwin}" = true ]; then
+    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
+    brew install yarn
+  else
+    echo "install yarn. ref. https://classic.yarnpkg.com/ja/docs/install/#alternatives-stable" | sh -c "${stderrPipeInfo:?}"
+    curl -o- -L https://yarnpkg.com/install.sh | bash
+  fi
+fi
+
+
+
 # (C) 2018 djeeno </code></pre></div>
