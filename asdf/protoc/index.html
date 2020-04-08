@@ -10,7 +10,7 @@ cat >/dev/null << '#sh.djeeno.com'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
-echo "  PROTOC_VERSION=${KUBETAIL_VERSION:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
+echo "  PROTOC_VERSION=${PROTOC_VERSION:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
 
 lang_name="protoc"
 echo "install ${lang_name} via asdf" | sh -c "${stderrPipeInfo:?}"
