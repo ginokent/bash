@@ -550,7 +550,7 @@ curl -LsS https://unity3d.com/get-unity/download/archive | grep -Eo "href=\"unit
 # ==================================================
 
 # vim ${hoge} を ${hoge:?} に変換する。
-# vim %s/\(\${[^:{}]*[^\?"]\)}/\1:?}/gc
+# vim %s/\(\${[^!:{}\[\]]*[^\?"]\)}/\1:?}/gc
 
 
 
