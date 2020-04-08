@@ -466,6 +466,9 @@ kubectl() { (
   command kubectl "$@"
 )}
 
+# 現在 ~/.kube/config が向いている context を表示する
+kubectl config current-context
+
 
 
 # ==================================================
