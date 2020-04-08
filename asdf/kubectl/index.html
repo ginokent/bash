@@ -15,7 +15,7 @@ echo "  KUBECTL_VERSION=${KUBECTL_VERSION:-USE_DEFAULT}" | sh -c "${stderrPipeIn
 lang_name="kubectl"
 echo "install ${lang_name} via asdf" | sh -c "${stderrPipeInfo:?}"
 
-command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/asdf/")" || exit 1
+asdf --version 1>/dev/null 2>&1 || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/asdf/")" || exit 1
 
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
