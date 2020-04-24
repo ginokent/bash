@@ -448,6 +448,9 @@ docker-compose down --rmi all
 # api コンテナから db コンテナに MySQL 接続する。
 docker-compose exec api bash -c 'mysql -h db -P 3306 -u root --password=password'
 
+# docker build
+curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/tag/v[0-9]+\.[0-9]+\.[0-9]+" | awk -F "releases/tag/v" "\$0=\$2" | while read -r VERSION; do printf "%s\n%s\n" "FROM hashicorp/terraform:${VERSION}" "CMD terraform" | docker build -t "djeeno/terraform:${VERSION}" - && docker push "djeeno/terraform:${VERSION}"; done
+
 
 
 # ==================================================
