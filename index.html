@@ -334,10 +334,10 @@ mysql -e "INSERT INTO ${TABLE:?} (__uniquekey__, __column1__) VALUES ('myAwesome
 mysql -e "SELECT * FROM employees LIMIT 3; INSERT INTO employees VALUES (10000, '1970-01-01', 'John', 'Due', 'M', '2000-01-01') ON DUPLICATE KEY UPDATE hire_date = UTC_TIMESTAMP(); SELECT * FROM employees LIMIT 3; INSERT INTO employees VALUES (10000, '1970-01-01', 'John', 'Due', 'M', '2000-01-01') ON DUPLICATE KEY UPDATE hire_date = UTC_TIMESTAMP(); SELECT * FROM employees LIMIT 3; DELETE FROM employees WHERE emp_no = 10000;"
 
 # mysql db database データベースのサイズを表示する
-mysql -e "SELECT table_schema, SUM(data_length+index_length)/1024/1024/1024 AS GiB FROM information_schema.tables GROUP BY table_schema ORDER BY SUM(data_length+index_length) DESC;"
+mysql -e "SELECT table_schema, SUM(data_length+index_length)/1024/1024 AS MiB FROM information_schema.tables GROUP BY table_schema ORDER BY SUM(data_length+index_length) DESC;"
 
 # mysql table テーブルのサイズを表示する
-mysql -e "SELECT table_name, engine, table_rows, avg_row_length, FLOOR((data_length+index_length)/1024/1024/1024) AS AllGiB, FLOOR((data_length)/1024/1024/1024) AS DataGiB, FLOOR((index_length)/1024/1024/1024) AS IndexGiB FROM information_schema.tables WHERE table_schema=DATABASE() ORDER BY (data_length+index_length) DESC;"
+mysql -e "SELECT table_name, engine, table_rows, avg_row_length, FLOOR((data_length+index_length)/1024/1024) AS AllMiB, FLOOR((data_length)/1024/1024) AS DataMiB, FLOOR((index_length)/1024/1024) AS IndexMiB FROM information_schema.tables WHERE table_schema=DATABASE() ORDER BY (data_length+index_length) DESC;"
 
 # mysql INNODB STATUS を表示する
 mysql -e "SHOW ENGINE INNODB STATUS;"
