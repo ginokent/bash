@@ -262,6 +262,9 @@ scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostnam
 # mysql MySQL
 # ==================================================
 
+# mysql MYSQL_PWD 環境ヘンスを用いて認証を警告無しで通す
+MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?}" -e "SELECT VERSION();";
+
 # mysqldump : 指定した DATABASE を backup
 DUMP_GZ="./${MYSQL_DB:?}_$(date +%Y%m%d_%H%M%S).dump.gz"
 mysqldump --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --single-transaction "${MYSQL_DB:?}" | gzip - >"${DUMP_GZ:?}"
@@ -312,16 +315,16 @@ mysql -e "SHOW STATUS LIKE 'Conn%';"
 mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only';"
 
 # mysql create database データベースを作成する
-mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4;"
-# mysql db_for_test データベースが存在しなければ, CREATE DATABASE する
-MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?}" -e "CREATE DATABASE IF NOT EXISTS '${MYSQL_DB:?}';";
+mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4 IF NOT EXISTS '${MYSQL_DB:?}';"
+# mysql 使用するデータベースを指定する
+mysql -e "USE ${MYSQL_DB:?};"
 # mysql データベース一覧を表示する
 mysql -e "SHOW DATABASES;"
 # mysql データベース詳細を表示する
-mysql -e "SHOW CREATE DATABASE ${TABLE:?}\G"
-# mysql 使用するデータベースを指定する
-mysql -e "USE ${MYSQL_DB:?};"
+mysql -e "SHOW CREATE DATABASE ${MYSQL_DB:?}\G"
 
+# mysql 使用するテーブルを指定する
+mysql -e "USE ${TABLE:?};"
 # mysql テーブル一覧を表示する
 mysql -e "SHOW TABLES;"
 # mysql テーブル詳細を表示する
@@ -329,8 +332,6 @@ mysql -e "DESCRIBE ${TABLE:?};"
 mysql -e "DESC ${TABLE:?};"
 mysql -e "SHOW COLUMNS FROM ${TABLE:?};"
 mysql -e "SHOW CREATE TABLE ${TABLE:?}\G"
-# mysql 使用するテーブルを指定する
-mysql -e "USE ${TABLE:?};"
 
 # mysql Oracle で言うところの UPSERT. INSERTする時にユニークキーを含まないと複数行ヒットしてしまい、しかし内1行しか更新されないらしい（伝聞）
 mysql -e "INSERT INTO ${TABLE:?} (__uniquekey__, __column1__) VALUES ('myAwesomeUniqueKey', 'myAwesomeValue') ON DUPLICATE KEY UPDATE __column1__ = 'myGreatValue', __column2__ = 100;"
@@ -346,7 +347,7 @@ mysql -e "SELECT table_name, engine, table_rows, avg_row_length, FLOOR((data_len
 mysql -e "SHOW ENGINE INNODB STATUS;"
 
 # mysql ~/.my.cnf の設定
-tee -a "${MY_CNF:-/dev/null}" << MY_CNF
+tee -a "${MY_CNF:-"$HOME/.my.cnf"}" << MY_CNF
 [client]
 user                        = ${MYSQL_USER:?}
 host                        = ${MYSQL_HOST:?}
