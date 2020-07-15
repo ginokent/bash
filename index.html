@@ -571,6 +571,18 @@ curl -LsS https://unity3d.com/get-unity/download/archive | grep -Eo "href=\"unit
 
 
 
+# ==================================================
+# awk gawk
+# ==================================================
+printf '%d\n%d\n' 1 2               | awk '{sum+=$1} END {print sum}'
+printf '%s\n%s\n' 'value1' 'value2' | awk '{ if (/^value2$/) print }'
+printf '%s\n'     'before'          | awk '{ gsub(/before/, "\"after\""); print }'
+printf '%s\n'     'value1,value2'   | awk '{ split($0, array, ","); print array[1] }'
+printf '%s\n'     'abcdefghijklmn'  | awk '{ print toupper($0)}'
+printf '%s\n'     'abcdefghijklmn'  | awk '{ print length($0)}'
+
+
+
 # ====================================================================================================
 #   ここまで
 # ====================================================================================================
