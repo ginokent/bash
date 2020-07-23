@@ -495,7 +495,7 @@ gcloud components update
 # gcloud : TL;DR
 gcloud config configurations create "${GCP_CONFIG:?}"
 gcloud auth login
-gcloud config set project "${GCP_PROJECT:?}"
+gcloud config set project "${GOOGLE_PROJECT:?}"
 gcloud config configurations list
 # gcloud : 初期化
 gcloud init --console-only
@@ -513,17 +513,17 @@ gcloud auth login
 # gcloud : アカウントを認証する - サービスアカウントの場合
 gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
 # gcloud : プロジェクトを設定する。
-gcloud config set project "${GCP_PROJECT:?}"
+gcloud config set project "${GOOGLE_PROJECT:?}"
 # gcloud : 利用する configuration を切り替える。
 gcloud config configurations activate "${GCP_CONFIG:?}"
 # gcloud : peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 
 # gcloud : compute ssh
-gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GCP_PROJECT:?}" "${GCE_INSTANCE:?}"
+gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GOOGLE_PROJECT:?}" "${GCE_INSTANCE:?}"
 # gcloud : 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
-gcloud compute operations list --sort-by=TIMESTAMP --project "${GCP_PROJECT:?}"
+gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_PROJECT:?}"
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i hostError
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 
@@ -531,8 +531,8 @@ gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 gcloud container clusters create "${GKE_CLUSTER:?}"
 # gcloud : kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
 # gcloud : `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
-gcloud container clusters get-credentials --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
-gcloud container clusters get-credentials --zone "${GCP_ZONE:?}" --project "${GCP_PROJECT:?}" "${GKE_CLUSTER:?}"
+gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
+gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
 
 
 
