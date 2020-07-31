@@ -60,6 +60,8 @@ bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/kubetail/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/direnv/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
 bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
+curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/local/bin/cdiff ; chmod -v +x /usr/local/bin/cdiff
+curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/local/bin/kubectl ; chmod -v +x /usr/local/bin/kubectl
 
 # complete
 command -v kubeadm 1>/dev/null && eval "$(command kubeadm completion bash)"
