@@ -485,6 +485,9 @@ kubectl() { (
 # 現在 ~/.kube/config が向いている context を表示する
 kubectl config current-context
 
+# k9s を docker 経由で実行する
+alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro quay.io/derailed/k9s'
+
 
 
 # ==================================================
