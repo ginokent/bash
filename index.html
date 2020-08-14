@@ -60,8 +60,8 @@ bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/kubetail/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/direnv/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
 bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
-curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/local/bin/cdiff ; chmod -v +x /usr/local/bin/cdiff
-curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/local/bin/kubectl ; chmod -v +x /usr/local/bin/kubectl
+curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff ; chmod -v +x /usr/bin/cdiff
+curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl ; chmod -v +x /usr/bin/kubectl
 
 # complete
 command -v kubeadm 1>/dev/null && eval "$(command kubeadm completion bash)"
@@ -448,7 +448,7 @@ screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 # docker-compose : 最新の docker-compose をインストールする。
 DOCKER_COMPOSE_URL="$(echo "https://github.com$(curl -LRsS https://github.com/docker/compose/releases | grep -Eo "/docker/compose/releases/download/[0-9\.]+/docker-compose-$(uname -s)-$(uname -m)" | head -n 1)" | tee /dev/stderr)"
-sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
 
 # docker-compose : `ERROR: readlink /var/lib/docker/overlay2: invalid argument` が出た時に実行する。
 docker-compose down --rmi local
