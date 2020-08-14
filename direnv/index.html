@@ -12,7 +12,7 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { comman
 
 echo "  DIRENV_VERSION=latest" | sh -c "${stderrPipeInfo:?}"
 prog_name=direnv
-bin_dir=/usr/local/bin
+bin_dir=/usr/bin
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
@@ -43,6 +43,15 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
 fi
 
 echo "${prog_name:?} installed" | sh -c "${stderrPipeOK:?}"
+
+if ! grep -q "eval....direnv.hook.bash.." ~/.bashrc; then
+  echo "Add direnv hook to ~/.bashrc" | sh -c "${stderrPipeInfo:?}"
+  {
+    echo
+    echo "# direnv hook"
+    echo "eval \"\$(direnv hook bash)\""
+  } >> ~/.bashrc
+fi
 
 
 
