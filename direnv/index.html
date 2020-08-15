@@ -11,6 +11,7 @@ cat >/dev/null << '#djeeno.github.io/sh'
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
 echo "  DIRENV_VERSION=latest" | sh -c "${stderrPipeInfo:?}"
+echo "  SHELLRC=${SHELLRC:-default}" | sh -c "${stderrPipeInfo:?}"
 prog_name=direnv
 bin_dir=/usr/bin
 
@@ -44,14 +45,18 @@ fi
 
 echo "${prog_name:?} installed" | sh -c "${stderrPipeOK:?}"
 
-if ! grep -q "eval....direnv.hook.bash.." ~/.bashrc; then
-  echo "Add direnv hook to ~/.bashrc" | sh -c "${stderrPipeInfo:?}"
-  {
-    echo
-    echo "# direnv hook"
-    echo "eval \"\$(direnv hook bash)\""
-  } >> ~/.bashrc
-fi
+AddDirenvHook () {
+  file="${1:?}"
+  if ! grep -q "^eval....direnv.hook.bash.." "${file:?}"; then
+    echo "Add direnv hook to ${file:?}" | sh -c "${stderrPipeInfo:?}"
+    if [ -w "${file:?}" ]; then
+      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| tee -a "${file:?}" 1>/dev/null
+    else
+      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| sudo tee -a "${file:?}" 1>/dev/null
+    fi
+  fi
+}
+AddDirenvHook "${SHELLRC:=$HOME/.bashrc}"
 
 
 
