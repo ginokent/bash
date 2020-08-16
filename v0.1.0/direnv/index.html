@@ -16,6 +16,8 @@ prog_name=direnv
 bin_dir=/usr/local/bin
 shellrc=${SHELLRC:-$HOME/.bashrc}
 
+echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
+
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
