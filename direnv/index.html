@@ -11,9 +11,10 @@ cat >/dev/null << '#djeeno.github.io/sh'
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
 echo "  DIRENV_VERSION=latest" | sh -c "${stderrPipeInfo:?}"
-echo "  SHELLRC=${SHELLRC:-default}" | sh -c "${stderrPipeInfo:?}"
+echo "  SHELLRC=${SHELLRC:--USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
 prog_name=direnv
 bin_dir=/usr/local/bin
+shellrc=${SHELLRC:-$HOME/.bashrc}
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
@@ -21,7 +22,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
     commands_for_install="brew install ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
-    url=$(curl -LRsS https://github.com/direnv/direnv/releases/ | grep -o "href=\"/direnv/direnv/releases/download/v[0-9]*\.[0-9]*\.[0-9]*/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64" | sed "s|href=\"|https://github.com|" | head -n 1)
+    url="https://github.com/direnv/direnv/releases/latest/download/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"
     commands_for_install="
       ${httpGet:?} \"${url:?}\" >${bin_dir:?}/${prog_name:?} && chmod +x ${bin_dir:?}/${prog_name:?}
     "
@@ -56,7 +57,7 @@ AddDirenvHook () {
     fi
   fi
 }
-AddDirenvHook "${SHELLRC:=$HOME/.bashrc}"
+AddDirenvHook "${shellrc:?}"
 
 
 
