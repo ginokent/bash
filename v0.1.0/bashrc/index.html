@@ -6,19 +6,19 @@ cat >/dev/null << '#djeeno.github.io/sh'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/sh/bashrc/ | bash
+#   $ curl https://djeeno.github.io/sh/v0.1.0/bashrc/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.0/common/")" || exit 1 ##httpGet##
 
 echo "  BASHRC=${BASHRC:-default}" | sh -c "${stderrPipeInfo:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
-if ! grep -q "^#.djeeno.github.io/sh/bashrc" "${bashrc:?}"; then
+if ! grep -q "^#.djeeno.github.io/sh/v0.1.0/bashrc" "${bashrc:?}"; then
   echo "Add bashrc settings" | sh -c "${stderrPipeInfo:?}"
   bashrc_content=$(cat << "BASHRC"
 
 ##
-# djeeno.github.io/sh/bashrc/
+# djeeno.github.io/sh/v0.1.0/bashrc/
 ##
 
 # HTTP GET Client
@@ -44,7 +44,7 @@ fi
 
 # direnv
 if ! command -v direnv 1>/dev/null; then
-  ${httpGet:?} https://djeeno.github.io/sh/direnv/ | bash
+  ${httpGet:?} https://djeeno.github.io/sh/v0.1.0/direnv/ | bash
 fi
 if command -v direnv 1>/dev/null; then
   eval "$(direnv hook bash)"
