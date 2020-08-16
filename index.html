@@ -7,15 +7,6 @@ cat >/dev/null << '#djeeno.github.io/sh'
 
 
 
-export  stderrPipeDebug="awk \"{print \\\"\\\\033[00m\$(date +%Y-%m-%dT%H:%M:%S%z) [  debug] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-export stderrPipeNotice="awk \"{print \\\"\\\\033[01m\$(date +%Y-%m-%dT%H:%M:%S%z) [ notice] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-export  stderrPipeError="awk \"{print \\\"\\\\033[31m\$(date +%Y-%m-%dT%H:%M:%S%z) [  error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-export     stderrPipeOK="awk \"{print \\\"\\\\033[32m\$(date +%Y-%m-%dT%H:%M:%S%z) [     ok] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-export   stderrPipeWarn="awk \"{print \\\"\\\\033[33m\$(date +%Y-%m-%dT%H:%M:%S%z) [warning] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-export   stderrPipeInfo="awk \"{print \\\"\\\\033[34m\$(date +%Y-%m-%dT%H:%M:%S%z) [   info] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin 1>&2"
-
-
-
 cat << "DOCUMENT" | sh -c "${stderrPipeNotice:?}"
 +--!!注意!!----------------------------------------------------------------------------+
 | このページをシェルスクリプトとして実行しないでください。                             |
