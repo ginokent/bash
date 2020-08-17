@@ -22,10 +22,10 @@ if [ "${envIsDarwin}" = true ]; then
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${envIsCentOS}" = true ] || [ "${envIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016
-  commands_for_install='yum makecache && yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar xzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
+  commands_for_install='yum makecache && yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget && cd /usr/local/src && URL=https://mirrors.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar xzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
 elif [ "${envIsUbuntu}" = true ]; then
   # shellcheck disable=SC2016
-  commands_for_install='apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar xzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
+  commands_for_install='apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://mirrors.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar xzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
 else
   echo "OS not supported" | sh -c "${stderrPipeError:?}"
   exit 1
