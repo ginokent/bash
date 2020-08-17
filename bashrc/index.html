@@ -8,7 +8,7 @@ cat >/dev/null << '#djeeno.github.io/sh'
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/sh/bashrc/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
 echo "  BASHRC=${BASHRC:-default}" | sh -c "${stderrPipeInfo:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
@@ -22,7 +22,7 @@ if ! grep -q "^#.djeeno.github.io/sh/bashrc" "${bashrc:?}"; then
 ##
 
 # HTTP GET Client
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1;
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1;
 
 # PATH
 echo "$PATH" | grep -q "/usr/local/bin" || export PATH="/usr/local/bin:${PATH:?}"
@@ -44,7 +44,7 @@ fi
 
 # direnv
 if ! command -v direnv 1>/dev/null; then
-  ${httpGet:?} https://djeeno.github.io/sh/direnv/ | bash
+  bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/direnv/")"
 fi
 if command -v direnv 1>/dev/null; then
   eval "$(direnv hook bash)"
