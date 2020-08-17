@@ -13,12 +13,12 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 echo "  BASHRC=${BASHRC:-default}" | sh -c "${stderrPipeInfo:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
-if ! grep -q "^#.djeeno.github.io/sh/bashrc" "${bashrc:?}"; then
+if ! grep -q "^# START djeeno.github.io/sh/bashrc/" "${bashrc:?}"; then
   echo "Add bashrc settings" | sh -c "${stderrPipeInfo:?}"
   bashrc_content=$(cat << "BASHRC"
 
 ##
-# djeeno.github.io/sh/bashrc/
+# START djeeno.github.io/sh/bashrc/
 ##
 
 # HTTP GET Client
@@ -26,6 +26,14 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 # PATH
 echo "$PATH" | grep -q "/usr/local/bin" || export PATH="/usr/local/bin:${PATH:?}"
+
+# PS1
+[ "$(id -u)" = 0 ] && PS1='\[\e[1;31m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ ' || PS1='\[\e[1;37m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
+
+# alias
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
 
 # EDITOR
 ! command -v vi  1>/dev/null || export EDITOR="$(command -v vi)"
@@ -49,6 +57,10 @@ fi
 if command -v direnv 1>/dev/null; then
   eval "$(direnv hook bash)"
 fi
+
+##
+# END djeeno.github.io/sh/bashrc/
+##
 BASHRC
   )
   if [ -w "${bashrc:?}" ]; then
