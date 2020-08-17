@@ -26,7 +26,7 @@ echo "update asdf" | sh -c "${stderrPipeInfo:?}"
 asdf update
 
 echo "update asdf plugins" | sh -c "${stderrPipeInfo:?}"
-asdf plugin-update --all
+asdf plugin-update --all || true
 
 echo "show asdf plugins current versions" | sh -c "${stderrPipeInfo:?}"
 asdf current
