@@ -12,6 +12,6 @@ copy_and_overwrite () {
   find "${1:?}" -type f -print0 | xargs -I{} perl -pe "s|(${URL_BASE:?})/|\1/${VERSION:?}/|g" -i {}
 }
 
-for dir in bashrc common direnv git peco; do
+for dir in bashrc brew common direnv git peco; do
   copy_and_overwrite "${dir:?}"
 done
