@@ -22,9 +22,9 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   elif command -v apt-get 1>/dev/null; then
     commands_for_install="apt-get update && apt-get install -y ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
-    url=$(curl -LRsS https://github.com/peco/peco/releases | grep -o "href=\"[^\"]*linux_amd64[^\"]*" | sed "s|href=\"|https://github.com|" | head -n 1)
+    url=https://github.com/peco/peco/releases/latest/download/peco_linux_amd64.tar.gz
     commands_for_install="
-      ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz 'peco_*/${prog_name:?}' && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
+      ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz \"peco_*/${prog_name:?}\" && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
     "
   else
     echo "OS not supported" | sh -c "${stderrPipeError:?}"
