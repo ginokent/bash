@@ -39,13 +39,4 @@ asdf current "${lang_name}"
 
 
 
-echo "add kubectl completion settings to ~/.bashrc" | sh -c "${stderrPipeInfo:?}"
-if ! grep -q "kubectl completion bash" ~/.bashrc; then
-cat >>~/.bashrc << 'BASHRC'
-command -v kubectl 1>/dev/null && eval "$(command kubectl completion bash)"
-BASHRC
-fi
-
-
-
 # (C) 2018 djeeno </code></pre></div>
