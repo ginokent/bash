@@ -26,6 +26,7 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 # PATH
 echo "$PATH" | grep -q "/usr/local/bin" || export PATH="/usr/local/bin:${PATH:?}"
+echo "$PATH" | grep -q "${HOME:?}/bin"  || export PATH="${HOME:?}/bin:${PATH:?}"
 
 # PS1
 [ "$(id -u)" = 0 ] && PS1='\[\e[1;31m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ ' || PS1='\[\e[1;37m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
@@ -37,6 +38,9 @@ export HISTSIZE=50000
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+alias l='ls -F'
+alias la='ls -A'
+alias ll='ls -alF'
 
 # complete
 ! command -v kubectl 1>/dev/null || eval "$(command kubectl completion bash)"
