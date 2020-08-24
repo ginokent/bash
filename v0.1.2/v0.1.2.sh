@@ -3,7 +3,7 @@ set -E -e -o pipefail
 
 cd "$(dirname "$0")" || exit 1
 
-VERSION=v0.1.1
+VERSION=v0.1.2
 URL_BASE=djeeno.github.io/sh
 
 copy_and_overwrite () {

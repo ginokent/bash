@@ -6,19 +6,19 @@ cat >/dev/null << '#djeeno.github.io/sh'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/sh/v0.1.1/bashrc/ | bash
+#   $ curl https://djeeno.github.io/sh/v0.1.2/bashrc/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.1/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.2/common/")" || exit 1 ##httpGet##
 
 echo "  BASHRC=${BASHRC:-default}" | sh -c "${stderrPipeInfo:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
-if ! grep -q "^# START djeeno.github.io/sh/v0.1.1/bashrc/" "${bashrc:?}"; then
+if ! grep -q "^# START djeeno.github.io/sh/v0.1.2/bashrc/" "${bashrc:?}"; then
   echo "Add bashrc settings" | sh -c "${stderrPipeInfo:?}"
   bashrc_content=$(cat << "BASHRC"
 
 ##
-# START djeeno.github.io/sh/v0.1.1/bashrc/
+# START djeeno.github.io/sh/v0.1.2/bashrc/
 ##
 
 # HTTP GET Client
@@ -44,7 +44,7 @@ alias ll='ls -alF'
 
 # history
 _readline_history() {
-  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.1/v0.1.1/peco/")"
+  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.2/v0.1.1/peco/")"
   READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:blank:]]*[0-9]*[[:blank:]]*//' | peco --layout bottom-up)
   READLINE_POINT=${#READLINE_LINE}
 } && [[ $- =~ i ]] && bind -x '"\C-r":_readline_history'
@@ -65,7 +65,7 @@ if command -v git 1>/dev/null; then
 fi
 
 # direnv
-command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.1/direnv/")"
+command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.2/direnv/")"
 ! command -v direnv 1>/dev/null || eval "$(direnv hook bash)"
 
 # kubectl
@@ -73,7 +73,7 @@ command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://dje
 ! command -v cdiff   1>/dev/null || export KUBECTL_EXTERNAL_DIFF=cdiff
 
 ##
-# END djeeno.github.io/sh/v0.1.1/bashrc/
+# END djeeno.github.io/sh/v0.1.2/bashrc/
 ##
 BASHRC
   )

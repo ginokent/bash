@@ -6,9 +6,9 @@ cat >/dev/null << '#djeeno.github.io/sh'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/sh/v0.1.1/asdf/ | bash
+#   $ curl https://djeeno.github.io/sh/v0.1.2/asdf/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.1/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.2/common/")" || exit 1 ##httpGet##
 
 asdf_version=${ASDF_VERSION:=v0.7.8}
 echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
