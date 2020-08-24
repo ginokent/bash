@@ -45,7 +45,7 @@ alias ll='ls -alF'
 
 # history
 _readline_history() {
-  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.2/v0.1.1/peco/")"
+  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/sh/v0.1.2/peco/")"
   READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:blank:]]*[0-9]*[[:blank:]]*//' | peco --layout bottom-up)
   READLINE_POINT=${#READLINE_LINE}
 } && [[ $- =~ i ]] && bind -x '"\C-r":_readline_history'
