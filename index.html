@@ -42,7 +42,7 @@ exit 0
 # 一撃インストール系
 xcode-select --install
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/brew/)"
-bash -c "command -v gcloud || curl -LRsS https://sdk.cloud.google.com/ | bash"
+bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/git/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/golang/)"
