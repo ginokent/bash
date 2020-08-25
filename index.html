@@ -336,6 +336,9 @@ mysql -e "SELECT table_schema, SUM(data_length+index_length)/1024/1024 AS MiB FR
 # mysql table テーブルのサイズを表示する
 mysql -e "SELECT table_name, engine, table_rows, avg_row_length, FLOOR((data_length+index_length)/1024/1024) AS AllMiB, FLOOR((data_length)/1024/1024) AS DataMiB, FLOOR((index_length)/1024/1024) AS IndexMiB FROM information_schema.tables WHERE table_schema=DATABASE() ORDER BY (data_length+index_length) DESC;"
 
+# mysql table の row 数を表示する
+mysql -e "SELECT table_name, table_rows FROM information_schema.TABLES WHERE table_schema = '${MYSQL_DB:?}';"
+
 # mysql INNODB STATUS を表示する
 mysql -e "SHOW ENGINE INNODB STATUS;"
 
