@@ -25,8 +25,9 @@ if ! grep -q "^# START djeeno.github.io/sh/bashrc/" "${bashrc:?}"; then
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1;
 
 # PATH
-echo "$PATH" | grep -q "/usr/local/bin" || export PATH="/usr/local/bin:${PATH:?}"
-echo "$PATH" | grep -q "${HOME:?}/bin"  || export PATH="${HOME:?}/bin:${PATH:?}"
+echo "$PATH" | grep -q "/usr/local/bin"         || export PATH="/usr/local/bin:${PATH:?}"
+echo "$PATH" | grep -q "${HOME:?}/bin"          || export PATH="${HOME:?}/bin:${PATH:?}"
+echo "$PATH" | grep -q "${HOME:?}/dotfiles/bin" || export PATH="${HOME:?}/dotfiles/bin:${PATH:?}"
 
 # export
 export HISTSIZE=50000  ## number of history
