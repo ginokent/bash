@@ -24,11 +24,6 @@ if ! grep -q "^# START djeeno.github.io/sh/bashrc/" "${bashrc:?}"; then
 # HTTP GET Client
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1;
 
-# PATH
-echo "$PATH" | grep -q "/usr/local/bin"         || export PATH="/usr/local/bin:${PATH:?}"
-echo "$PATH" | grep -q "${HOME:?}/bin"          || export PATH="${HOME:?}/bin:${PATH:?}"
-echo "$PATH" | grep -q "${HOME:?}/dotfiles/bin" || export PATH="${HOME:?}/dotfiles/bin:${PATH:?}"
-
 # export
 export HISTSIZE=50000  ## number of history
 ! command -v vi   1>/dev/null || export EDITOR="$(command -v vi)"
@@ -70,6 +65,11 @@ command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://dje
 # kubectl
 ! command -v kubectl 1>/dev/null || eval "$(command kubectl completion bash)"
 ! command -v cdiff   1>/dev/null || export KUBECTL_EXTERNAL_DIFF=cdiff
+
+# PATH
+echo "$PATH" | grep -q "/usr/local/bin"         || export PATH="/usr/local/bin:${PATH:?}"
+echo "$PATH" | grep -q "${HOME:?}/bin"          || export PATH="${HOME:?}/bin:${PATH:?}"
+echo "$PATH" | grep -q "${HOME:?}/dotfiles/bin" || export PATH="${HOME:?}/dotfiles/bin:${PATH:?}"
 
 ##
 # END djeeno.github.io/sh/bashrc/
