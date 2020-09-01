@@ -24,6 +24,10 @@ if ! grep -q "^# START djeeno.github.io/sh/bashrc/" "${bashrc:?}"; then
 # HTTP GET Client
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1;
 
+# asdf
+test ! -f ~/.asdf/asdf.sh || . "$_"
+test ! -f ~/.asdf/completions/asdf.bash || . "$_"
+
 # export
 export HISTSIZE=50000  ## number of history
 ! command -v vi   1>/dev/null || export EDITOR="$(command -v vi)"
@@ -47,9 +51,13 @@ _readline_history() {
   READLINE_POINT=${#READLINE_LINE}
 } && [[ $- =~ i ]] && bind -x '"\C-r":_readline_history'
 
-# asdf
-test ! -f ~/.asdf/asdf.sh || . "$_"
-test ! -f ~/.asdf/completions/asdf.bash || . "$_"
+# golang
+if command -v go 1>/dev/null; then
+  export GOROOT="$(go env GOROOT)"
+  export GOPATH=$HOME/go
+  export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+  export GO111MODULE=on
+fi
 
 # git
 if command -v git 1>/dev/null; then
