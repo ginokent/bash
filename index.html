@@ -460,24 +460,11 @@ curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/t
 # Kubernetes
 # ==================================================
 
-# kubect-wrapper displays the current-context and prompts for user confirmation
-# when trying to execute kubectl's subcommands that can update the cluster's state.
-kubectl() { (
-  # if has 1 argument || has -h --help --dry-run option || Sub-commands that are not dangerous if executed without confirmation; then
-  if [ $# -le 1 ] || { echo " $* " | grep -Eq -- ' -h | --help | --dry-run '; } \
-    || { echo " $* " | grep -Eq ' api-resources | api-version | cluster-info | completion | config | describe | diff | explain | get | logs | top | version | wait '; }; then
-    command kubectl "$@"
-    return $?
-  fi
-  printf "\e[01;33m%s\n%s\e[0m" "# CurrentContext: " "#   "
-  command kubectl config current-context
-  printf "\e[01;33m%s\e[0m" "# Press Enter key to continue... "
-  read -r
-  command kubectl "$@"
-)}
-
 # 現在 ~/.kube/config が向いている context を表示する
 kubectl config current-context
+
+# kubectl port-forward
+kubectl --context="${KUBECTL_CONTEXT:?}" port-forward "service/${SERVICE_NAME:?}" "${LOCAL_PORT:?}:${SERVICE_PORT:?}"
 
 # k9s を docker 経由で実行する
 alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro quay.io/derailed/k9s'
