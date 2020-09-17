@@ -83,7 +83,7 @@ ionice -c 3 nice -n 19 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o Stri
 cdiff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');W=$(printf '\033[1m');N=$(printf '\033[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")} && alias difff=cdiff
 
 # whilediff
-whilediff () { while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep 10; done; }
+whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep 10; done)}
 
 # openssl : 証明書期限チェック。
 openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
