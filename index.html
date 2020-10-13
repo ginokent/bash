@@ -201,7 +201,8 @@ apt-get update && apt-get install -y zip
 apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # tcpdump
-sudo tcpdump -G300 -W1 -vvv -l -n -p -s 65535 -w "$(uname -n)_%Y%m%dT%H%M%S.pcap"
+sudo tcpdump -G300 -W1 -vvv -l -n -p -s 65535 -w "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
+tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 
 # apt まとめてインストールするためのコマンドを生成する。
 curl -LRsS https://djeeno.github.io/sh/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
@@ -316,15 +317,16 @@ mysql -e "SHOW DATABASES;"
 # mysql データベース詳細を表示する
 mysql -e "SHOW CREATE DATABASE ${MYSQL_DB:?}\G"
 
-# mysql 使用するテーブルを指定する
-mysql -e "USE ${TABLE:?};"
-# mysql テーブル一覧を表示する
+# mysql table テーブル一覧を表示する
 mysql -e "SHOW TABLES;"
-# mysql テーブル詳細を表示する
+# mysql table テーブル詳細を表示する
 mysql -e "DESCRIBE ${TABLE:?};"
 mysql -e "DESC ${TABLE:?};"
 mysql -e "SHOW COLUMNS FROM ${TABLE:?};"
 mysql -e "SHOW CREATE TABLE ${TABLE:?}\G"
+
+# mysql index
+mysql -e "SHOW INDEX FROM ${TABLE:?}"
 
 # mysql Oracle で言うところの UPSERT. INSERTする時にユニークキーを含まないと複数行ヒットしてしまい、しかし内1行しか更新されないらしい（伝聞）
 mysql -e "INSERT INTO ${TABLE:?} (__uniquekey__, __column1__) VALUES ('myAwesomeUniqueKey', 'myAwesomeValue') ON DUPLICATE KEY UPDATE __column1__ = 'myGreatValue', __column2__ = 100;"
