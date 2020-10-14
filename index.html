@@ -307,6 +307,10 @@ mysql -e "KILL ${MYSQL_CONNECTION_ID:?};"
 mysql -e "SHOW STATUS LIKE 'Conn%';"
 # mysql Master か Replica か判定 (Master は OFF, Replica は ON)
 mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only';"
+# mysql transaction isolation level トランザクション分離レベル
+mysql -e "SELECT @@global.tx_isolation, @@session.tx_isolation;"
+mysql -e "SHOW GLOBAL VARIABLES LIKE 'tx_isolation';"
+mysql -e "SHOW SESSION VARIABLES LIKE 'tx_isolation';"
 
 # mysql create database データベースを作成する
 mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4 IF NOT EXISTS '${MYSQL_DB:?}';"
