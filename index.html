@@ -293,6 +293,10 @@ mysql -e "SHOW STATUS LIKE 'Threads_connected';"
 # mysql innodb status log を出力する設定を確認する
 mysql -e "SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';"
 
+# mysql lock LOCK ロック
+mysql -e "SELECT * FROM sys.innodb_lock_waits;"
+mysql -e "SELECT * FROM information_schema.INNODB_LOCKS;"
+
 # mysql 現在接続しているユーザー一覧を表示する
 mysql -e "SELECT * FROM information_schema.PROCESSLIST;"
 # mysql 60 秒以上経過している接続を表示する
