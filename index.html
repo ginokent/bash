@@ -374,10 +374,10 @@ git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && c
 # ==================================================
 
 # docker : djeeno/ubuntu:18.04 の docker コンテナを起動する。
-docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(pwd):$(pwd)" djeeno/ubuntu:18.04 bash -c "cd $(pwd) && bash -l"
+docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(pwd):$(pwd)" --workdir "$(pwd)" djeeno/ubuntu:18.04 bash -l
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
-docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/ubuntu:18.04 bash -c "cd $(pwd) && bash -l"
+docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$(git rev-parse --show-toplevel)" djeeno/ubuntu:18.04 bash -l
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
