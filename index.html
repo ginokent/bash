@@ -171,7 +171,7 @@ git filter-branch -f --env-filter "GIT_AUTHOR_NAME='djeeno'; GIT_AUTHOR_EMAIL='2
 # ==================================================
 
 # apt
-export apt_get_update_cmd="last=\$(stat /var/lib/apt/lists/* 2>/dev/null | awk -F\"Change:\" \"/Change:/ {print \\\$2}\" | sort | tail -n 1); [ 43200 -ge \$((\$(date +%s)-\$(date -d\"\${last:=1970-1-1}\" +%s))) ] || command apt-get update"
+export apt_update_cmd="last=\$(stat /var/lib/apt/lists/* 2>/dev/null | awk -F\"Change:\" \"/Change:/ {print \\\$2}\" | sort | tail -n 1); [ 43200 -ge \$((\$(date +%s)-\$(date -d\"\${last:=1970-1-1}\" +%s))) ] || command apt update"
 apt-get update && apt-get install -y bsdmainutils   # column
 apt-get update && apt-get install -y coreutils      # tail
 apt-get update && apt-get install -y dnsutils       # dig
@@ -374,10 +374,10 @@ git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && c
 # ==================================================
 
 # docker : djeeno/ubuntu:18.04 の docker コンテナを起動する。
-docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(pwd):$(pwd)" --workdir "$(pwd)" djeeno/ubuntu:18.04 bash -l
+docker run -dit --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$PWD:$PWD" --workdir "$PWD" djeeno/ubuntu:18.04 bash -l && docker exec -it workspace bash -l
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
-docker run -it --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$(git rev-parse --show-toplevel)" djeeno/ubuntu:18.04 bash -l
+docker run -dit --rm --name workspace -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$(git rev-parse --show-toplevel)" djeeno/ubuntu:18.04 bash -l && docker exec -it workspace bash -l
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
