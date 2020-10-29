@@ -41,8 +41,8 @@ alias   kubectl-docker='docker run -it --rm -e KUBECONFIG="${KUBECONFIG}" -v "${
 ##
 docker_djeeno_kubectl() { (
   set -E -o pipefail
-  echo "${FUNCNAME[0]} を実行します。" | sh -c "${stderrPipeInfo:?}"
-  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | sh -c "${stderrPipeError:?}"; return 1; }
+  echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
+  command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | sh -c "${pipe_error:?}"; return 1; }
   TMPDIR="/tmp/${FUNCNAME[0]}"
   trap 'rm -rf "${TMPDIR:?}"' EXIT
   rm -rf "${TMPDIR:?}"
@@ -62,20 +62,20 @@ LABEL maintainer="djeeno <29125616+djeeno@users.noreply.github.com>"
 
 COPY ./kubectl /usr/bin/kubectl
 EOF
-  echo 'docker build を実行します。' | sh -c "${stderrPipeInfo:?}"
+  echo 'docker build を実行します。' | sh -c "${pipe_info:?}"
   docker build --tag "${DOCKER_TAG}" .
 
-  echo 'docker run をテスト実行します。' | sh -c "${stderrPipeInfo:?}"
+  echo 'docker run をテスト実行します。' | sh -c "${pipe_info:?}"
   docker run --rm --name "test_${FUNCNAME[0]}" "${DOCKER_TAG}" date
 
-  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${pipe_info:?}"
   docker push "${DOCKER_TAG}"
 
-  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${stderrPipeInfo:?}"
+  echo "docker push ${DOCKER_REPOSITORY}:latest を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${pipe_info:?}"
   docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
   docker push "${DOCKER_REPOSITORY}:latest"
 
-  echo "正常に実行が完了しました。" | sh -c "${stderrPipeOK:?}"
+  echo "正常に実行が完了しました。" | sh -c "${pipe_ok:?}"
 )} && docker_djeeno_kubectl
 
 

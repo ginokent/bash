@@ -10,19 +10,19 @@ cat >/dev/null << '#djeeno.github.io/sh'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
-echo "  PYTHON_PATH=${PYTHON_PATH:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
-echo "  VIRTUALENV_NAME=${VIRTUALENV_NAME:-USE_DEFAULT}" | sh -c "${stderrPipeInfo:?}"
+echo "  PYTHON_PATH=${PYTHON_PATH:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
+echo "  VIRTUALENV_NAME=${VIRTUALENV_NAME:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
 
 python3_path="${PYTHON_PATH:="$(echo "$PATH" | tr : "\n" | xargs -I@ file @/python @/python3 | grep -Ev "cannot[[:space:]]open" | tee /dev/stderr | awk -F"[:[:space:]]" '$0=$1' | while read -r LINE; do if [ "$("${LINE}" -c 'import sys; v=sys.version_info; print(str(v.major)+str(v.minor))')" -ge 35 ] 2>/dev/null; then echo "${LINE}"; fi; done | awk '$0=$1' | head -n 1)"}"
 virtualenv_name="${VIRTUALENV_NAME:="mitmproxy"}"
 virtualenv_dir=~/.virtualenvs/"${virtualenv_name}"
 
 if [ -z "${python3_path}" ] ; then
-  echo "mitmproxy requires Python 3.5 or later" | sh -c "${stderrPipeError:?}"
+  echo "mitmproxy requires Python 3.5 or later" | sh -c "${pipe_error:?}"
   exit 1
 fi
 
-echo "install mitmproxy to ${virtualenv_dir} via virtualenv" | sh -c "${stderrPipeInfo:?}"
+echo "install mitmproxy to ${virtualenv_dir} via virtualenv" | sh -c "${pipe_info:?}"
 
 if [ ! -d "${virtualenv_dir}" ]; then
   env bash -cx "\"${python3_path}\" -m pip install --no-cache-dir virtualenv"
@@ -31,7 +31,7 @@ fi
 
 env bash -cx "\"${virtualenv_dir}/bin/python\" -m pip install -U --no-cache-dir mitmproxy"
 
-echo "install locust_extractor ref: https://github.com/zlorb/locust.replay/blob/master/locust_extractor.py" | sh -c "${stderrPipeInfo:?}"
+echo "install locust_extractor ref: https://github.com/zlorb/locust.replay/blob/master/locust_extractor.py" | sh -c "${pipe_info:?}"
 env bash -cx "mkdir -p ~/lib && curl -fLSs -o ~/lib/locust_extractor.py https://raw.githubusercontent.com/zlorb/locust.replay/master/locust_extractor.py"
 
 # (C) 2018 djeeno </code></pre></div>

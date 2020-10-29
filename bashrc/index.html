@@ -10,11 +10,11 @@ cat >/dev/null << '#djeeno.github.io/sh'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
 
-echo "  BASHRC=${BASHRC:-default}" | sh -c "${stderrPipeInfo:?}"
+echo "  BASHRC=${BASHRC:-default}" | sh -c "${pipe_info:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
 if ! grep -q "^# START djeeno.github.io/sh/bashrc/" "${bashrc:?}"; then
-  echo "Add bashrc settings" | sh -c "${stderrPipeInfo:?}"
+  echo "Add bashrc settings" | sh -c "${pipe_info:?}"
   bashrc_content=$(cat << "BASHRC"
 
 ##

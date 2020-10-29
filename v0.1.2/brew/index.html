@@ -10,7 +10,7 @@ cat >/dev/null << '#djeeno.github.io/sh'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.2/common/")" || exit 1 ##httpGet##
 
-echo "  BREW_VERSION=latest" | sh -c "${stderrPipeInfo:?}"
+echo "  BREW_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=brew
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
@@ -19,17 +19,17 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
     command -v git 1>/dev/null || xcode-select --install
     bash -c "$(curl -LRsS https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   else
-    echo "OS not supported" | sh -c "${stderrPipeError:?}"
+    echo "OS not supported" | sh -c "${pipe_error:?}"
     exit 1
   fi
 
   if ! command -v "${prog_name:?}" 1>/dev/null; then
-    echo "${prog_name:?} not installed" | sh -c "${stderrPipeError:?}"
+    echo "${prog_name:?} not installed" | sh -c "${pipe_error:?}"
     exit 1
   fi
 fi
 
-echo "${prog_name:?} installed" | sh -c "${stderrPipeOK:?}"
+echo "${prog_name:?} installed" | sh -c "${pipe_ok:?}"
 
 
 

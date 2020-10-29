@@ -10,7 +10,7 @@ cat >/dev/null << '#djeeno.github.io/sh'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -LRsS "; } || { command -v wget 1>/dev/null && printf "wget -qO- "; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/v0.1.0/common/")" || exit 1 ##httpGet##
 
-echo "  GIT_VERSION=latest" | sh -c "${stderrPipeInfo:?}"
+echo "  GIT_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=git
 bin_dir=/usr/local/bin
 
@@ -27,7 +27,7 @@ elif [ "${envIsUbuntu}" = true ]; then
   # shellcheck disable=SC2016
   commands_for_install='apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && cd $(basename -s .tar.gz $FILE) && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $(basename -s .tar.gz $FILE) && /usr/local/bin/git --version'
 else
-  echo "OS not supported" | sh -c "${stderrPipeError:?}"
+  echo "OS not supported" | sh -c "${pipe_error:?}"
   exit 1
 fi
 
@@ -41,7 +41,7 @@ fi
 
 
 if ! grep -q git-completion.bash ~/.bashrc; then
-  echo "add git-completion.bash settings to ~/.bashrc" | sh -c "${stderrPipeInfo:?}"
+  echo "add git-completion.bash settings to ~/.bashrc" | sh -c "${pipe_info:?}"
   cat >>~/.bashrc << "BASHRC"
 # git
 test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
@@ -52,7 +52,7 @@ fi
 
 
 
-echo "${prog_name:?} installed" | sh -c "${stderrPipeOK:?}"
+echo "${prog_name:?} installed" | sh -c "${pipe_ok:?}"
 
 
 
