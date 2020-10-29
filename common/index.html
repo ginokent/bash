@@ -11,7 +11,15 @@ export     pipe_ok="exec awk \"{print \\\"\\\\033[32m\$(date +%Y-%m-%dT%H:%M:%S%
 export pipe_notice="exec awk \"{print \\\"\\\\033[01m\$(date +%Y-%m-%dT%H:%M:%S%z) [notice] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin"
 export   pipe_warn="exec awk \"{print \\\"\\\\033[33m\$(date +%Y-%m-%dT%H:%M:%S%z) [  warn] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin"
 export  pipe_error="exec awk \"{print \\\"\\\\033[31m\$(date +%Y-%m-%dT%H:%M:%S%z) [ error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin"
-logln () { _rgx="^(debug|info|ok|notice|warn|error)$"; echo "${1:?"$_rgx"}" | grep -Eq "$_rgx" || { echo "\$1: $_rgx"; return 1; }; echo "${2?"log content"}" | bash -c "eval \"\${pipe_$1:?}\"" 1>"${3:-"/dev/stderr"}"; }
+
+debugln  () { echo "${1:?"log content"}" | sh -c "${pipe_debug:?}"  1>"${2:-"/dev/stderr"}"; };
+infoln   () { echo "${1:?"log content"}" | sh -c "${pipe_info:?}"   1>"${2:-"/dev/stderr"}"; };
+okln     () { echo "${1:?"log content"}" | sh -c "${pipe_ok:?}"     1>"${2:-"/dev/stderr"}"; };
+noticeln () { echo "${1:?"log content"}" | sh -c "${pipe_notice:?}" 1>"${2:-"/dev/stderr"}"; };
+warnln   () { echo "${1:?"log content"}" | sh -c "${pipe_warn:?}"   1>"${2:-"/dev/stderr"}"; };
+errorln  () { echo "${1:?"log content"}" | sh -c "${pipe_error:?}"  1>"${2:-"/dev/stderr"}"; };
+
+logln () { _rgx="^(debug|info|ok|notice|warn|error)$"; echo "${1:?"$_rgx"}" | grep -Eq "$_rgx" || { echo "\$1: $_rgx"; return 1; }; echo "${2?"log content"}" | sh -c "eval \"\${pipe_$1:?}\"" 1>"${3:-"/dev/stderr"}"; }
 
 # CPUアーキテクチャ判定用
 export envIsAMD64=false
