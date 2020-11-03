@@ -453,8 +453,7 @@ command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
 screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
 
 # docker-compose : 最新の docker-compose をインストールする。
-DOCKER_COMPOSE_URL="$(echo "https://github.com$(curl -LRsS https://github.com/docker/compose/releases | grep -Eo "/docker/compose/releases/download/[0-9\.]+/docker-compose-$(uname -s)-$(uname -m)" | head -n 1)" | tee /dev/stderr)"
-sudo curl -LRsS "${DOCKER_COMPOSE_URL:?}" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
+sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
 
 # docker-compose : `ERROR: readlink /var/lib/docker/overlay2: invalid argument` が出た時に実行する。
 docker-compose down --rmi local
