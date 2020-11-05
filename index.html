@@ -240,6 +240,9 @@ tc qdisc del    dev eth0 root
 # Mac
 # ==================================================
 
+# dotnet uninstall
+curl -LR https://github.com/dotnet/cli-lab/releases/latest/download/dotnet-core-uninstall.tar.gz -o /tmp/dotnet-core-uninstall.tar.gz ; mkdir -p ~/dotnet-core-uninstall ; tar -zxf /tmp/dotnet-core-uninstall.tar.gz -C ~/dotnet-core-uninstall ; cd ~/dotnet-core-uninstall ; ./dotnet-core-uninstall -h
+
 # k9s : kubectl の TUI https://github.com/derailed/k9s
 brew install derailed/k9s/k9s
 
