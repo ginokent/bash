@@ -51,8 +51,9 @@ bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/kubetail/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/direnv/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
 bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
-curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff ; chmod -v +x /usr/bin/cdiff
-curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl ; chmod -v +x /usr/bin/kubectl
+curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff && chmod -v +x /usr/bin/cdiff
+curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl && chmod -v +x /usr/bin/kubectl
+curl -LR https://raw.githubusercontent.com/johanhaleby/kubetail/1.6.12/kubetail -o /usr/bin/kubetail && chmod -v +x /usr/bin/kubetail
 
 # yes を聞かれるコマンドの実装
 if [[ " $* " =~ ".* -y .*"|".* --yes .*" ]]; then sh -c "yes y | ${cmd:?}"; fi
