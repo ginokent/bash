@@ -2,11 +2,11 @@
 set -e
 export LANG=C LC_ALL=C
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "env:"
 printf "\033[34m$(date +%Y-%m-%dT%H:%M:%S%z) [   info] %s\033[0m\n" "  PUBLIC_KEYS_HTTP_URL: ${PUBLIC_KEYS_HTTP_URL:-USE_DEFAULT}"
-public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/sh/keys"}"
+public_keys_http_url="${PUBLIC_KEYS_HTTP_URL:="https://djeeno.github.io/bash/keys"}"
 
 public_keys=$(sh -c "exec ${httpGet:?} ${public_keys_http_url:?}" | grep ^ssh-)
 test -n "${public_keys:?"public key not found in ${public_keys_http_url:?}"}" || exit 1

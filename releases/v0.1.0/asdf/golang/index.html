@@ -6,16 +6,16 @@ cat >/dev/null << '#djeeno.github.io/bash'
 ##
 
 # Run the following command to install:
-#   $ curl https://djeeno.github.io/bash/asdf/golang/ | bash
+#   $ curl https://djeeno.github.io/bash/releases/v0.1.0/asdf/golang/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
 echo "  GOLANG_VERSION=${GOLANG_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
 
 lang_name="golang"
 echo "install ${lang_name} via asdf" | sh -c "${pipe_info:?}"
 
-command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" || exit 1
+command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/asdf/")" || exit 1
 
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash

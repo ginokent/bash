@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
-cat >/dev/null << '#djeeno.github.io/sh'
+cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}pre{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io/sh
+#djeeno.github.io/bash
 ##
 
 
@@ -15,13 +15,13 @@ cat << "DOCUMENT"
 
 個人用コマンドチートシート。
 
-  curl -LRsS https://djeeno.github.io/sh/
+  curl -LRsS https://djeeno.github.io/bash/
 
 や
 
   _readline_helpme() {
-    command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
-    READLINE_LINE=$(curl -LRsS https://djeeno.github.io/sh/ | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up)
+    command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://djeeno.github.io/bash/peco/)"
+    READLINE_LINE=$(curl -LRsS https://djeeno.github.io/bash/ | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up)
     READLINE_POINT=${#READLINE_LINE}
   } && bind -x '"\C-n":_readline_helpme'
 
@@ -41,15 +41,15 @@ exit 0
 
 # 一撃インストール系
 xcode-select --install
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/brew/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/brew/)"
 bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/git/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/golang/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/kubectl/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/asdf/kubetail/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/direnv/)"
-bash -c "$(curl -LRsS https://djeeno.github.io/sh/peco/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/git/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/asdf/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/asdf/golang/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/asdf/kubectl/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/asdf/kubetail/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/direnv/)"
+bash -c "$(curl -LRsS https://djeeno.github.io/bash/peco/)"
 bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
 curl -LR https://github.com/djeeno/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff && chmod -v +x /usr/bin/cdiff
 curl -LR https://github.com/djeeno/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl && chmod -v +x /usr/bin/kubectl
@@ -69,9 +69,9 @@ sudoeradd() {(set -e; SDR="${1:?}"; SDRF=/etc/sudoers.d/administrators; ROW="${S
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
 # ssh-keygen : 秘密鍵を作成する。
-ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://djeeno.github.io/sh/keys" -N ""
-ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://djeeno.github.io/sh/keys" -N ""
-ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://djeeno.github.io/sh/keys" -N ""
+ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://djeeno.github.io/bash/keys" -N ""
+ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://djeeno.github.io/bash/keys" -N ""
+ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://djeeno.github.io/bash/keys" -N ""
 # ssh-keygen : 公開鍵のフィンガープリントを表示する。
 ssh-keygen -E md5 -l -f _path_to_public_key_
 
@@ -212,7 +212,7 @@ tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 nm /usr/lib/libcrypto.*
 
 # apt まとめてインストールするためのコマンドを生成する。
-curl -LRsS https://djeeno.github.io/sh/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
+curl -LRsS https://djeeno.github.io/bash/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
 
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /

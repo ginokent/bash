@@ -6,9 +6,9 @@ cat >/dev/null << '#djeeno.github.io/bash'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/bash/direnv/ | bash
+#   $ curl https://djeeno.github.io/bash/releases/v0.1.0/direnv/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
 echo "  GIT_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=git
@@ -18,7 +18,7 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 # shellcheck disable=SC2154
 if [ "${envIsDarwin}" = true ]; then
-  bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
+  bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/brew/")"
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${envIsCentOS}" = true ] || [ "${envIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016

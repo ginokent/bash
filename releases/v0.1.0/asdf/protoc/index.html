@@ -6,24 +6,24 @@ cat >/dev/null << '#djeeno.github.io/bash'
 ##
 
 # Run the following command to install:
-#   $ curl https://djeeno.github.io/bash/asdf/mysql/ | bash
+#   $ curl https://djeeno.github.io/bash/releases/v0.1.0/asdf/kubetail/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
-echo "  MYSQL_VERSION=${MYSQL_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
+echo "  PROTOC_VERSION=${PROTOC_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
 
-lang_name="mysql"
+lang_name="protoc"
 echo "install ${lang_name} via asdf" | sh -c "${pipe_info:?}"
 
-command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" || exit 1
+command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/asdf/")" || exit 1
 
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
 
 echo "add ${lang_name} plugin" | sh -c "${pipe_info:?}"
-asdf plugin-add "${lang_name}" || true
+asdf plugin-add "${lang_name}" https://github.com/paxosglobal/asdf-protoc.git || true
 
-lang_version="${MYSQL_VERSION:="$(asdf list-all "${lang_name}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)"}"
+lang_version="${PROTOC_VERSION:="$(asdf list-all "${lang_name}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)"}"
 
 echo "install ${lang_name} ${lang_version}" | sh -c "${pipe_info:?}"
 asdf install "${lang_name}" "${lang_version}"

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e -E -o pipefail
-cat >/dev/null << '#djeeno.github.io/sh'
+cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io/sh
+#djeeno.github.io/bash
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/sh/direnv/ | bash
+#   $ curl https://djeeno.github.io/bash/direnv/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 echo "  DIRENV_VERSION=latest" | sh -c "${pipe_info:?}"
 echo "  SHELLRC=${SHELLRC:--USE_DEFAULT}" | sh -c "${pipe_info:?}"
@@ -21,7 +21,7 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
-    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/sh/brew/")"
+    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
     commands_for_install="brew install ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
     url="https://github.com/direnv/direnv/releases/latest/download/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"

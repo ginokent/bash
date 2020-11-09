@@ -6,27 +6,27 @@ cat >/dev/null << '#djeeno.github.io/bash'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/bash/peco/ | bash
+#   $ curl https://djeeno.github.io/bash/releases/v0.1.0/direnv/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
-echo "  PECO_VERSION=latest" | sh -c "${pipe_info:?}"
-prog_name=peco
+echo "  DIRENV_VERSION=latest" | sh -c "${pipe_info:?}"
+echo "  SHELLRC=${SHELLRC:--USE_DEFAULT}" | sh -c "${pipe_info:?}"
+prog_name=direnv
 bin_dir=/usr/local/bin
+shellrc=${SHELLRC:-$HOME/.bashrc}
 
 echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${envIsDarwin}" = true ]; then
-    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
+    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/brew/")"
     commands_for_install="brew install ${prog_name:?}"
-  elif command -v apt-get 1>/dev/null; then
-    commands_for_install="apt-get update && apt-get install -y ${prog_name:?}"
   elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
-    url=https://github.com/peco/peco/releases/latest/download/peco_linux_amd64.tar.gz
+    url="https://github.com/direnv/direnv/releases/latest/download/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"
     commands_for_install="
-      ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz \"peco_*/${prog_name:?}\" && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
+      ${httpGet:?} \"${url:?}\" >${bin_dir:?}/${prog_name:?} && chmod +x ${bin_dir:?}/${prog_name:?}
     "
   else
     echo "OS not supported" | sh -c "${pipe_error:?}"
@@ -47,6 +47,19 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
 fi
 
 echo "${prog_name:?} installed" | sh -c "${pipe_ok:?}"
+
+AddDirenvHook () {
+  file="${1:?}"
+  if ! grep -q "^eval....direnv.hook.bash.." "${file:?}"; then
+    echo "Add direnv hook to ${file:?}" | sh -c "${pipe_info:?}"
+    if [ -w "${file:?}" ]; then
+      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| tee -a "${file:?}" 1>/dev/null
+    else
+      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| sudo tee -a "${file:?}" 1>/dev/null
+    fi
+  fi
+}
+AddDirenvHook "${shellrc:?}"
 
 
 

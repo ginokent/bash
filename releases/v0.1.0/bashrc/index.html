@@ -6,19 +6,19 @@ cat >/dev/null << '#djeeno.github.io/bash'
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/bash/bashrc/ | bash
+#   $ curl https://djeeno.github.io/bash/releases/v0.1.0/bashrc/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
 echo "  BASHRC=${BASHRC:-default}" | sh -c "${pipe_info:?}"
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
-if ! grep -q "^# START djeeno.github.io/bash/bashrc/" "${bashrc:?}"; then
+if ! grep -q "^# START djeeno.github.io/bash/releases/v0.1.0/bashrc/" "${bashrc:?}"; then
   echo "Add bashrc settings" | sh -c "${pipe_info:?}"
   bashrc_content=$(cat << "BASHRC"
 
 ##
-# START djeeno.github.io/bash/bashrc/
+# START djeeno.github.io/bash/releases/v0.1.0/bashrc/
 ##
 
 # HTTP GET Client
@@ -46,7 +46,7 @@ alias ll='ls -alF'
 
 # history
 _readline_history() {
-  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/peco/")"
+  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/releases/v0.1.0/peco/")"
   READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:blank:]]*[0-9]*[[:blank:]]*//' | peco --layout bottom-up)
   READLINE_POINT=${#READLINE_LINE}
 } && [[ $- =~ i ]] && bind -x '"\C-r":_readline_history'
@@ -67,7 +67,7 @@ if command -v git 1>/dev/null; then
 fi
 
 # direnv
-command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/direnv/")"
+command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/releases/v0.1.0/direnv/")"
 ! command -v direnv 1>/dev/null || eval "$(direnv hook bash)"
 
 # kubectl
@@ -80,7 +80,7 @@ echo "$PATH" | grep -q "${HOME:?}/bin"          || export PATH="${HOME:?}/bin:${
 echo "$PATH" | grep -q "${HOME:?}/dotfiles/bin" || export PATH="${HOME:?}/dotfiles/bin:${PATH:?}"
 
 ##
-# END djeeno.github.io/bash/bashrc/
+# END djeeno.github.io/bash/releases/v0.1.0/bashrc/
 ##
 BASHRC
   )
