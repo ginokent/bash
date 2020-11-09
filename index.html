@@ -208,6 +208,9 @@ apt-get clean && rm -rf /var/lib/apt/lists/*
 sudo tcpdump -G300 -W1 -vvv -l -n -p -s 65535 -w "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 
+# nm
+nm /usr/lib/libcrypto.*
+
 # apt まとめてインストールするためのコマンドを生成する。
 curl -LRsS https://djeeno.github.io/sh/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
 
@@ -480,6 +483,9 @@ kubectl config current-context
 
 # kubectl port-forward
 kubectl --context="${KUBECTL_CONTEXT:?}" port-forward "service/${SERVICE_NAME:?}" "${LOCAL_PORT:?}:${SERVICE_PORT:?}"
+
+# pv 秒間何行出力か表示する
+kubetail app --context="${KUBECTL_CONTEXT:?}" --namespace default 2>&1 | pv --line-mode --rate >/dev/null
 
 # k9s を docker 経由で実行する
 alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro quay.io/derailed/k9s'
