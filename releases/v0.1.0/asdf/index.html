@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e -E -o pipefail
 cat >/dev/null << '#djeeno.github.io/bash'
-<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code{font-size:1rem;font-family:'Ricty Diminished',Osaka,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #djeeno.github.io/bash
 ##
 
@@ -10,7 +10,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
-asdf_version=${ASDF_VERSION:=v0.7.8}
+asdf_version=${ASDF_VERSION:=v0.8.0}
 echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
 
 echo "install asdf to \"~/.asdf\"" | sh -c "${pipe_info:?}"
