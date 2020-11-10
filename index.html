@@ -150,6 +150,9 @@ test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubuserconte
 test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
 export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\033[1;31m\\\]\$(__git_ps1)\\\[\\\033[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\033[1;31m\]\$(__git_ps1)\[\033[00m\]}"; fi
 
+# git commit 空コミット
+git commit --allow-empty -m "first commit"
+
 # git : auther / commiter を更新する。
 git config --local user.name djeeno
 git config --local user.email 29125616+djeeno@users.noreply.github.com
