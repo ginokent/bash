@@ -56,7 +56,7 @@ if command -v go 1>/dev/null; then
   export GOROOT="$(go env GOROOT)"
   export GOPATH=$HOME/go
   export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-  export GO111MODULE=on
+  export GO111MODULE=auto
 fi
 
 # git
