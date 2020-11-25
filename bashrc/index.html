@@ -63,7 +63,7 @@ fi
 if command -v git 1>/dev/null; then
   test -f ~/.git-completion.bash || bash -cx "${httpGet:?} https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
   test -f ~/.git-prompt.sh || bash -cx "${httpGet:?} https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
-  export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [[ "${BASH_VERSINFO[0]}" -ge 5 ]] || [[ "${BASH_VERSINFO[0]}" -ge 4 ]] && [[ "${BASH_VERSINFO[1]}" -ge 4 ]]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
+  export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; export PS1="${PS1//"\\\$"/\\$\\[\\e[1;31m\\]\$(__git_ps1)\\[\\e[00m\\]}"
 fi
 
 # direnv
