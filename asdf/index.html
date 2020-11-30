@@ -29,7 +29,7 @@ echo "update asdf plugins" | sh -c "${pipe_info:?}"
 asdf plugin-update --all || true
 
 echo "show asdf plugins current versions" | sh -c "${pipe_info:?}"
-asdf current
+asdf current || true
 
 echo "asdf installed" | sh -c "${pipe_ok:?}"
 
