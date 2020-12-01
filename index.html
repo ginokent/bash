@@ -569,6 +569,7 @@ circleci local execute
 
 # unity
 curl -LsS https://unity3d.com/get-unity/download/archive | grep -Eo "href=\"unityhub://[^\"]+\"" | sed "s|^.*\"unityhub://\([^/]*\)/\([^\"]*\)\".*$|https://download.unity3d.com/download_unity/\2/UnitySetup-\1|"
+cat ProjectSettings/ProjectVersion.txt
 
 
 
