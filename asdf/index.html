@@ -31,7 +31,7 @@ asdf plugin-update --all || true
 echo "show asdf plugins current versions" | sh -c "${pipe_info:?}"
 asdf current || true
 
-echo "asdf installed" | sh -c "${pipe_ok:?}"
+echo "asdf installed" | sh -c "${pipe_notice:?}"
 
 
 

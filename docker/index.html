@@ -88,7 +88,7 @@ EOF
   docker tag ${DOCKER_TAG} ${DOCKER_REPOSITORY}:latest
   docker push ${DOCKER_REPOSITORY}:latest
   
-  echo "正常に実行が完了しました。" | sh -c "${pipe_ok:?}"
+  echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
 )} && docker_djeeno_ubuntu_1804
 
 ##
@@ -149,7 +149,7 @@ EOF
   docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
   docker push "${DOCKER_REPOSITORY}:latest"
   
-  echo "正常に実行が完了しました。" | sh -c "${pipe_ok:?}"
+  echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
 )} && docker_djeeno_terraform
 
 ##
@@ -202,7 +202,7 @@ EOF
   docker tag "${DOCKER_TAG}" "${DOCKER_REPOSITORY}:latest"
   docker push "${DOCKER_REPOSITORY}:latest"
   
-  echo "正常に実行が完了しました。" | sh -c "${pipe_ok:?}"
+  echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
 )} && docker_djeeno_awscli
 
 

@@ -46,7 +46,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   fi
 fi
 
-echo "${prog_name:?} installed" | sh -c "${pipe_ok:?}"
+echo "${prog_name:?} installed" | sh -c "${pipe_notice:?}"
 
 AddDirenvHook () {
   file="${1:?}"
