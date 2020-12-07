@@ -8,13 +8,13 @@ cat >/dev/null << '#djeeno.github.io/bash'
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/bash/bbr/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 echo "  BBR_VERSION=USE_DEFAULT" | sh -c "${pipe_info:?}"
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
-  if [ "${envIsLinux}" = true ]; then
+  if [ "${EnvIsLinux}" = true ]; then
     ##
     # 更新用コマンド
     ##
@@ -29,7 +29,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   fi
 
   # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
+  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
     sudo -E bash -cx "${commands_for_install:?}"
   else
     bash -cx "${commands_for_install:?}"

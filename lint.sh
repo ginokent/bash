@@ -20,4 +20,4 @@ Infoln "$ ${cmd:?}" && bash -c "${cmd:?}"
 
 
 # memo
-# git grep -l "##HttpGet##" | xargs -I{} perl -0pe 's@\n.*##HttpGet##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -LRsS "; } || { command -v wget 1>/dev/null \&\& printf "wget -qO- "; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${envIsLoaded:-false}" = true ] || eval "\$(sh -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##@g' -i {}
+# git grep -l "##HttpGet##" | xargs -I{} perl -0pe 's@\n.*##HttpGet##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -LRsS "; } || { command -v wget 1>/dev/null \&\& printf "wget -qO- "; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${EnvIsLoaded:-false}" = true ] || eval "\$(sh -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##@g' -i {}

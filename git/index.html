@@ -8,7 +8,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/bash/direnv/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 echo "  GIT_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=git
@@ -17,13 +17,13 @@ bin_dir=/usr/local/bin
 echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 # shellcheck disable=SC2154
-if [ "${envIsDarwin}" = true ]; then
+if [ "${EnvIsDarwin}" = true ]; then
   bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
   commands_for_install="brew install ${prog_name:?}"
-elif [ "${envIsCentOS}" = true ] || [ "${envIsAmazonLinux2}" = true ]; then
+elif [ "${EnvIsCentOS}" = true ] || [ "${EnvIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016
   commands_for_install='yum makecache && yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget && mkdir -p /usr/local/src && cd /usr/local/src && FILE=$(wget -qO- https://github.com/git/git/releases | grep -o -E v[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv https://github.com/git/git/archive/$FILE && tar xzf $FILE && DIR=git-$(basename -s .tar.gz $FILE | tr -d v) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && git --version'
-elif [ "${envIsUbuntu}" = true ]; then
+elif [ "${EnvIsUbuntu}" = true ]; then
   # shellcheck disable=SC2016
   commands_for_install='apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget && mkdir -p /usr/local/src && cd /usr/local/src && FILE=$(wget -qO- https://github.com/git/git/releases | grep -o -E v[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv https://github.com/git/git/archive/$FILE && tar xzf $FILE && DIR=git-$(basename -s .tar.gz $FILE | tr -d v) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && git --version'
 else
@@ -32,7 +32,7 @@ else
 fi
 
 # shellcheck disable=SC2154
-if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
+if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
   sudo -E bash -cx "${commands_for_install:?}"
 else
   bash -cx "${commands_for_install:?}"

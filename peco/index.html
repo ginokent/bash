@@ -8,7 +8,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/bash/peco/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 echo "  PECO_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=peco
@@ -18,12 +18,12 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" = true ]; then
+  if [ "${EnvIsDarwin}" = true ]; then
     bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
     commands_for_install="brew install ${prog_name:?}"
   elif command -v apt-get 1>/dev/null; then
     commands_for_install="apt-get update && apt-get install -y ${prog_name:?}"
-  elif [ "${envIsLinux}" = true ] && [ "${envIsAMD64}" = true ]; then
+  elif [ "${EnvIsLinux}" = true ] && [ "${EnvIsAMD64}" = true ]; then
     url=https://github.com/peco/peco/releases/latest/download/peco_linux_amd64.tar.gz
     commands_for_install="
       ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz \"peco_*/${prog_name:?}\" && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
@@ -34,7 +34,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   fi
 
   # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
+  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
     sudo -E bash -cx "${commands_for_install:?}"
   else
     bash -cx "${commands_for_install:?}"

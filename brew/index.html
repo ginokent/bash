@@ -8,14 +8,14 @@ cat >/dev/null << '#djeeno.github.io/bash'
 # Run the following command to execute this script:
 #   $ curl https://djeeno.github.io/bash/brew/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
 echo "  BREW_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=brew
 
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
-  if [ "${envIsDarwin}" = true ]; then
+  if [ "${EnvIsDarwin}" = true ]; then
     command -v git 1>/dev/null || xcode-select --install
     bash -c "$(curl -LRsS https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   else
