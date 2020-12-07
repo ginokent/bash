@@ -5,58 +5,52 @@ cat >/dev/null << '#djeeno.github.io/bash'
 #djeeno.github.io/bash
 ##
 
-# Run the following command to install:
-#   $ curl https://djeeno.github.io/bash/asdf/nodejs/ | bash
-
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-echo "  NODEJS_VERSION=${NODEJS_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
+LANG_NAME=NODEJS
+lang_name=nodejs
 
-lang_name="nodejs"
-echo "install ${lang_name} via asdf" | sh -c "${pipe_info:?}"
+LANG_VERSION_KEY="${LANG_NAME}_VERSION"
+Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-command -v asdf 1>/dev/null || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" || exit 1
+Infoln "Start to install ${lang_name:?}"
 
-# shellcheck disable=SC1090
-. ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
+command -v asdf 1>/dev/null ||
+  eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" ||
+  exit 1
 
-echo "add ${lang_name} plugin" | sh -c "${pipe_info:?}"
-asdf plugin-add "${lang_name}" || true
+Run asdf plugin-add "${lang_name}" || true
 
-
-
-echo "install dependencies for nodejs" | sh -c "${pipe_info:?}"
-(! uname -s | grep -q Darwin) || brew install gnupg
+Infoln "Install dependencies"
+if [ "${EnvIsDarwin:-false}" = true ]; then brew install gnupga; fi
 # If GnuPG keys are not imported, import from bash script
 if [ "$(grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring | while read -r LINE; do gpg --list-keys | grep -q "${LINE}"; echo $?; done | sort -u)" != "0" ]; then
   bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 fi
 
+lang_version="${!LANG_VERSION_KEY:="$(
+  asdf list-all "${lang_name}" |
+    grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+$' |
+    sort -V |
+    tail -n 1
+)"}"
+
+Run asdf install "${lang_name}" "${lang_version}"
+
+Run asdf global "${lang_name}" "${lang_version}"
+
+Run asdf reshim "${lang_name}"
+
+Run asdf current "${lang_name}"
 
 
-lang_version="${NODEJS_VERSION:="$(asdf list-all "${lang_name}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)"}"
 
-echo "install ${lang_name} ${lang_version}" | sh -c "${pipe_info:?}"
-asdf install "${lang_name}" "${lang_version}"
-
-echo "set ${lang_name} ${lang_version} to global" | sh -c "${pipe_info:?}"
-asdf global "${lang_name}" "${lang_version}"
-
-echo "run asdf ${lang_name} reshim" | sh -c "${pipe_info:?}"
-asdf reshim "${lang_name}"
-
-echo "show asdf ${lang_name} current version" | sh -c "${pipe_info:?}"
-asdf current "${lang_name}"
-
-
-
-if ! which yarn 1>/dev/null; then
-  # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" = true ]; then
-    bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
+if ! command -v yarn 1>/dev/null; then
+  if [ "${EnvIsDarwin:-false}" = true ]; then
+    bash -c "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
     brew install yarn
   else
-    echo "install yarn. ref. https://classic.yarnpkg.com/ja/docs/install/#alternatives-stable" | sh -c "${pipe_info:?}"
+    Infoln "install yarn. ref. https://classic.yarnpkg.com/ja/docs/install/#alternatives-stable"
     curl -o- -L https://yarnpkg.com/install.sh | bash
   fi
 fi
