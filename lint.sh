@@ -24,5 +24,5 @@ set +x
 Infoln "httpGet を更新します。"
 set -x
 # shellcheck disable=SC2016
-git grep -l -E " ##httpGet##" | grep -Ev "^releases/|lint.sh" | xargs -I{} perl -0pe 's@\n.*##httpGet##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -fLRSs"; } || { command -v wget 1>/dev/null \&\& printf "wget -O- -q"; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${EnvIsLoaded:-false}" = true ] || eval "\$(bash -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGet##@g' -i {} || true
+git grep -l -E " ##httpGetDoNotRemoveThisComment##" | grep -Ev "^releases/|lint.sh" | xargs -I{} perl -0pe 's@\n.*##httpGetDoNotRemoveThisComment##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -fLRSs"; } || { command -v wget 1>/dev/null \&\& printf "wget -O- -q"; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${EnvIsLoaded:-false}" = true ] || eval "\$(bash -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##@g' -i {} || true
 set +x
