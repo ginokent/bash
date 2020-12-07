@@ -34,7 +34,9 @@ export HISTSIZE=50000  ## number of history
 ! command -v vim  1>/dev/null || export EDITOR="$(command -v vim)" && alias view='vim -R'
 ! command -v curl 1>/dev/null || { google_project=$(curl --max-time 1 -Ss -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/project/project-id 2>/dev/null || true); [[ ! $google_project ]] || export GOOGLE_PROJECT=$google_project; }
 # shellcheck disable=SC2015
-[ "$(id -u)" = 0 ] && export PS1='\[\e[1;31m\]\u@\h${GOOGLE_PROJECT+ }\[\e[1;31m\]${GOOGLE_PROJECT}\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ ' || export PS1='\[\e[1;37m\]\u@\h${GOOGLE_PROJECT+ }\[\e[1;31m\]${GOOGLE_PROJECT}\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
+[ "$(id -u)" = 0 ] &&
+  export PS1='\[\e[1;31m\]\u@\h${GOOGLE_PROJECT+ }\[\e[37;41;1m\]${GOOGLE_PROJECT}\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ ' ||
+  export PS1='\[\e[1;37m\]\u@\h${GOOGLE_PROJECT+ }\[\e[37;41;1m\]${GOOGLE_PROJECT}\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
 
 # alias
 alias rm='rm -i'
