@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e -E -o pipefail
+set -E -e -o pipefail
 cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #djeeno.github.io/bash
@@ -15,7 +15,7 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 # $ docker pull djeeno/ubuntu:18.04
 ##
 docker_djeeno_ubuntu_1804 () { (
-  set -e -E -o pipefail
+  set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
     echo "docker がインストールされている必要があります。" | sh -c "${pipe_error:?}"
@@ -103,7 +103,7 @@ docker push djeeno/sandbox:latest
 # $ docker pull djeeno/terraform:latest
 ##
 docker_djeeno_terraform() { (
-  set -e -E -o pipefail
+  set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
     echo "docker がインストールされている必要があります。" | sh -c "${pipe_error:?}"
@@ -157,7 +157,7 @@ EOF
 # $ docker pull djeeno/awscli:latest
 ##
 docker_djeeno_awscli() { (
-  set -e -E -o pipefail
+  set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
     echo "docker がインストールされている必要があります。" | sh -c "${pipe_error:?}"
