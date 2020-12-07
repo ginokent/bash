@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -E -e -u -o pipefail
+if [ ! "${BASH_VERSINFO:-0}" -ge 3 ]; then printf '\033[1;31m%s\033[0m\n' "bash 3.x or later is required" 1>&2; exit 1; fi
 # このリポジトリ向け lint
 
 # 関数 export
@@ -10,14 +11,18 @@ export   pipe_warn="exec awk \"{print \\\"\\\\033[0;33m\$(date +%Y-%m-%dT%H:%M:%
 export  pipe_error="exec awk \"{print \\\"\\\\033[0;31m\$(date +%Y-%m-%dT%H:%M:%S%z) [ error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&  Errorln () { [ "${LOG_SEVERITY:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "${pipe_error:?}"  1>&2; }
 export   pipe_crit="exec awk \"{print \\\"\\\\033[1;31m\$(date +%Y-%m-%dT%H:%M:%S%z) [  crit] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&   Critln () { [ "${LOG_SEVERITY:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
 
-if [ ! "${BASH_VERSINFO:-0}" -ge 3 ]; then printf '\033[1;31m%s\033[0m\n' "bash 3.x or later is required" 1>&2; exit 1; fi
+# func
+Run () { Debugln "$ $*"; "$@"; }
 
+# <<
+Infoln "\"<\" と文字列が隣接すると HTML タグとして解釈される問題があるため、以下コマンドで、ヒアドキュメントの \"<<\" の後ろにスペースを追加するよう置換します。"
+set -x
+git grep -l "<<[^[:space:]]" | grep -v "lint\.sh" | xargs -I{} perl -pe "s/(<<)([^[:space:]])/\1 \2/g" -i {} || true
+set +x
 
-echo "\"<\" と文字列が隣接すると HTML タグとして解釈される問題。以下コマンドで、ヒアドキュメントの \"<<\" の後ろにスペースを追加するよう置換する。" | sh -c "${pipe_info:?}"
-cmd='git grep -l "<<[^[:space:]]" | grep -v "lint\.sh" | xargs -I{} perl -pe "s/(<<)([^[:space:]])/\1 \2/g" -i {}'
-Infoln "$ ${cmd:?}" && bash -c "${cmd:?}"
-
-
-
-# memo
-# git grep -l -E "^[^#].+##httpGet##" | grep -v ^releases/ | xargs -I{} perl -0pe 's@\n.*##httpGet##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -fLRSs"; } || { command -v wget 1>/dev/null \&\& printf "wget -O- -q"; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${EnvIsLoaded:-false}" = true ] || eval "\$(bash -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##@g' -i {}
+# httpGet
+Infoln "httpGet を更新します。"
+set -x
+# shellcheck disable=SC2016
+git grep -l -E " ##httpGet##" | grep -Ev "^releases/|lint.sh" | xargs -I{} perl -0pe 's@\n.*##httpGet##@\nhttpGet="\$( { command -v curl 1>/dev/null \&\& printf "curl -fLRSs"; } || { command -v wget 1>/dev/null \&\& printf "wget -O- -q"; } )"; export httpGet; [ "\${httpGet:?"curl or wget are required"}" ] || exit 1; [ "\${EnvIsLoaded:-false}" = true ] || eval "\$(bash -c "exec \${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGet##@g' -i {} || true
+set +x
