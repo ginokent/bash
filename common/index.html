@@ -17,69 +17,69 @@ export   pipe_crit="exec awk \"{print \\\"\\\\033[1;31m\$(date +%Y-%m-%dT%H:%M:%
 Run () { debugln "$ $*"; "$@"; }
 
 # CPUアーキテクチャ判定用
-export envIsAMD64=false
+export EnvIsAMD64=false
 
 # カーネル判定用
-export envIsDarwin=false
-export envIsLinux=false
+export EnvIsDarwin=false
+export EnvIsLinux=false
 
 # Ubuntu
-export envIsUbuntu=false
-export envIsUbuntu1404=false
-export envIsUbuntu1604=false
-export envIsUbuntu1804=false
+export EnvIsUbuntu=false
+export EnvIsUbuntu1404=false
+export EnvIsUbuntu1604=false
+export EnvIsUbuntu1804=false
 
 # Amazon Linux
-export envIsAmazonLinux
-export envIsAmazonLinux2
+export EnvIsAmazonLinux
+export EnvIsAmazonLinux2
 
 # CentOS
-export envIsCentOS=false
-export envIsCentOS6=false
-export envIsCentOS7=false
-export envIsCentOS8=false
+export EnvIsCentOS=false
+export EnvIsCentOS6=false
+export EnvIsCentOS7=false
+export EnvIsCentOS8=false
 
 # CPU アーキテクチャ判定
 if uname -m | grep -q ^x86_64$; then
-  envIsAMD64=true
+  EnvIsAMD64=true
 fi
 
 # カーネル判定
 if uname -s | grep -q ^Darwin$; then
-  envIsDarwin=true
+  EnvIsDarwin=true
 elif uname -s | grep -q ^Linux$; then
-  envIsLinux=true
+  EnvIsLinux=true
 fi
 
 # ディストリビューション及び OS バージョン判定
 if grep -q "\"Ubuntu 14\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1404=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1404=true
 elif grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1604=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1604=true
 elif grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1804=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1804=true
 elif grep -q "\"Amazon Linux 2\"" /etc/lsb-release 2>/dev/null; then
-  envIsAmazonLinux=true
-  envIsAmazonLinux2=true
+  EnvIsAmazonLinux=true
+  EnvIsAmazonLinux2=true
 elif grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS6=true
+  EnvIsCentOS=true
+  EnvIsCentOS6=true
 elif grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS7=true
+  EnvIsCentOS=true
+  EnvIsCentOS7=true
 elif grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS8=true
+  EnvIsCentOS=true
+  EnvIsCentOS8=true
 fi
 
 # 読み込み判定用
-export envIsLoaded=true
+export EnvIsLoaded=true
 
 # ログ出力
-Infoln "$(echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}')"
+Infoln "$(echo 'env:'; env | grep ^EnvIs | sort | awk '{print "  "$0}')"
 
 
 
