@@ -79,7 +79,7 @@ fi
 export EnvIsLoaded=true
 
 # ログ出力
-Infoln "$(echo 'env:'; env | grep ^EnvIs | sort | awk '{print "  "$0}')"
+Debugln "$(echo 'env:'; env | grep ^EnvIs | sort | awk '{print "  "$0}')"
 
 
 
