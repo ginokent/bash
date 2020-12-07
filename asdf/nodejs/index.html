@@ -21,11 +21,13 @@ command -v asdf 1>/dev/null ||
 
 Run asdf plugin-add "${lang_name}" || true
 
-Infoln "Install dependencies"
-if [ "${EnvIsDarwin:-false}" = true ]; then brew install gnupga; fi
+if ! command -v gpg 1>/dev/null && [ "${EnvIsDarwin:-false}" = true ]; then
+  Infoln "Install gpg for resolving dependencies"
+  Run brew install gnupg
+fi
 # If GnuPG keys are not imported, import from bash script
 if [ "$(grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring | while read -r LINE; do gpg --list-keys | grep -q "${LINE}"; echo $?; done | sort -u)" != "0" ]; then
-  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+  Run bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 fi
 
 lang_version="${!LANG_VERSION_KEY:="$(
