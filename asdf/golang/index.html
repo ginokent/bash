@@ -23,7 +23,7 @@ Run asdf plugin-add "${lang_name}" || true
 
 lang_version="${!LANG_VERSION_KEY:="$(
   asdf list-all "${lang_name}" |
-    grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' |
+    grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+' |
     sort -V |
     tail -n 1
 )"}"
