@@ -1,37 +1,54 @@
 #!/usr/bin/env bash
-set -e -E -o pipefail
+set -E -e -o pipefail expand_aliases
 cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #djeeno.github.io/bash
 ##
 
-# Run the following command to execute this script:
-#   $ curl https://djeeno.github.io/bash/asdf/ | bash
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1 ##httpGet##
+LANG_NAME=ASDF
+lang_name=asdf
 
-asdf_version=${ASDF_VERSION:=v0.8.0}
-echo "  ASDF_VERSION=${ASDF_VERSION:-USE_DEFAULT}" | sh -c "${pipe_info:?}"
+LANG_VERSION_KEY="${LANG_NAME}_VERSION"
+Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-echo "install asdf to \"~/.asdf\"" | sh -c "${pipe_info:?}"
-test -d ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version}"
+Infoln "Start to install ${lang_name:?}"
 
-echo "append codes for asdf to \"~/.bashrc\"" | sh -c "${pipe_info:?}"
+lang_version="${!LANG_VERSION_KEY:=$(
+  git ls-remote --quiet --refs --tags https://github.com/asdf-vm/asdf.git |
+    grep -Eo "v[0-9]+\.[0-9]+\.[0-9]+" |
+    sort -V |
+    tail -n 1
+)}"
+
+if test ! -d ~/.asdf; then
+  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${lang_version}"
+fi
+
 # shellcheck disable=SC2016,SC2088
-grep -q '~/.asdf/' ~/.bashrc || printf '\n%s\n%s\n%s\n' '# asdf' 'test ! -f ~/.asdf/asdf.sh || . "$_"' 'test ! -f ~/.asdf/completions/asdf.bash || . "$_"' | tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+if ! grep -q '~/.asdf/' ~/.bashrc; then
+  Infoln "Install asdf setting to ~/.bashrc"
+  {
+    echo '# asdf'
+    echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
+    echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
+  } |
+  Run tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+fi
+
 # shellcheck disable=SC1090
-. ~/.asdf/asdf.sh && . ~/.asdf/completions/asdf.bash
+test ! -f ~/.asdf/asdf.sh ||
+  Run source ~/.asdf/asdf.sh
+# shellcheck disable=SC1090
+test ! -f ~/.asdf/completions/asdf.bash ||
+  Run source ~/.asdf/completions/asdf.bash
 
-echo "update asdf" | sh -c "${pipe_info:?}"
-asdf update
+Run asdf update
 
-echo "update asdf plugins" | sh -c "${pipe_info:?}"
-asdf plugin-update --all || true
+Run asdf plugin-update --all || true
 
-echo "show asdf plugins current versions" | sh -c "${pipe_info:?}"
-asdf current || true
-
-echo "asdf installed" | sh -c "${pipe_notice:?}"
+Run asdf current || true
 
 
 
