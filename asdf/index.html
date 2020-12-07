@@ -7,13 +7,13 @@ cat >/dev/null << '#djeeno.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-LANG_NAME=ASDF
-lang_name=asdf
+PROG_NAME=ASDF
+prog_name=asdf
 
-LANG_VERSION_KEY="${LANG_NAME}_VERSION"
+LANG_VERSION_KEY="${PROG_NAME}_VERSION"
 Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-Infoln "Start to install ${lang_name:?}"
+Infoln "Install ${prog_name:?}"
 
 lang_version="${!LANG_VERSION_KEY:=$(
   git ls-remote --quiet --refs --tags https://github.com/asdf-vm/asdf.git |
@@ -49,6 +49,8 @@ Run asdf update
 Run asdf plugin-update --all || true
 
 Run asdf current || true
+
+Noticeln "${prog_name:?} installed"
 
 
 
