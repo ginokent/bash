@@ -398,6 +398,9 @@ docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debi
 # docker : terraform
 docker run -it --rm -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOOGLE_APPLICATION_CREDENTIALS:?}":/credential.json:ro -v "$HOME/.ssh:/root/.ssh" -v "$HOME/.vim:/root/.vim" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" djeeno/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
 
+# docker env
+docker run -it --env-file <(env) --rm alpine sh
+
 # docker : よく使いそうな docker image たち
 docker run -it --rm alpine          sh
 docker run -it --rm debian:10.2     bash
