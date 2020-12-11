@@ -40,7 +40,6 @@ exit 0
 # ==================================================
 
 # 一撃インストール系
-xcode-select --install
 bash -c "$(curl -LRsS https://djeeno.github.io/bash/brew/)"
 bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
 bash -c "$(curl -LRsS https://djeeno.github.io/bash/git/)"
@@ -262,6 +261,10 @@ sudo killall -HUP mDNSResponder
 # mac Mac のホスト名変更
 scutil --get ComputerName ; scutil --get LocalHostName ; scutil --get HostName
 scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostname:?}"
+
+# xcode XCode
+xcode-select --install
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 
 
