@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -E -e -o pipefail
+cat >/dev/null << '#djeeno.github.io/bash'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#djeeno.github.io/bash
+##
+
+# Visual Studio Code
+
+# - code コマンドをインストールする
+#    ```
+#    >Shell Command: Install 'code' command in PATH
+#    ```
+
+# code --list-extensions | sort | awk "{print \"code --install-extension \"\$0}"
+
+# { if [ $(basename $PWD) = vscode ]; then python -c "import sys,re; b=r'''\n# REPLACE BLOCK.*\n# REPLACE BLOCK'''; a=r'''\n# REPLACE BLOCK\n{\n$(code --list-extensions | sort | awk "{print \"code --install-extension \"\$0\" --force\"}" | tr -d '\r')\n}\n# REPLACE BLOCK'''; f=open('./index.html', 'r'); d=f.read(); n=re.sub(b, a, d, flags=re.DOTALL); f=open('./index.html', 'w'); f.write(n); f.close();"; fi; }
+
+# REPLACE BLOCK
+{
+code --install-extension VisualStudioExptTeam.vscodeintellicode --force
+code --install-extension eamodio.gitlens --force
+code --install-extension golang.go --force
+code --install-extension ms-dotnettools.csharp --force
+code --install-extension ms-vsliveshare.vsliveshare --force
+code --install-extension zxh404.vscode-proto3 --force
+}
+# REPLACE BLOCK
+
+# (C) 2018 djeeno </code></pre></div>
+
