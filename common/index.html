@@ -14,7 +14,7 @@ export  pipe_error="exec awk \"{print \\\"\\\\033[0;31m\$(date +%Y-%m-%dT%H:%M:%
 export   pipe_crit="exec awk \"{print \\\"\\\\033[1;31m\$(date +%Y-%m-%dT%H:%M:%S%z) [  crit] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&   Critln () { [ "${LOG_SEVERITY:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
 
 # func
-Run () { Debugln "$ $*"; "$@"; }
+Run () { Debugln "$ $(for s in "$@"; do if echo "$s" | grep -Eq "[ ]"; then printf "'%s' " "$s"; else printf "%s " "$s"; fi; done)"; "$@"; }
 
 # CPUアーキテクチャ判定用
 export EnvIsAMD64=false
