@@ -543,6 +543,8 @@ gcloud config configurations activate "${GCP_CONFIG:?}"
 # gcloud : peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 
+# gcloud compute instances list : 構築順にソート
+gcloud --project "${GOOGLE_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
 # gcloud : compute ssh
 gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GOOGLE_PROJECT:?}" "${GCE_INSTANCE:?}"
 # gcloud : 変な operations が起こっていないか確認する。
