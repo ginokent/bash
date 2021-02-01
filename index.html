@@ -456,8 +456,7 @@ docker image ls --filter "dangling=true" -aq | xargs docker image rm
 
 # docker : 全部 kill して rm する。掃除する。
 { docker ps -aq | xargs docker kill; docker ps -aq | xargs docker rm; }
-{ docker container prune -f; docker volume prune -f; docker image prune -f; }
-docker system prune -f
+{ docker container prune -f; docker volume prune -f; docker image prune -f; docker system prune -f; }
 
 # docker : docker を root ユーザー以外でも実行できるように。
 sudo usermod -aG docker "$(whoami)"
