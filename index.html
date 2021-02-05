@@ -249,8 +249,11 @@ tc qdisc del    dev eth0 root
 # Mac
 # ==================================================
 
-# dotnet uninstall
+# dotnet-core-uninstall
 wget -c https://github.com/dotnet/cli-lab/releases/latest/download/dotnet-core-uninstall.tar.gz -O /tmp/dotnet-core-uninstall.tar.gz ; mkdir -p ~/dotnet-core-uninstall ; tar -zxf /tmp/dotnet-core-uninstall.tar.gz -C ~/dotnet-core-uninstall ; cd ~/dotnet-core-uninstall ; ./dotnet-core-uninstall -h
+# dotnet uninstall : dotnet --list-sdks
+sudo bash -cx "rm -v -rf /usr/local/share/dotnet/sdk/${version:?} /usr/local/share/dotnet/shared/Microsoft.NETCore.App/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.All/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.App/${version:?} /usr/local/share/dotnet/host/fxr/${version:?}"
+
 
 # k9s : kubectl の TUI https://github.com/derailed/k9s
 brew install derailed/k9s/k9s
