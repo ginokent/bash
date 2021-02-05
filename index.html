@@ -74,7 +74,10 @@ ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://djeeno.github.io/bash/keys
 # ssh-keygen : 公開鍵のフィンガープリントを表示する。
 ssh-keygen -E md5 -l -f _path_to_public_key_
 
-# ssh
+# ssh port forward ポートフォワード
+ssh -N -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
+
+# ssh port forward ポートフォワード バックグラウンド実行
 ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
 ssh -fN -L 3306:"${MYSQL_HOSTNAME:?}":3306 "${BASTION_HOST:?}"
 ssh -fN -L 6379:"${REDIS_HOSTNAME:?}":6379 "${BASTION_HOST:?}"
