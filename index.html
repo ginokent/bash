@@ -422,6 +422,9 @@ docker run -it --rm centos:8.1.1911 bash
 docker run -it --rm centos:7.7.1908 bash
 docker run -it --rm centos:6.10     bash
 
+# plantuml Plant UML
+docker run -d --rm -p 8931:8080 plantuml/plantuml-server:jetty
+
 # docker : MySQL Server のコンテナを起動する。
 docker network create common
 docker run -di --rm --network common --name mysql_8_0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql:8.0
