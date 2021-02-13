@@ -568,6 +568,9 @@ gcloud container clusters create "${GKE_CLUSTER:?}"
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
 
+# gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
+TEST_KEY=/path/to/key.json ; docker run -it -e GOOGLE_APPLICATION_CREDENTIALS="${TEST_KEY:?}" -v "${TEST_KEY:?}:${TEST_KEY:?}:ro" google/cloud-sdk sh -cx "gcloud auth activate-service-account --key-file ${GOOGLE_APPLICATION_CREDENTIALS:?} && bash -l"
+
 
 
 # ==================================================
