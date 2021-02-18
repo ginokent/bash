@@ -82,6 +82,11 @@ ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HO
 ssh -fN -L 3306:"${MYSQL_HOSTNAME:?}":3306 "${BASTION_HOST:?}"
 ssh -fN -L 6379:"${REDIS_HOSTNAME:?}":6379 "${BASTION_HOST:?}"
 
+# while ssh
+echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -t -t -- hostname < /dev/null; done
+# while ssh : Pseudo-terminal will not be allocated because stdin is not a terminal.
+echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -T -- hostname < /dev/null; done
+
 # rsync : 網羅的なコマンド例。
 ionice -c 3 nice -n 19 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
 
