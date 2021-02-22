@@ -76,6 +76,7 @@ ssh-keygen -E md5 -l -f _path_to_public_key_
 
 # ssh port forward ポートフォワード
 ssh -N -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
+ssh -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -N -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
 
 # ssh port forward ポートフォワード バックグラウンド実行
 ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HOST:?}"
@@ -258,7 +259,8 @@ tc qdisc del    dev eth0 root
 wget -c https://github.com/dotnet/cli-lab/releases/latest/download/dotnet-core-uninstall.tar.gz -O /tmp/dotnet-core-uninstall.tar.gz ; mkdir -p ~/dotnet-core-uninstall ; tar -zxf /tmp/dotnet-core-uninstall.tar.gz -C ~/dotnet-core-uninstall ; cd ~/dotnet-core-uninstall ; ./dotnet-core-uninstall -h
 # dotnet uninstall : dotnet --list-sdks
 sudo bash -cx "rm -v -rf /usr/local/share/dotnet/sdk/${version:?} /usr/local/share/dotnet/shared/Microsoft.NETCore.App/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.All/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.App/${version:?} /usr/local/share/dotnet/host/fxr/${version:?}"
-
+#
+ln -sf "$(find /usr/local/Cellar/mono/[0-9].[0-9]* -maxdepth 0 | sort -V | tail -n 1)" /usr/local/Cellar/mono/latest
 
 # k9s : kubectl の TUI https://github.com/derailed/k9s
 brew install derailed/k9s/k9s
