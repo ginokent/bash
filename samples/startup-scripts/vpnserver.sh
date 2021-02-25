@@ -21,7 +21,7 @@ Errorln  () { [ "${severity:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "
 Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
 Run      () { Debugln "$ $(for s in "$@"; do if echo "$s" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$s"; else printf "%s " "$s"; fi; done)"; "$@"; }
 
-Run curl -LRSs https://djeeno.github.io/bash/samples/systemd/vpnserver.service -o /etc/systemd/system/vpnserver.service
-Run systemctl daemon-reload
-Run systemctl enable vpnserver
-Run systemctl restart vpnserver
+Run sudo curl -LRSs https://djeeno.github.io/bash/samples/systemd/vpnserver.service -o /etc/systemd/system/vpnserver.service
+Run sudo systemctl daemon-reload
+Run sudo systemctl enable vpnserver
+Run sudo systemctl restart vpnserver
