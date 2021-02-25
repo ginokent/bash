@@ -1,0 +1,21 @@
+[Unit]
+Description=SoftEther VPN Server
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+# NOTE: ref. https://hub.docker.com/r/siomiz/softethervpn
+ExecStart=/usr/bin/docker run --rm --privileged --name vpnserver \
+    -p 500:500/udp \
+    -p 4500:4500/udp \
+    -p 1701:1701/tcp \
+    -p 1194:1194/udp \
+    -p 5555:5555/tcp \
+    -e PSK='VPNPreSharedKey' \
+    -e USERS='vpnuser000:vpnuser000password;vpnuser001:vpnuser001password' \
+    siomiz/softethervpn:4.29-ubuntu
+ExecStop=/usr/bin/docker stop -t 30 vpnserver
+
+[Install]
+WantedBy=multi-user.target
