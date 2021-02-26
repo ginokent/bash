@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -E -e -o pipefail
+cat >/dev/null << '#djeeno.github.io/bash'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#djeeno.github.io/bash
+##
+
+# Run the following command to execute this script:
+#   $ curl https://djeeno.github.io/bash/direnv/ | bash
+
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+
+cat <<"EOF"
+#!/bin/bash
+set -E -e -o pipefail
+cd "$(dirname "$0")" || exit 1
+
+# INIT
+iptables --flush INPUT
+iptables --policy INPUT ACCEPT
+
+# DROP invalid packets
+iptables --append INPUT --protocol tcp --tcp-flags ALL NONE --jump DROP               # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
+iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
+
+# ESTABLISHED
+iptables --append INPUT --match state --state ESTABLISHED,RELATED --jump ACCEPT
+
+# Internal
+iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 10.0.0.0/8 --jump ACCEPT
+iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 172.16.0.0/12 --jump ACCEPT
+iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 192.168.0.0/16 --jump ACCEPT
+
+# SSH
+iptables --append INPUT --protocol tcp --match tcp --dport 22 --jump ACCEPT
+
+# HTTP
+iptables --append INPUT --protocol tcp --match tcp --dport 80 --jump ACCEPT
+
+# HTTPS
+iptables --append INPUT --protocol tcp --match tcp --dport 443 --jump ACCEPT
+
+# SoftEther VPN Server
+iptables --append INPUT --protocol udp --match udp --dport 500 --jump ACCEPT
+iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
+iptables --append INPUT --protocol tcp --match tcp --dport 1701 --jump ACCEPT
+iptables --append INPUT --protocol udp --match udp --dport 4500 --jump ACCEPT
+iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
+
+# ICMP
+iptables -A INPUT --protocol icmp --jump ACCEPT
+
+# loopback interface
+iptables -A INPUT --in-interface lo --jump ACCEPT
+
+# LOG
+#iptables -A INPUT -j LOG --log-prefix 'drop_packet: '
+
+# DROP
+iptables -A INPUT -j DROP
+EOF
+
+
+
+# (C) 2018 djeeno </code></pre></div>
