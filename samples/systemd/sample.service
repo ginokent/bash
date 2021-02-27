@@ -1,3 +1,7 @@
+# sudo vim /etc/systemd/system/sample.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable sample
+# sudo systemctl start sample
 [Unit]
 Description=sample
 After=network.service
