@@ -58,6 +58,13 @@ iptables -A INPUT --in-interface lo --jump ACCEPT
 
 # DROP
 iptables -A INPUT -j DROP
+
+# SAVE
+if grep -q "=Ubuntu" /etc/lsb-release 2>/dev/null; then
+  DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+  /etc/init.d/netfilter-persistent save
+fi
+
 EOF
 
 
