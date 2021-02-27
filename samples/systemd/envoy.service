@@ -1,0 +1,12 @@
+[Unit]
+Description=Envoy Proxy
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run -di --rm --name envoy -p 10000:10000 -v /etc/envoy/envoy.yaml:/etc/envoy/envoy.yaml envoyproxy/envoy-alpine:v1.17-latest
+ExecStop=/usr/bin/docker stop -t 30 envoy
+
+[Install]
+WantedBy=multi-user.target
