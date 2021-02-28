@@ -259,6 +259,8 @@ tc qdisc del    dev eth0 root
 wget -c https://github.com/dotnet/cli-lab/releases/latest/download/dotnet-core-uninstall.tar.gz -O /tmp/dotnet-core-uninstall.tar.gz ; mkdir -p ~/dotnet-core-uninstall ; tar -zxf /tmp/dotnet-core-uninstall.tar.gz -C ~/dotnet-core-uninstall ; cd ~/dotnet-core-uninstall ; ./dotnet-core-uninstall -h
 # dotnet uninstall : dotnet --list-sdks
 sudo bash -cx "rm -v -rf /usr/local/share/dotnet/sdk/${version:?} /usr/local/share/dotnet/shared/Microsoft.NETCore.App/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.All/${version:?} /usr/local/share/dotnet/shared/Microsoft.AspNetCore.App/${version:?} /usr/local/share/dotnet/host/fxr/${version:?}"
+# mono uninstall  ref. https://www.mono-project.com/docs/about-mono/supported-platforms/macos/#uninstalling-mono-on-macos
+sudo bash -cx "rm -v -rf /Library/Frameworks/Mono.framework; pkgutil --forget com.xamarin.mono-MDK.pkg; sudo rm /etc/paths.d/mono-commands"
 #
 ln -sf "$(find /usr/local/Cellar/mono/[0-9].[0-9]* -maxdepth 0 | sort -V | tail -n 1)" /usr/local/Cellar/mono/latest
 
