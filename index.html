@@ -606,9 +606,10 @@ circleci local execute
 # Unity
 # ==================================================
 
-# unity
+# unity download urls
 curl -LsS https://unity3d.com/get-unity/download/archive | grep -Eo "href=\"unityhub://[^\"]+\"" | sed "s|^.*\"unityhub://\([^/]*\)/\([^\"]*\)\".*$|https://download.unity3d.com/download_unity/\2/UnitySetup-\1|"
-cat ProjectSettings/ProjectVersion.txt
+# unity check ProjectSettings/ProjectVersion.txt
+find "${PWD:?}" -name "ProjectVersion.txt" -print -exec cat {} \;
 
 
 
