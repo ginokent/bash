@@ -46,6 +46,7 @@ static_resources:
                 route:
                   host_rewrite_literal: localhost.localdomain
                   cluster: service_localhsot_localdomain
+                  timeout: 300s
 
   clusters:
   - name: service_localhsot_localdomain
