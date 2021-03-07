@@ -14,9 +14,12 @@ cat >/dev/null << '#djeeno.github.io/bash'
 
 # code --list-extensions --show-versions | sort | awk "{print \"code --install-extension \"\$0\" --force\"}"
 
-# { if [ $(basename $PWD) = vscode ]; then python -c "import sys,re; b=r'''\n# REPLACE BLOCK.*\n# REPLACE BLOCK'''; a=r'''\n# REPLACE BLOCK\n{\n$(code --list-extensions --show-versions | sort | awk "{print \"code --install-extension \"\$0\" --force\"}" | tr -d '\r')\n}\n# REPLACE BLOCK'''; f=open('./index.html', 'r'); d=f.read(); n=re.sub(b, a, d, flags=re.DOTALL); f=open('./index.html', 'w'); f.write(n); f.close();"; fi; }
+# { if [ $(basename $PWD) = vscode ]; then python -c "import sys,re; b=r'''\n# REPLACE BLOCK.*\n# REPLACE BLOCK'''; a=r'''\n# REPLACE BLOCK\n$(code --version | sed "s/^/# /")\n{\n$(code --list-extensions --show-versions | sort | awk "{print \"code --install-extension \"\$0\" --force\"}" | tr -d '\r')\n}\n# REPLACE BLOCK'''; f=open('./index.html', 'r'); d=f.read(); n=re.sub(b, a, d, flags=re.DOTALL); f=open('./index.html', 'w'); f.write(n); f.close();"; fi; }
 
 # REPLACE BLOCK
+# 1.53.0
+# 8490d3dde47c57ba65ec40dd192d014fd2113496
+# x64
 {
 code --install-extension Unity.unity-debug@3.0.2 --force
 code --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.11 --force
