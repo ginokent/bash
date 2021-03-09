@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -E -e -o pipefail
+cat >/dev/null << '#djeeno.github.io/bash'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#djeeno.github.io/bash
+##
+
+# Visual Studio Code
+
+# - code コマンドをインストールする
+#   ```
+#   >Shell Command: Install 'code' command in PATH
+#   ```
+#
+# - PlantUML ( ref. https://dev.classmethod.jp/articles/plantuml-server-on-docker/ )
+#   ```
+#   docker run -d -p 8931:8080 plantuml/plantuml-server:jetty
+#   ```
+#
+
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+
+prog_name=vscodeenv
+bin_dir=/usr/local/bin
+
+echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
+
+if ! command -v "${prog_name:?}" 1>/dev/null; then
+  # shellcheck disable=SC2154
+  if [ "${EnvIsDarwin}" = true ]; then
+    # ref. https://github.com/djeeno/vscodeenv#installing
+    wget https://github.com/djeeno/vscodeenv/releases/latest/download/vscodeenv-darwin-amd64 --output-document=/usr/local/bin/vscodeenv && chmod -v +x /usr/local/bin/vscodeenv
+  fi
+
+  if ! command -v "${prog_name:?}" 1>/dev/null; then
+    echo "${prog_name:?} not installed" | sh -c "${pipe_error:?}"
+    exit 1
+  fi
+fi
+
+${httpGet:?} https://djeeno.github.io/bash/vscode/vscodeenv.lock.sh | sh
+
+
+
+# (C) 2018 djeeno </code></pre></div>
+
