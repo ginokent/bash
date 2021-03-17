@@ -19,18 +19,18 @@ __main () { (
     [ -f ~/Library/Fonts/RictyDiminished-Oblique.ttf     ] || Run curl -LR -o ~/Library/Fonts/RictyDiminished-Oblique.ttf     https://github.com/edihbrandon/RictyDiminished/raw/55dd719ac9a57db3c0022866b783a092d0514037/RictyDiminished-Oblique.ttf
     [ -f ~/Library/Fonts/RictyDiminished-Regular.ttf     ] || Run curl -LR -o ~/Library/Fonts/RictyDiminished-Regular.ttf     https://github.com/edihbrandon/RictyDiminished/raw/55dd719ac9a57db3c0022866b783a092d0514037/RictyDiminished-Regular.ttf
 
-    # NOTE: https://www.google.com/get/noto/#sans-mono
-    Infoln "フォント Noto Sans Mono をインストールします。"
-    [ -f /tmp/NotoSansMono-unhinted.zip              ] || Run curl -LR -o /tmp/NotoSansMono-unhinted.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSansMono-unhinted.zip
-    [ -f ~/Library/Fonts/NotoSansMono-Black.ttf      ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Black.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-Bold.ttf       ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Bold.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-ExtraBold.ttf  ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-ExtraBold.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-ExtraLight.ttf ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-ExtraLight.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-Light.ttf      ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Light.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-Medium.ttf     ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Medium.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-Regular.ttf    ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Regular.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-SemiBold.ttf   ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-SemiBold.ttf
-    [ -f ~/Library/Fonts/NotoSansMono-Thin.ttf       ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Thin.ttf
+    # # NOTE: https://www.google.com/get/noto/#sans-mono
+    # Infoln "フォント Noto Sans Mono をインストールします。"
+    # [ -f /tmp/NotoSansMono-unhinted.zip              ] || Run curl -LR -o /tmp/NotoSansMono-unhinted.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSansMono-unhinted.zip
+    # [ -f ~/Library/Fonts/NotoSansMono-Black.ttf      ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Black.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-Bold.ttf       ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Bold.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-ExtraBold.ttf  ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-ExtraBold.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-ExtraLight.ttf ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-ExtraLight.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-Light.ttf      ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Light.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-Medium.ttf     ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Medium.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-Regular.ttf    ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Regular.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-SemiBold.ttf   ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-SemiBold.ttf
+    # [ -f ~/Library/Fonts/NotoSansMono-Thin.ttf       ] || Run unzip -o /tmp/NotoSansMono-unhinted.zip -d ~/Library/Fonts NotoSansMono-Thin.ttf
   fi
 )} && __main "$@"
 
