@@ -98,9 +98,9 @@ cdiff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');
 whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep "${WHILEDIFF_DURATION:=1}"; done)}
 
 # openssl : 証明書期限チェック。
-openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
+HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
 # openssl : 証明書チェーンチェック。
-openssl s_client -connect google.com:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'
+HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'
 
 # find : 見つけたファイルの行数を出力する。 `+` 引数としてまとめて渡して実行。 `;` 個別に実行。
 find . -name "*.html" -exec wc -l {} \+
