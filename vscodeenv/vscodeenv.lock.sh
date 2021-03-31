@@ -12,6 +12,7 @@ vscodeenv install 1.54.1
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension eamodio.gitlens@11.3.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.23.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension googlecloudtools.cloudcode@1.9.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension jebbs.plantuml@2.14.3 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.11.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-azuretools.vscode-docker@1.11.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-dotnettools.csharp@1.23.9 --force
