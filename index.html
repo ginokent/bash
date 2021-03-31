@@ -255,6 +255,8 @@ tc qdisc del    dev eth0 root
 # Mac
 # ==================================================
 
+# dotnet-install.sh https://docs.microsoft.com/ja-jp/dotnet/core/tools/dotnet-install-script
+curl -LRSs https://dot.net/v1/dotnet-install.sh | bash
 # dotnet-core-uninstall
 wget -c https://github.com/dotnet/cli-lab/releases/latest/download/dotnet-core-uninstall.tar.gz -O /tmp/dotnet-core-uninstall.tar.gz ; mkdir -p ~/dotnet-core-uninstall ; tar -zxf /tmp/dotnet-core-uninstall.tar.gz -C ~/dotnet-core-uninstall ; cd ~/dotnet-core-uninstall ; ./dotnet-core-uninstall -h
 # dotnet uninstall : dotnet --list-sdks
