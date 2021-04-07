@@ -529,6 +529,9 @@ alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/conf
 # aws sts UserId Account Arn を取得する
 aws sts get-caller-identity
 
+# aws ec2 describe-instances (with tags) インスタンス一覧 タグ名
+aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
+
 
 
 # ==================================================
