@@ -531,6 +531,8 @@ aws sts get-caller-identity
 
 # aws ec2 describe-instances (with tags) インスタンス一覧 タグ名
 aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
+aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:cluster-name").Value)]'
+aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:nodegroup-name").Value)]'
 
 
 
