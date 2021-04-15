@@ -30,9 +30,18 @@ Run asdf plugin-add "${lang_name}" || true
 # Mojave
 #   sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
 # shellcheck disable=SC2154
-[ "${EnvIsDarwin}" = true ] && { Run brew install openssl@1.1 readline xz zlib; CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl@1.1)"; export CONFIGURE_OPTS; }
+[ "${EnvIsDarwin}" = true ] && {
+  Run brew install openssl@1.1 readline xz zlib
+  CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl@1.1)"
+  export CONFIGURE_OPTS
+  Infoln "CONFIGURE_OPTS=${CONFIGURE_OPTS-}"
+}
 # shellcheck disable=SC2154
-[ "${EnvIsUbuntu}" = true ] && Run sudo bash -c 'apt-get update; apt-get install -y build-essential libbz2-dev libffi-dev libsqlite3-dev libreadline-dev zlib1g-dev'
+[ "${EnvIsUbuntu}" = true ] && {
+  Run sudo bash -c 'apt-get update; apt-get install -y build-essential libbz2-dev libffi-dev libsqlite3-dev libreadline-dev zlib1g-dev'
+  export CFLAGS=-I/usr/include/openssl LDFLAGS=-L/usr/lib
+  Infoln "CFLAGS=${CFLAGS-} LDFLAGS=${LDFLAGS-}"
+}
 
 
 
