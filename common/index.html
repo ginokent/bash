@@ -25,7 +25,7 @@ Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "
 Run      () { Debugln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; }
 Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && trap Catch ERR
 CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; }
-ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; [[ "${YES_OR_NO-N}" =~ ^Y|^y ]]; }
+ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; [[ "${YES_OR_NO-N}" =~ ^Y|^y ]]; }  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
 # CPUアーキテクチャ判定用
 export EnvIsAMD64=false
