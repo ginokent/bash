@@ -515,8 +515,11 @@ kubectl config current-context
 # kubectl port-forward
 kubectl --context="${KUBECTL_CONTEXT:?}" port-forward "service/${SERVICE_NAME:?}" "${LOCAL_PORT:?}:${SERVICE_PORT:?}"
 
-# pv 秒間何行出力か表示する
-kubetail app --context="${KUBECTL_CONTEXT:?}" --namespace default 2>&1 | pv --line-mode --rate >/dev/null
+# kubetail regex
+kubetail "^app-[0-9a-z]+-[0-9a-z]+" --regex --context "${KUBECTL_CONTEXT:?}" --namespace default --since 300s
+
+# kubetail + pv 秒間何行ログ出力があるか表示する
+kubetail "^app-[0-9a-z]+-[0-9a-z]+" --regex --context "${KUBECTL_CONTEXT:?}" --namespace default --since 300s 2>&1 | pv --line-mode --rate >/dev/null
 
 # k9s を docker 経由で実行する
 alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro quay.io/derailed/k9s'
