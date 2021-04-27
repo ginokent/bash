@@ -578,11 +578,12 @@ gcloud config set project "${GOOGLE_PROJECT:?}"
 gcloud config configurations activate "${GCP_CONFIG:?}"
 # gcloud : peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
-
 # gcloud compute instances list : 構築順にソート
 gcloud --project "${GOOGLE_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
-# gcloud : compute ssh
-gcloud compute ssh --zone "${GCP_ZONE:?}" --project "${GOOGLE_PROJECT:?}" "${GCE_INSTANCE:?}"
+# gcloud compute ssh
+gcloud compute ssh --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+# gcloud start-iap-tunnel portforward
+gcloud compute start-iap-tunnel --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
 # gcloud : 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
 gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_PROJECT:?}"
