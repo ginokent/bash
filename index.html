@@ -649,8 +649,7 @@ printf '%s\n'     'value1,value2'   | awk '{ split($0, array, ","); print array[
 printf '%s\n'     'abcdefghijklmn'  | awk '{ print toupper($0)}'
 printf '%s\n'     'abcdefghijklmn'  | awk '{ print length($0)}'
 printf '%s\n%s\n' 1 2               | awk '{print "'"$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+09:00)"'",$0}'
-TS=$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+09:00); ps auxf | awk '{print "'"${TS:?}"'",$0}'
-while sleep 30; do TS=$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+09:00); ps auxf | awk '{print "'"${TS:?}"'",$0}'; done >~/"ps-auxf-$(TZ=Asia/Tokyo date +%Y%m%dT%H%M%SJST).log"
+while :; do top -b -c -d 1 -n 1 -o "%CPU" -w 10240 | awk '{print "'"$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+09:00)"'",$0}'; sleep 30; done > ~/"${HOSTNAME:?}_top_$(TZ=Asia/Tokyo date +%Y%m%dT%H%M%SJST).log"
 
 
 
