@@ -134,7 +134,7 @@ ruby -ryaml -rjson -e 'puts JSON.dump(YAML.load(STDIN.read))'
 ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 
 # python 3.4 or later を探す
-echo "$PATH" | tr : "\n" | xargs -I@ sh -c "exec ls -1 \"@/python\"*" 2>/dev/null | grep -o "^/[^:]*" | xargs -I@ sh -c "@ -c \"import sys; v=sys.version_info; print(sys.executable) if v.major >= 3 and v.minor >= 4 else sys.exit()\"" 2>/dev/null | grep "^/[^[:blank:]]*$"
+echo "${PATH:?}:" | while read -d: -r BIN; do ls -1 "${BIN:?}/python"* 2>/dev/null; done | while read -r PYTHON3; do "${PYTHON3:?}" -c "import sys; v=sys.version_info; sys.stdout.write(str(v.major)+'.'+str(v.minor)+'.'+str(v.micro)+'\t'+sys.executable+'\n') if v.major >= 3 and v.minor >= 4 else sys.exit()" 2>/dev/null; done | sort -V | cut -f2 | grep "^/[^[:blank:]]*$" | tail -n 1
 
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
