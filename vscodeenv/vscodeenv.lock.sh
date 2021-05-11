@@ -3,11 +3,11 @@
 set -eu
 
 # Visual Studio Code
-vscodeenv install 1.54.1
+vscodeenv install 1.56.0
 
 # Extensions
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Unity.unity-debug@3.0.2 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.12 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.13 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.9.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension eamodio.gitlens@11.3.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.24.2 --force
@@ -26,6 +26,6 @@ vscodeenv install 1.54.1
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vscode-remote.remote-ssh@0.65.4 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vsliveshare.vsliveshare@1.0.4131 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-yaml@0.18.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.14.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.14.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension zxh404.vscode-proto3@0.5.4 --force
