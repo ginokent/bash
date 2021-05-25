@@ -4,78 +4,98 @@ cat >/dev/null << '#djeeno.github.io/bash'
 #djeeno.github.io/bash
 ##
 
-# 関数 export
-export  pipe_debug="exec awk \"{print \\\"\\\\033[00m\$(date +%Y-%m-%dT%H:%M:%S%z) [ debug] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&  debugln () { test "$DEBUG" != true || echo "${*:?"log content"}" | sh -c "${pipe_debug:?}"  1>&2; }
-export   pipe_info="exec awk \"{print \\\"\\\\033[34m\$(date +%Y-%m-%dT%H:%M:%S%z) [  info] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&   infoln () { echo "${*:?"log content"}" | sh -c "${pipe_info:?}"   1>&2; }
-export     pipe_ok="exec awk \"{print \\\"\\\\033[32m\$(date +%Y-%m-%dT%H:%M:%S%z) [    ok] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&     okln () { echo "${*:?"log content"}" | sh -c "${pipe_ok:?}"     1>&2; }
-export pipe_notice="exec awk \"{print \\\"\\\\033[01m\$(date +%Y-%m-%dT%H:%M:%S%z) [notice] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" && noticeln () { echo "${*:?"log content"}" | sh -c "${pipe_notice:?}" 1>&2; }
-export   pipe_warn="exec awk \"{print \\\"\\\\033[33m\$(date +%Y-%m-%dT%H:%M:%S%z) [  warn] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&   warnln () { echo "${*:?"log content"}" | sh -c "${pipe_warn:?}"   1>&2; }
-export  pipe_error="exec awk \"{print \\\"\\\\033[31m\$(date +%Y-%m-%dT%H:%M:%S%z) [ error] \\\"\\\$0\\\"\\\\033[0m\\\"}\" /dev/stdin" &&  errorln () { echo "${*:?"log content"}" | sh -c "${pipe_error:?}"  1>&2; }
+# export for func
+[ "${LOG_COLOR:-}" = false ] || export enablecolor=true
+export  pipe_debug="awk \"{print \\\"${enablecolor:+\\\\033[0;34m}\$(date +%Y-%m-%dT%H:%M:%S%z) [ debug] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+export   pipe_info="awk \"{print \\\"${enablecolor:+\\\\033[0;32m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  info] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+export pipe_notice="awk \"{print \\\"${enablecolor:+\\\\033[0;36m}\$(date +%Y-%m-%dT%H:%M:%S%z) [notice] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+export   pipe_warn="awk \"{print \\\"${enablecolor:+\\\\033[0;33m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  warn] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+export  pipe_error="awk \"{print \\\"${enablecolor:+\\\\033[0;31m}\$(date +%Y-%m-%dT%H:%M:%S%z) [ error] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+export   pipe_crit="awk \"{print \\\"${enablecolor:+\\\\033[1;31m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  crit] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+
+# func
+export severity="${LOG_SEVERITY:--1}"
+Debugln  () { [ "${severity:--1}" -gt 100 ] 2>/dev/null || echo "$*" | bash -c "${pipe_debug:?}"  1>&2; }
+Infoln   () { [ "${severity:--1}" -gt 200 ] 2>/dev/null || echo "$*" | bash -c "${pipe_info:?}"   1>&2; }
+Noticeln () { [ "${severity:--1}" -gt 300 ] 2>/dev/null || echo "$*" | bash -c "${pipe_notice:?}" 1>&2; }
+Warnln   () { [ "${severity:--1}" -gt 400 ] 2>/dev/null || echo "$*" | bash -c "${pipe_warn:?}"   1>&2; }
+Errorln  () { [ "${severity:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "${pipe_error:?}"  1>&2; }
+Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
+Run      () { Debugln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; }
+Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && trap Catch ERR
+CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; }
+ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; [[ "${YES_OR_NO-N}" =~ ^Y|^y ]]; }  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
 # CPUアーキテクチャ判定用
-export envIsAMD64=false
+export EnvIsAMD64=false
 
 # カーネル判定用
-export envIsDarwin=false
-export envIsLinux=false
+export EnvIsDarwin=false
+export EnvIsLinux=false
 
 # Ubuntu
-export envIsUbuntu=false
-export envIsUbuntu1404=false
-export envIsUbuntu1604=false
-export envIsUbuntu1804=false
+export EnvIsUbuntu=false
+export EnvIsUbuntu1404=false
+export EnvIsUbuntu1604=false
+export EnvIsUbuntu1804=false
+export EnvIsUbuntu2004=false
 
 # Amazon Linux
-export envIsAmazonLinux
-export envIsAmazonLinux2
+export EnvIsAmazonLinux
+export EnvIsAmazonLinux2
 
 # CentOS
-export envIsCentOS=false
-export envIsCentOS6=false
-export envIsCentOS7=false
-export envIsCentOS8=false
+export EnvIsCentOS=false
+export EnvIsCentOS6=false
+export EnvIsCentOS7=false
+export EnvIsCentOS8=false
 
 # CPU アーキテクチャ判定
 if uname -m | grep -q ^x86_64$; then
-  envIsAMD64=true
+  EnvIsAMD64=true
 fi
 
 # カーネル判定
 if uname -s | grep -q ^Darwin$; then
-  envIsDarwin=true
+  EnvIsDarwin=true
 elif uname -s | grep -q ^Linux$; then
-  envIsLinux=true
+  EnvIsLinux=true
 fi
 
 # ディストリビューション及び OS バージョン判定
 if grep -q "\"Ubuntu 14\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1404=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1404=true
 elif grep -q "\"Ubuntu 16\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1604=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1604=true
 elif grep -q "\"Ubuntu 18\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
-  envIsUbuntu=true
-  envIsUbuntu1804=true
+  EnvIsUbuntu=true
+  EnvIsUbuntu1804=true
+elif grep -q "\"Ubuntu 20\.04.* LTS\"" /etc/lsb-release 2>/dev/null; then
+  EnvIsUbuntu=true
+  EnvIsUbuntu2004=true
+elif grep -q "\"Ubuntu .* LTS\"" /etc/lsb-release 2>/dev/null; then
+  EnvIsUbuntu=true
 elif grep -q "\"Amazon Linux 2\"" /etc/lsb-release 2>/dev/null; then
-  envIsAmazonLinux=true
-  envIsAmazonLinux2=true
+  EnvIsAmazonLinux=true
+  EnvIsAmazonLinux2=true
 elif grep -q "^CentOS release 6\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS6=true
+  EnvIsCentOS=true
+  EnvIsCentOS6=true
 elif grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS7=true
+  EnvIsCentOS=true
+  EnvIsCentOS7=true
 elif grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; then
-  envIsCentOS=true
-  envIsCentOS8=true
+  EnvIsCentOS=true
+  EnvIsCentOS8=true
 fi
 
 # 読み込み判定用
-export envIsLoaded=true
+export EnvIsLoaded=true
 
 # ログ出力
-infoln "$(echo 'env:'; env | grep ^envIs | sort | awk '{print "  "$0}')"
+Debugln "$(echo 'env:'; env | grep ^EnvIs | sort | awk '{print "  "$0}')"
 
 
 
