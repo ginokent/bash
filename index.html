@@ -549,34 +549,36 @@ aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances 
 # GCP gcp gcloud Google Cloud Platform
 # ==================================================
 
-# gcloud : 各種コンポーネントをアップデートする。
+# gcloud 各種コンポーネントをアップデートする。
 gcloud components update
 
-# gcloud : TL;DR
+# gcloud TL;DR
 gcloud config configurations create "${GCP_CONFIG:?}"
 gcloud auth login
 gcloud config set project "${GOOGLE_PROJECT:?}"
 gcloud config configurations list
-# gcloud : 初期化
+# gcloud 初期化
 gcloud init --console-only
-# gcloud : 現在利用している configuration の内容を表示する。
+# gcloud 現在利用している configuration の内容を表示する。
 gcloud config list
-# gcloud : configuration 一覧を表示する。
+# gcloud configuration 一覧を表示する。
 gcloud config configurations list
-# gcloud : configuration を新規作成する ( 初期状態では 'default' が使用される )
+# gcloud configuration を新規作成する ( 初期状態では 'default' が使用される )
 gcloud config configurations create "${GCP_CONFIG:?}"
-# gcloud : アカウントを設定する。
+# gcloud アカウントを設定する。
 gcloud config set account "${GCP_ACCOUNT:?}"
-# gcloud : アカウントを認証する - IAM アカウントの場合
+# gcloud auth login ログインする
 gcloud auth login
+# gcloud auth revoke ログアウトする
+gcloud auth revoke
 # MEMO: gcloud auth application-default login
-# gcloud : アカウントを認証する - サービスアカウントの場合
+# gcloud アカウントを認証する - サービスアカウントの場合
 gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
-# gcloud : プロジェクトを設定する。
+# gcloud プロジェクトを設定する。
 gcloud config set project "${GOOGLE_PROJECT:?}"
-# gcloud : 利用する configuration を切り替える。
+# gcloud 利用する configuration を切り替える。
 gcloud config configurations activate "${GCP_CONFIG:?}"
-# gcloud : peco で選択可能形式で configuration を切り替える。
+# gcloud peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 # gcloud compute instances list : 構築順にソート
 gcloud --project "${GOOGLE_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
@@ -584,21 +586,25 @@ gcloud --project "${GOOGLE_PROJECT:?}" compute instances list --format="json" | 
 gcloud compute ssh --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
 # gcloud start-iap-tunnel portforward
 gcloud compute start-iap-tunnel --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
-# gcloud : 変な operations が起こっていないか確認する。
+# gcloud 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
 gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_PROJECT:?}"
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i hostError
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 
-# gcloud : kubernetes cluster を作成する。
+# gcloud kubernetes cluster を作成する。
 gcloud container clusters create "${GKE_CLUSTER:?}"
-# gcloud : kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
-# gcloud : `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
+# gcloud kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
+# gcloud `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
 
 # gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
 TEST_KEY=/path/to/key.json ; docker run -it -e GOOGLE_APPLICATION_CREDENTIALS="${TEST_KEY:?}" -v "${TEST_KEY:?}:${TEST_KEY:?}:ro" google/cloud-sdk sh -cx "gcloud auth activate-service-account --key-file ${GOOGLE_APPLICATION_CREDENTIALS:?} && bash -l"
+
+# gcloud metadata.google.internal
+curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/instance/
+curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/email
 
 
 
