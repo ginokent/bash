@@ -26,6 +26,12 @@ Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && trap Catch ER
 CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; }
 ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; [[ "${YES_OR_NO-N}" =~ ^Y|^y ]]; }  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
+DebugJSONL    () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" debug    "${LINE:?}"; done; }
+InfoJSONL     () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" info     "${LINE:?}"; done; }
+WarningJSONL  () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" warning  "${LINE:?}"; done; }
+ErrorJSONL    () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" error    "${LINE:?}"; done; }
+CriticalJSONL () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" critical "${LINE:?}"; done; }
+
 # CPUアーキテクチャ判定用
 export EnvIsAMD64=false
 
