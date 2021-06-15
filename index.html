@@ -601,7 +601,8 @@ gcloud container clusters create "${GKE_CLUSTER:?}"
 # gcloud `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
 gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
-
+# gcloud logging read
+PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read '(resource.labels.container_name="AAA" OR resource.labels.container_name="BBB") AND "foobar" AND timestamp>="2021-06-15T00:00:00+09:00" AND timestamp<"2021-06-15T23:59:59+09:00"' --order="asc" --format="value(textPayload)"
 # gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
 TEST_KEY=/path/to/key.json ; docker run -it -e GOOGLE_APPLICATION_CREDENTIALS="${TEST_KEY:?}" -v "${TEST_KEY:?}:${TEST_KEY:?}:ro" google/cloud-sdk sh -cx "gcloud auth activate-service-account --key-file ${GOOGLE_APPLICATION_CREDENTIALS:?} && bash -l"
 
