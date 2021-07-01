@@ -503,8 +503,10 @@ sudo usermod -aG docker "$(whoami)"
 # docker : Docker for Windows を WSL1 から利用できるようにするための設定。
 command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
 
-# docker : Docker for Mac の LinuxKit の tty に接続する。
+# docker : Docker for Mac の LinuxKit の tty に接続する。 2021-07-01 使えなくなってた。
 screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
+# docker : Docker for Mac の LinuxKit にログイン
+docker run -it --privileged --pid=host debian nsenter -t 1 -m -u -n -i sh
 
 # docker-compose : 最新の docker-compose をインストールする。
 sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
