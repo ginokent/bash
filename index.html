@@ -618,6 +618,9 @@ TEST_KEY=/path/to/key.json ; docker run -it -e GOOGLE_APPLICATION_CREDENTIALS="$
 curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/instance/
 curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/email
 
+# gsutil .boto ファイルを生成する
+gsutil config -n
+
 
 
 # ==================================================
