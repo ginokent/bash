@@ -438,17 +438,18 @@ docker run -it --rm -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOO
 docker run -it --env-file <(env) --rm alpine sh
 
 # docker : よく使いそうな docker image たち
-docker run -it --rm alpine          sh
-docker run -it --rm debian:10.2     bash
-docker run -it --rm debian:9.11     bash
-docker run -it --rm debian:8.11     bash
-docker run -it --rm ubuntu:20.04    bash
-docker run -it --rm ubuntu:18.04    bash
-docker run -it --rm ubuntu:16.04    bash
-docker run -it --rm ubuntu:14.04    bash
-docker run -it --rm centos:8.1.1911 bash
-docker run -it --rm centos:7.7.1908 bash
-docker run -it --rm centos:6.10     bash
+docker run -it --rm alpine sh
+docker run -it --rm debian:10 bash
+docker run -it --rm debian:9 bash
+docker run -it --rm debian:8 bash
+docker run -it --rm ubuntu:20.04 bash
+docker run -it --rm ubuntu:18.04 bash
+docker run -it --rm ubuntu:16.04 bash
+docker run -it --rm ubuntu:14.04 bash
+docker run -it --rm centos:8 bash
+docker run -it --rm centos:7 bash
+docker run -it --rm centos:6 bash
+docker run -it --rm rockylinux/rockylinux:8 bash
 
 # plantuml Plant UML
 docker run -d --rm -p 8931:8080 plantuml/plantuml-server:jetty
