@@ -19,6 +19,7 @@ if [ -f "$HOME/.ssh/authorized_keys" ]; then
   done
 else
   tmp_random_chars="tmp$(LANG=C LC_ALL=C tr -dc 0-9A-Za-z </dev/urandom | head -c 13 || true)"
+  mkdir -m 0700 "$HOME/.ssh/"
   echo | ssh-keygen -t rsa -N "" -f "$HOME/.ssh/${tmp_random_chars}" 1>/dev/null 2>&1 \
     && rm -f "$HOME/.ssh/${tmp_random_chars}" \
     && echo "${public_keys}" >"$HOME/.ssh/${tmp_random_chars}.pub" \
