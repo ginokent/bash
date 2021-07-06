@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -E -e -o pipefail
+set -E -e -o pipefail -u
 cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #djeeno.github.io/bash
@@ -20,12 +20,12 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 URL="https://github.com/tmux/tmux/archive/refs/tags/${TMUX_VERSION:?}.tar.gz"
 FILE="tmux-$(basename "${URL:?}")"
 # shellcheck disable=SC2154
-if [ "${EnvIsDarwin}" = true ]; then
+if [ "${EnvIsDarwin-}" = true ]; then
   bash -c "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
   commands_for_install="brew install ${prog_name:?}"
-elif [ "${EnvIsCentOS}" = true ] || [ "${EnvIsAmazonLinux}" = true ]; then
+elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
   commands_for_install="yum install -y automake bison gcc less libevent-devel ncurses-devel make tar wget && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V"
-elif [ "${EnvIsUbuntu}" = true ]; then
+elif [ "${EnvIsUbuntu-}" = true ]; then
   commands_for_install="apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y automake bison gcc less libevent-dev libncurses-dev make pkg-config tar wget && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V"
 else
   echo "OS not supported" | bash -c "${pipe_error:?}"

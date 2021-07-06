@@ -57,6 +57,10 @@ export EnvIsCentOS6=false
 export EnvIsCentOS7=false
 export EnvIsCentOS8=false
 
+# Rocky Linux
+export EnvIsRockyLinux=false
+export EnvIsRockyLinux8=false
+
 # CPU アーキテクチャ判定
 if uname -m | grep -q ^x86_64$; then
   EnvIsAMD64=true
@@ -96,6 +100,13 @@ elif grep -q "^CentOS Linux release 7\." /etc/centos-release 2>/dev/null; then
 elif grep -q "^CentOS Linux release 8\." /etc/centos-release 2>/dev/null; then
   EnvIsCentOS=true
   EnvIsCentOS8=true
+elif grep -q "CentOS" /etc/centos-release 2>/dev/null; then
+  EnvIsCentOS=true
+elif grep -q "\"Rocky Linux 8.*\"" /etc/os-release 2>/dev/null; then
+  EnvIsRockyLinux=true
+  EnvIsRockyLinux8=true
+elif grep -q "\"Rocky Linux.*\"" /etc/os-release 2>/dev/null; then
+  EnvIsRockyLinux=true
 fi
 
 # 読み込み判定用
