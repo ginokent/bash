@@ -417,6 +417,8 @@ curl -LRsS http://downloads.mysql.com/docs/world.sql.gz | gunzip - | mysql
 git clone --depth=1 https://github.com/datacharmer/test_db.git /tmp/test_db && cd /tmp/test_db && mysql <./employees.sql
 
 # gcloud cloud sql slow log : rows_examined = このクエリ実行時に何行に触ったか。当然、数字が大きいとマズい。 : https://blog.kamipo.net/entry/2018/03/22/084126
+# メモ
+# - IN 句に大量に指定いれると PK 絞り込みが効かなくなることがある
 PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read 'resource.type="cloudsql_database" AND logName="projects/'"${GOOGLE_CLOUD_PROJECT:?}"'/logs/cloudsql.googleapis.com%2Fmysql-slow.log" AND timestamp>="2021-01-01T00:00:00+09:00" AND timestamp<"2021-01-01T00:01:00+09:00"' --order="asc" --format="value(textPayload)"
 
 
