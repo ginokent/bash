@@ -3,7 +3,7 @@
 set -eu
 
 # Visual Studio Code
-vscodeenv install 1.56.0
+vscodeenv install 1.56.2
 
 # Extensions
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Unity.unity-debug@3.0.2 --force
@@ -11,6 +11,7 @@ vscodeenv install 1.56.0
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.9.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension eamodio.gitlens@11.3.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.24.2 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.terraform@2.13.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ionutvmi.path-autocomplete@1.17.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension jebbs.plantuml@2.14.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.11.0 --force
