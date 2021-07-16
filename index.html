@@ -461,6 +461,7 @@ docker run -d --rm -p 8931:8080 plantuml/plantuml-server:jetty
 
 # docker : nginx NGINX
 docker run -i --rm -p 8080:80 nginx
+docker run -i -v "$(pwd -P)/nginx.conf":/etc/nginx/nginx.conf:ro -p 8080:80 nginx
 
 # docker : MySQL Server のコンテナを起動する。
 docker network create common
