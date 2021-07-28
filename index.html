@@ -629,6 +629,9 @@ curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v
 # gsutil .boto ファイルを生成する
 gsutil config -n
 
+# gsutil cache-control GCS メタデータに Cache-Control: private,no-cache,no-store,max-age=0,must-revalidate を設定する
+gsutil -m setmeta -h "Cache-Control: private,no-cache,no-store,max-age=0,must-revalidate" -r "gs://${BUCKET:?}/${PATH_TO:?}"
+
 
 
 # ==================================================
