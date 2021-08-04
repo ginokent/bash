@@ -560,6 +560,8 @@ alias k9s='docker run --rm -it -v ${KUBECONFIG:-~/.kube/config}:/root/.kube/conf
 # ==================================================
 # pass : Linux 上での aws-vault の動作要件
 sudo apt-get install -y pass
+# shellcheck disable=SC2155
+export GPG_TTY="$(tty)"
 gpg --full-generate-key
 pass init "${EMAIL:?}"
 
