@@ -241,6 +241,29 @@ curl -LRsS https://djeeno.github.io/bash/ | grep "^apt-get update && apt-get ins
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /
 
+# ps STAT 列に書いてあることの意味
+man ps
+# PROCESS STATE CODES
+#        Here are the different values that the s, stat and state output specifiers (header "STAT" or "S") will display to describe the state of a process:
+# 
+#                D    uninterruptible sleep (usually IO)
+#                R    running or runnable (on run queue)
+#                S    interruptible sleep (waiting for an event to complete)
+#                T    stopped by job control signal
+#                t    stopped by debugger during the tracing
+#                W    paging (not valid since the 2.6.xx kernel)
+#                X    dead (should never be seen)
+#                Z    defunct ("zombie") process, terminated but not reaped by its parent
+# 
+#        For BSD formats and when the stat keyword is used, additional characters may be displayed:
+# 
+#                <    high-priority (not nice to other users)
+#                N    low-priority (nice to other users)
+#                L    has pages locked into memory (for real-time and custom IO)
+#                s    is a session leader
+#                l    is multi-threaded (using CLONE_THREAD, like NPTL pthreads do)
+#                +    is in the foreground process group
+
 # ps.sh : ps コマンドの代わり。
 ps_sh() { _piddirs=$(find /proc -maxdepth 1 -type d -name "[0-9]*"); printf "UID\tPID\tPPID\tCMD\n"; echo "$_piddirs" | sed s@/proc/@@ | while read -r PID; do if [ -d "/proc/$PID" ]; then printf "%s\t%d\t%d\t%s\n" "$(stat -c "%U" "/proc/$PID")" "$PID" "$(cut -d" " -f4 "/proc/$PID/stat")" "$(cat -e "/proc/$PID/cmdline" | sed "s/\^@$//; s/\^@/ /g")"; fi; done; } && ps_sh
 
