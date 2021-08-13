@@ -5,7 +5,7 @@ mkdir -p /tmp/benchmark
 cd /tmp/benchmark || exit 1
 
 # ベンチマークファイル作成
-tee /tmp/benchmark/benchmark_test.go <<"EOF"
+tee /tmp/benchmark/benchmark_test.go << "EOF"
 // ベンチマーク走らせる
 // $ go test -bench . -benchmem -test.run=none -test.benchtime=1000ms
 
