@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -E -e -o pipefail
+set -E -e -o pipefail -u
 cat >/dev/null << '#djeeno.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #djeeno.github.io/bash
@@ -49,7 +49,7 @@ Run asdf current "${lang_name}"
 
 if ! command -v yarn 1>/dev/null; then
   if [ "${EnvIsDarwin:-false}" = true ]; then
-    bash -c "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/brew/")"
+    bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install yarn
   else
     Infoln "install yarn. ref. https://classic.yarnpkg.com/ja/docs/install/#alternatives-stable"

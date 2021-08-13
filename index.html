@@ -40,7 +40,8 @@ exit 0
 # ==================================================
 
 # 一撃インストール系
-bash -c "$(curl -LRsS https://djeeno.github.io/bash/brew/)"
+bash -c "$(curl -fLRSs https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+bash -c "$(wget -O- -q https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
 bash -c "$(curl -LRsS https://djeeno.github.io/bash/git/)"
 bash -c "$(curl -LRsS https://djeeno.github.io/bash/asdf/)"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -E -e -u -o pipefail
+set -E -e -o pipefail -u
 if [ ! "${BASH_VERSINFO:-0}" -ge 3 ]; then printf '\033[1;31m%s\033[0m\n' "bash 3.x or later is required" 1>&2; exit 1; fi
 # このリポジトリ向け lint
 
