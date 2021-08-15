@@ -11,15 +11,13 @@ PROG_NAME=ASDF
 prog_name=asdf
 
 LANG_VERSION_KEY="${PROG_NAME}_VERSION"
-Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
 Infoln "Install ${prog_name:?}"
 
 if ! command -v git >/dev/null; then
   Run bash -c "${httpGet} https://djeeno.github.io/bash/git/ | bash"
 fi
-
-Debugln "debug"
 
 lang_version="${!LANG_VERSION_KEY:=$(
   git ls-remote --quiet --refs --tags https://github.com/asdf-vm/asdf.git |
@@ -29,7 +27,7 @@ lang_version="${!LANG_VERSION_KEY:=$(
 )}"
 
 if test ! -d ~/.asdf; then
-  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${lang_version}"
+  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${lang_version:?}"
 fi
 
 # shellcheck disable=SC2016,SC2088
