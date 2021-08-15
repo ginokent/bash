@@ -16,7 +16,7 @@ Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 Infoln "Install ${prog_name:?}"
 
 if ! command -v git >/dev/null; then
-  bash -c "$(${httpGet} https://djeeno.github.io/bash/git/)"
+  Run bash -c "${httpGet} https://djeeno.github.io/bash/git/ | bash"
 fi
 
 Debugln "debug"
