@@ -5,7 +5,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 #djeeno.github.io/bash
 ##
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 LANG_NAME=PYTHON
 lang_name=python
@@ -16,7 +16,7 @@ Debugln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 Infoln "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null ||
-  eval "$(sh -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" ||
+  eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/asdf/")" ||
   exit 1
 
 Run asdf plugin-add "${lang_name}" || true
