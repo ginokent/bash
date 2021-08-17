@@ -7,11 +7,9 @@ cat >/dev/null << '#djeeno.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-PROG_NAME=ASDF
 prog_name=asdf
 
-LANG_VERSION_KEY="${PROG_NAME}_VERSION"
-Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+Infoln "  ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
 
 Infoln "Install ${prog_name:?}"
 
@@ -19,7 +17,7 @@ if ! command -v git >/dev/null; then
   Run bash -c "${httpGet} https://djeeno.github.io/bash/git/ | bash"
 fi
 
-lang_version="${!LANG_VERSION_KEY:=$(
+asdf_version="${ASDF_VERSION:=$(
   git ls-remote --quiet --refs --tags https://github.com/asdf-vm/asdf.git |
     grep -Eo "v[0-9]+\.[0-9]+\.[0-9]+" |
     sort -V |
@@ -27,7 +25,7 @@ lang_version="${!LANG_VERSION_KEY:=$(
 )}"
 
 if test ! -d ~/.asdf; then
-  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${lang_version:?}"
+  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
 fi
 
 # shellcheck disable=SC2016,SC2088
