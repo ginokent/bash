@@ -11,7 +11,8 @@ LANG_NAME=POSTGRES
 lang_name=postgres
 
 LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+#Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:=12.8}"
 
 Infoln "Start to install ${lang_name:?}"
 
