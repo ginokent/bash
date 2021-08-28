@@ -678,8 +678,12 @@ curl -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v
 # gsutil .boto ファイルを生成する
 gsutil config -n
 
-# gsutil cache-control GCS メタデータに Cache-Control: private,no-cache,no-store,max-age=0,must-revalidate を設定する
-gsutil -m setmeta -h "Cache-Control: private,no-cache,no-store,max-age=0,must-revalidate" -r "gs://${BUCKET:?}/${PATH_TO:?}"
+# gsutil cache-control GCS メタデータに cache-control: no-store を設定する
+# https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Cache-Control#cacheability
+gsutil -m setmeta -h "cache-control: no-store" -r "gs://${BUCKET:?}/${PATH_TO:?}"
+
+# gcloud services enable プロジェクトで利用できるサービスを有効化
+gcloud services enable run.googleapis.com
 
 
 
