@@ -572,6 +572,15 @@ aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username 
 # 現在 ~/.kube/config が向いている context を表示する
 kubectl config current-context
 
+# kubectl rollout status 当該 Deplyment の rollout 状況の確認 wait コマンドに近い
+kubectl rollout status deployment "${DEPLOYMENT_NAME:?}"
+
+# kubectl rollout restart 当該 Deplyment の Pod 再起動
+kubectl rollout restart deployment "${DEPLOYMENT_NAME:?}"
+
+# kubectl rollout undo 前のバージョンの Deplyment に切り戻し
+kubectl rollout undo deployment "${DEPLOYMENT_NAME:?}"
+
 # kubectl port-forward
 kubectl --context="${KUBECTL_CONTEXT:?}" port-forward "service/${SERVICE_NAME:?}" "${LOCAL_PORT:?}:${SERVICE_PORT:?}"
 
