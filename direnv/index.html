@@ -21,7 +21,9 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${EnvIsDarwin}" = true ]; then
-    bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if ! command -v brew 1>/dev/null; then
+      bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
     commands_for_install="brew install ${prog_name:?}"
   elif [ "${EnvIsLinux}" = true ] && [ "${EnvIsAMD64}" = true ]; then
     url="https://github.com/direnv/direnv/releases/latest/download/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"
