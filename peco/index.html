@@ -10,7 +10,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-echo "  PECO_VERSION=latest" | sh -c "${pipe_info:?}"
+Infoln "  PECO_VERSION=latest"
 prog_name=peco
 bin_dir=/usr/local/bin
 
@@ -20,7 +20,7 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${EnvIsDarwin}" = true ]; then
     if ! command -v brew 1>/dev/null; then
-      bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      Run bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     commands_for_install="brew install ${prog_name:?}"
   elif command -v apt-get 1>/dev/null; then
@@ -31,24 +31,27 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
       ${httpGet:?} \"${url:?}\" >/tmp/${prog_name:?}.tar.gz && (cd /tmp && tar xfz /tmp/${prog_name:?}.tar.gz \"peco_*/${prog_name:?}\" && mv -v /tmp/peco_*/${prog_name:?} ${bin_dir:?}/${prog_name:?})
     "
   else
-    echo "OS not supported" | sh -c "${pipe_error:?}"
+    Errorln "OS not supported"
     exit 1
   fi
 
   # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
-    sudo -E bash -cx "${commands_for_install:?}"
+  if [ "${EnvIsDarwin}" != true ] && 
+    command -v sudo 1>/dev/null && 
+    { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }
+  then
+    Run sudo -E bash -c "${commands_for_install:?}"
   else
-    bash -cx "${commands_for_install:?}"
+    Run bash -c "${commands_for_install:?}"
   fi
 
   if ! command -v "${prog_name:?}" 1>/dev/null; then
-    echo "${prog_name:?} not installed" | sh -c "${pipe_error:?}"
+    Errorln "${prog_name:?} not installed"
     exit 1
   fi
 fi
 
-echo "${prog_name:?} installed" | sh -c "${pipe_notice:?}"
+Noticeln "${prog_name:?} installed"
 
 
 
