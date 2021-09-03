@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 set -E -e -o pipefail
-cat >/dev/null << '#djeeno.github.io/bash'
+cat >/dev/null << '#newtstat.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io/bash
+#newtstat.github.io/bash
 ##
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://djeeno.github.io/bash/releases/v0.1.1/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(bash -c "exec ${httpGet} https://newtstat.github.io/bash/releases/v0.1.1/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 Debugln "  BASHRC=${BASHRC:-default}"
 
 bashrc="${BASHRC:=$HOME/.bashrc}"
 
-if ! grep -q "^# START djeeno.github.io/bash/releases/v0.1.1/bashrc/" "${bashrc:?}"; then
+if ! grep -q "^# START newtstat.github.io/bash/releases/v0.1.1/bashrc/" "${bashrc:?}"; then
   Infoln "Add bashrc settings"
   bashrc_content=$(cat << "BASHRC"
 
 ##
-# START djeeno.github.io/bash/releases/v0.1.1/bashrc/
+# START newtstat.github.io/bash/releases/v0.1.1/bashrc/
 ##
 
 # HTTP GET Client
@@ -46,7 +46,7 @@ alias ll='ls -alF'
 
 # history
 _readline_history() {
-  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/releases/v0.1.1/peco/")"
+  command -v peco 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://newtstat.github.io/bash/releases/v0.1.1/peco/")"
   READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:blank:]]*[0-9]*[[:blank:]]*//' | peco --layout bottom-up)
   READLINE_POINT=${#READLINE_LINE}
 } && [[ $- =~ i ]] && bind -x '"\C-r":_readline_history'
@@ -67,7 +67,7 @@ if command -v git 1>/dev/null; then
 fi
 
 # direnv
-command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://djeeno.github.io/bash/releases/v0.1.1/direnv/")"
+command -v direnv 1>/dev/null || bash -c "$(sh -c "exec ${httpGet:?} https://newtstat.github.io/bash/releases/v0.1.1/direnv/")"
 ! command -v direnv 1>/dev/null || eval "$(direnv hook bash)"
 
 # kubectl
@@ -80,7 +80,7 @@ echo "$PATH" | grep -q "${HOME:?}/bin"          || export PATH="${HOME:?}/bin:${
 echo "$PATH" | grep -q "${HOME:?}/dotfiles/bin" || export PATH="${HOME:?}/dotfiles/bin:${PATH:?}"
 
 ##
-# END djeeno.github.io/bash/releases/v0.1.1/bashrc/
+# END newtstat.github.io/bash/releases/v0.1.1/bashrc/
 ##
 BASHRC
   )
@@ -93,4 +93,4 @@ fi
 
 
 
-# (C) 2018 djeeno </code></pre></div>
+# (C) 2018 newtstat </code></pre></div>

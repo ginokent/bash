@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -E -e -o pipefail -u
-cat >/dev/null << '#djeeno.github.io/bash'
+cat >/dev/null << '#newtstat.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io/bash
+#newtstat.github.io/bash
 ##
 
 # Visual Studio Code
@@ -18,7 +18,7 @@ cat >/dev/null << '#djeeno.github.io/bash'
 #   ```
 #
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://djeeno.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 prog_name=vscodeenv
 bin_dir=/usr/local/bin
@@ -28,8 +28,8 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 if ! command -v "${prog_name:?}" 1>/dev/null; then
   # shellcheck disable=SC2154
   if [ "${EnvIsDarwin}" = true ]; then
-    # ref. https://github.com/djeeno/vscodeenv#installing
-    wget https://github.com/djeeno/vscodeenv/releases/latest/download/vscodeenv-darwin-amd64 --output-document=/usr/local/bin/vscodeenv && chmod -v +x /usr/local/bin/vscodeenv
+    # ref. https://github.com/newtstat/vscodeenv#installing
+    wget https://github.com/newtstat/vscodeenv/releases/latest/download/vscodeenv-darwin-amd64 --output-document=/usr/local/bin/vscodeenv && chmod -v +x /usr/local/bin/vscodeenv
   fi
 
   if ! command -v "${prog_name:?}" 1>/dev/null; then
@@ -38,9 +38,9 @@ if ! command -v "${prog_name:?}" 1>/dev/null; then
   fi
 fi
 
-${httpGet:?} https://djeeno.github.io/bash/vscodeenv/vscodeenv.lock.sh | sh
+${httpGet:?} https://newtstat.github.io/bash/vscodeenv/vscodeenv.lock.sh | sh
 
 
 
-# (C) 2018 djeeno </code></pre></div>
+# (C) 2018 newtstat </code></pre></div>
 

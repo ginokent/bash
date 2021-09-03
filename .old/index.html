@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
-cat >/dev/null << '#djeeno.github.io/bash'
+cat >/dev/null << '#newtstat.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#djeeno.github.io/bash
+#newtstat.github.io/bash
 ##
 
 cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
@@ -15,9 +15,9 @@ cat << DOCUMENT | awk '{print "\033[01m[ notice]: "$0"\033[0m"}' 1>&2
 
 以下のように curl コマンドなどの CLI から参照されることを想定しています。
 
-$ curl https://djeeno.github.io/bash/
+$ curl https://newtstat.github.io/bash/
 
-(C) 2018 djeeno
+(C) 2018 newtstat
 
 DOCUMENT
 
@@ -33,13 +33,13 @@ mkdir -p ubuntu14.04 && cd "$_" && vagrant init ubuntu/trusty64 && vagrant up &&
 mkdir -p ubuntu16.04 && cd "$_" && vagrant init ubuntu/xenial64 && vagrant up && vagrant ssh
 mkdir -p centos7     && cd "$_" && vagrant init centos/7        && vagrant up && vagrant ssh
 
-alias   kubectl-docker='docker run -it --rm -e KUBECONFIG="${KUBECONFIG}" -v "${KUBECONFIG-$HOME/.kube/config}":"${KUBECONFIG-/root/.kube/config}" djeeno/kubectl kubectl'
+alias   kubectl-docker='docker run -it --rm -e KUBECONFIG="${KUBECONFIG}" -v "${KUBECONFIG-$HOME/.kube/config}":"${KUBECONFIG-/root/.kube/config}" newtstat/kubectl kubectl'
 
 ##
-# https://hub.docker.com/r/djeeno/kubectl
-# $ docker pull djeeno/kubectl:latest
+# https://hub.docker.com/r/newtstat/kubectl
+# $ docker pull newtstat/kubectl:latest
 ##
-docker_djeeno_kubectl() { (
+docker_newtstat_kubectl() { (
   set -E -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   command -v docker 1>/dev/null || { echo "docker がインストールされている必要があります。" | sh -c "${pipe_error:?}"; return 1; }
@@ -50,7 +50,7 @@ docker_djeeno_kubectl() { (
   cd "${TMPDIR:?}"
 
   VERSION="$(curl -LRsS https://storage.googleapis.com/kubernetes-release/release/stable.txt)"
-  DOCKER_REPOSITORY=djeeno/kubectl
+  DOCKER_REPOSITORY=newtstat/kubectl
   DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
 
   curl -o ./kubectl -fLR "https://storage.googleapis.com/kubernetes-release/release/${VERSION}/bin/linux/amd64/kubectl"
@@ -58,7 +58,7 @@ docker_djeeno_kubectl() { (
   cat << EOF >Dockerfile
 FROM debian:10
 
-LABEL maintainer="djeeno <29125616+djeeno@users.noreply.github.com>"
+LABEL maintainer="newtstat <29125616+newtstat@users.noreply.github.com>"
 
 COPY ./kubectl /usr/bin/kubectl
 EOF
@@ -76,7 +76,7 @@ EOF
   docker push "${DOCKER_REPOSITORY}:latest"
 
   echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
-)} && docker_djeeno_kubectl
+)} && docker_newtstat_kubectl
 
 
 
@@ -84,4 +84,4 @@ EOF
 #   ここまで
 # ====================================================================================================
 
-# (C) 2018 djeeno </code></pre>
+# (C) 2018 newtstat </code></pre>
