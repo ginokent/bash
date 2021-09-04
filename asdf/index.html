@@ -32,8 +32,9 @@ if test ! -d ~/.asdf; then
 fi
 
 # shellcheck disable=SC2016,SC2088
-if ! grep -q '~/.asdf/' ~/.bashrc; then
+if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
   Infoln "Install asdf setting to ~/.bashrc"
+  Run touch ~/.bashrc
   {
     echo '# asdf'
     echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
