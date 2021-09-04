@@ -5,6 +5,9 @@ cat >/dev/null << '#newtstat.github.io/bash'
 #newtstat.github.io/bash
 ##
 
+# check interpreter
+[[ "${interpreter:="$(ps h -p $$ -o args='' | cut -d' ' -f1)"}" =~ bash$ ]] || { printf '\033[31;1m%s\033[0m\n' "ERROR: ${interpreter:?}: interpreter not supported"; exit 1; }
+
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 prog_name=asdf
