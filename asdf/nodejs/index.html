@@ -19,9 +19,24 @@ command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.gith
 
 Run asdf plugin-add "${lang_name}" || true
 
-if ! command -v gpg 1>/dev/null && [ "${EnvIsDarwin:-false}" = true ]; then
+if ! command -v gpg 1>/dev/null; then
   Infoln "Install gpg for resolving dependencies"
-  Run bash -c "brew install gnupg"
+  if [ "${EnvIsDarwin:-false}" = true ]; then
+    command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    commands_for_install="brew install gnupg"
+  elif [ "${EnvIsUbuntu:-false}" = true ] && [ "${EnvIsAMD64:-false}" = true ]; then
+    commands_for_install="apt-get install -y gnupg"
+  else
+    echo "OS not supported" | sh -c "${pipe_error:?}"
+    exit 1
+  fi
+
+  # shellcheck disable=SC2154
+  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
+    sudo -E bash -cx "${commands_for_install:?}"
+  else
+    bash -cx "${commands_for_install:?}"
+  fi
 fi
 # If GnuPG keys are not imported, import from bash script
 if [ "$(grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring | while read -r LINE; do gpg --list-keys | grep -q "${LINE}"; echo $?; done | sort -u)" != "0" ]; then
