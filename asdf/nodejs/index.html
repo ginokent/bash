@@ -15,15 +15,13 @@ Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
 Infoln "Start to install ${lang_name:?}"
 
-command -v asdf 1>/dev/null ||
-  eval "$(sh -c "exec ${httpGet} https://newtstat.github.io/bash/asdf/")" ||
-  exit 1
+command -v asdf 1>/dev/null || Run bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash" || exit 1
 
 Run asdf plugin-add "${lang_name}" || true
 
 if ! command -v gpg 1>/dev/null && [ "${EnvIsDarwin:-false}" = true ]; then
   Infoln "Install gpg for resolving dependencies"
-  Run brew install gnupg
+  Run bash -c "brew install gnupg"
 fi
 # If GnuPG keys are not imported, import from bash script
 if [ "$(grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring | while read -r LINE; do gpg --list-keys | grep -q "${LINE}"; echo $?; done | sort -u)" != "0" ]; then
