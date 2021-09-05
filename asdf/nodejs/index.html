@@ -45,16 +45,4 @@ Run asdf current "${lang_name}"
 
 
 
-if ! command -v yarn 1>/dev/null; then
-  if [ "${EnvIsDarwin:-false}" = true ]; then
-    bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install yarn
-  else
-    Infoln "install yarn. ref. https://classic.yarnpkg.com/ja/docs/install/#alternatives-stable"
-    curl -o- -L https://yarnpkg.com/install.sh | bash
-  fi
-fi
-
-
-
 # (C) 2018 newtstat </code></pre></div>
