@@ -15,19 +15,19 @@ export   pipe_crit="awk \"{print \\\"${enablecolor:+\\\\033[1;31m}\$(date +%Y-%m
 
 # func
 export severity="${LOG_SEVERITY:--1}"
-Debugln  () { [ "${severity:--1}" -gt 100 ] 2>/dev/null || echo "$*" | bash -c "${pipe_debug:?}"  1>&2; }
-Infoln   () { [ "${severity:--1}" -gt 200 ] 2>/dev/null || echo "$*" | bash -c "${pipe_info:?}"   1>&2; }
-Noticeln () { [ "${severity:--1}" -gt 300 ] 2>/dev/null || echo "$*" | bash -c "${pipe_notice:?}" 1>&2; }
-Warnln   () { [ "${severity:--1}" -gt 400 ] 2>/dev/null || echo "$*" | bash -c "${pipe_warn:?}"   1>&2; }
-Errorln  () { [ "${severity:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "${pipe_error:?}"  1>&2; }
-Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
-Run      () { Infoln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; }
-Trap     () { trap -- "${1:?};$(trap -p "${2:?}" | sed "s/trap -- '\(.*\)' ${2:?}/\1/; s/'\\\''/'/g")" "${2:?}"; }
-Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && Trap Catch ERR
-CdScriptDir () { cd "$(dirname -- "$0")" || { Errorln "failed to cd $(dirname -- "$0")"; return 1; }; }
-CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; }
-ErrorIfCommandNotFound () { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then Errorln "command \"${cmd:?}\" is required"; return 1; fi; done; }
-ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; }  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
+Debugln  () { [ "${severity:--1}" -gt 100 ] 2>/dev/null || echo "$*" | bash -c "${pipe_debug:?}"  1>&2; } && export -f Debugln
+Infoln   () { [ "${severity:--1}" -gt 200 ] 2>/dev/null || echo "$*" | bash -c "${pipe_info:?}"   1>&2; } && export -f Infoln
+Noticeln () { [ "${severity:--1}" -gt 300 ] 2>/dev/null || echo "$*" | bash -c "${pipe_notice:?}" 1>&2; } && export -f Noticeln
+Warnln   () { [ "${severity:--1}" -gt 400 ] 2>/dev/null || echo "$*" | bash -c "${pipe_warn:?}"   1>&2; } && export -f Warnln
+Errorln  () { [ "${severity:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "${pipe_error:?}"  1>&2; } && export -f Errorln
+Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; } && export -f Critln
+Run      () { Infoln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; } && export -f Run
+Trap     () { trap -- "${1:?};$(trap -p "${2:?}" | sed "s/trap -- '\(.*\)' ${2:?}/\1/; s/'\\\''/'/g")" "${2:?}"; } && export -f Trap
+Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && export -f Catch && Trap Catch ERR
+CdScriptDir () { cd "$(dirname -- "$0")" || { Errorln "failed to cd $(dirname -- "$0")"; return 1; }; } && export -f CdScriptDir
+CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; } && export -f CommandNotFound
+ErrorIfCommandNotFound () { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then Errorln "command \"${cmd:?}\" is required"; return 1; fi; done; } && export -f ErrorIfCommandNotFound
+ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; } && export -f ConfirmYesOrNo  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
 DebugJSONL    () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" debug    "${LINE:?}" 1>&2; done; }
 InfoJSONL     () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" info     "${LINE:?}" 1>&2; done; }
