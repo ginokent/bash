@@ -152,8 +152,8 @@ ruby -e "require 'time'; puts Time.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
 
-# npx == npm exec
-npx create-react-app mysampleapp --template typescript
+# npm exec == npx
+npm exec create-react-app mysampleapp --template typescript && cd mysampleapp && npm install --save-dev @types/react @types/react-dom
 
 
 
