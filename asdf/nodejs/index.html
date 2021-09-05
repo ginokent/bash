@@ -32,7 +32,7 @@ if ! command -v gpg 1>/dev/null; then
   fi
 
   # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
+  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
     sudo -E bash -cx "${commands_for_install:?}"
   else
     bash -cx "${commands_for_install:?}"
