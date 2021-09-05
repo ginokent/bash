@@ -17,7 +17,7 @@ Infoln "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
-Run asdf plugin-add "${lang_name}" || true
+Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
 
 if ! command -v gpg 1>/dev/null; then
   Infoln "Install gpg for resolving dependencies"
