@@ -156,7 +156,8 @@ node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
 npm exec create-react-app mysampleapp --template typescript
 npm install --save-dev @types/react @types/react-dom
 npm install --save-dev eslint prettier
-#    "lint": "set -x && eslint --ext .ts,tsx ./src && prettier --check ./src && npx tsc --noemit",
+npm install --save-dev eslint-plugin-simple-import-sort
+#    "lint": "set -x && npx eslint --ext .ts,tsx --fix ./src && npx prettier --check ./src && npx tsc --noemit",
 
 
 
