@@ -15,11 +15,9 @@ Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
 Infoln "Start to install ${lang_name:?}"
 
-command -v asdf 1>/dev/null ||
-  eval "$(sh -c "exec ${httpGet} https://newtstat.github.io/bash/asdf/")" ||
-  exit 1
+command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
-Run asdf plugin-add "${lang_name}" || true
+Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
 
 lang_version="${!LANG_VERSION_KEY:="$(
   asdf list-all "${lang_name}" |
