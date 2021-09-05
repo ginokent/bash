@@ -39,7 +39,18 @@ if ! command -v gpg 1>/dev/null; then
   fi
 fi
 # If GnuPG keys are not imported, import from bash script
-if [ "$(grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring | while read -r LINE; do gpg --list-keys | grep -q "${LINE}"; echo $?; done | sort -u)" != "0" ]; then
+imported="$(
+  grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring |
+    while read -r LINE; do
+      if gpg --list-keys | grep -q "${LINE}"; then
+        echo true
+      else
+        echo false
+      fi
+    done |
+    sort -u
+)"
+if [[ "${imported:?}" != "true" ]]; then
   Run bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 fi
 
