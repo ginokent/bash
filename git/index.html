@@ -18,7 +18,7 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 # shellcheck disable=SC2154
 if [ "${EnvIsDarwin}" = true ]; then
-  bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${EnvIsCentOS}" = true ] || [ "${EnvIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016
