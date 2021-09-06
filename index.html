@@ -152,12 +152,21 @@ ruby -e "require 'time'; puts Time.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 node -e "console.log(Date.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'));"
 
-# npm exec == npx
-npm exec create-react-app mysampleapp --template typescript
+# npm
 npm install --save-dev @types/react @types/react-dom
 npm install --save-dev eslint prettier
 npm install --save-dev eslint-plugin-simple-import-sort
-#    "lint": "set -x && npx eslint --ext .ts,tsx --fix ./src && npx prettier --check ./src && npx tsc --noemit",
+
+# npm exec == npx
+npm exec create-react-app mysampleapp --template typescript
+npx create-react-app mysampleapp --template typescript
+
+# npm run lint
+# {
+#   "scripts": {
+#     "lint": "set -x && npx eslint --ext .ts,tsx --fix ./src && npx prettier --check ./src && npx tsc --noemit",
+#   }
+# }
 
 
 
