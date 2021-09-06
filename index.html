@@ -164,7 +164,8 @@ npx create-react-app mysampleapp --template typescript
 # npm run lint
 # {
 #   "scripts": {
-#     "lint": "set -x && npx eslint --ext .ts,tsx --fix ./src && npx prettier --check ./src && npx tsc --noemit",
+#     "lint": "set -x && npx prettier --check ./src && npx eslint --ext .ts,tsx ./src && npx tsc --noemit",
+#     "fmt": "set -x && npx prettier --write ./src && npx eslint --ext .ts,tsx --fix ./src",
 #   }
 # }
 
