@@ -404,36 +404,23 @@ mysql -e "REVOKE FILE ON *.* FROM '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}';"
 # mysql 権限テーブルをリロードする
 mysql -e "FLUSH PRIVILEGES;"
 
-# mysql ユーザー一覧を表示する
-mysql -e "SELECT host,user,password,plugin FROM mysql.user;"
-
-# mysql 現在の接続数を表示する
-mysql -e "SHOW STATUS LIKE 'Threads_connected';"
-
-# mysql innodb status log を出力する設定を確認する
-mysql -e "SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';"
-# mysql lock LOCK ロック
-mysql -e "SELECT * FROM sys.innodb_lock_waits;"
-mysql -e "SELECT * FROM information_schema.INNODB_LOCKS;"
-
-# mysql 現在接続しているユーザー一覧を表示する
-mysql -e "SELECT * FROM information_schema.PROCESSLIST;"
-# mysql 60 秒以上経過している接続を表示する
-mysql -e "SELECT * FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin';"
-mysql -e "SELECT GROUP_CONCAT(id) FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin';"
-# mysql 処理中の接続を表示する
-mysql -e "SHOW PROCESSLIST;"
-mysql -e "SHOW FULL PROCESSLIST;"
-# mysql 接続を殺す
-mysql -e "KILL ${MYSQL_CONNECTION_ID:?};"
-# mysql 起動してからの累計接続数を表示する
-mysql -e "SHOW STATUS LIKE 'Conn%';"
-# mysql Master か Replica か判定 (Master は OFF, Replica は ON)
-mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only';"
-# mysql transaction isolation level トランザクション分離レベル
-mysql -e "SELECT @@global.tx_isolation, @@session.tx_isolation;"
-mysql -e "SHOW GLOBAL VARIABLES LIKE 'tx_isolation';"
-mysql -e "SHOW SESSION VARIABLES LIKE 'tx_isolation';"
+mysql -e "SELECT host,user,password,plugin FROM mysql.user; -- mysql ユーザー一覧を表示する"
+mysql -e "SHOW VARIABLES LIKE 'innodb_print_all_deadlocks'; -- mysql innodb status log を出力する設定を確認する"
+mysql -e "SELECT * FROM sys.innodb_lock_waits; -- mysql lock LOCK ロック"
+mysql -e "SELECT * FROM information_schema.INNODB_LOCKS; -- mysql lock LOCK ロック"
+mysql -e "SHOW STATUS LIKE 'Threads_connected'; -- mysql connection 現在のコネクション数を表示する"
+mysql -e "SHOW PROCESSLIST; -- mysql connection 現在のコネクション一覧を表示する"
+mysql -e "SHOW FULL PROCESSLIST; -- mysql connection 現在のコネクション一覧を表示する"
+mysql -e "SELECT * FROM information_schema.PROCESSLIST; -- mysql connection 現在のコネクション一覧を表示する"
+mysql -e "SELECT * FROM information_schema.PROCESSLIST WHERE INFO LIKE 'SELECT%' ORDER BY TIME ASC; -- mysql connection 現在のコネクション一覧を表示する"
+mysql -e "SELECT * FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin'; -- mysql connection 60 秒以上経過しているコネクションを表示する"
+mysql -e "SELECT GROUP_CONCAT(id) FROM information_schema.PROCESSLIST WHERE time >= 60 AND user != 'rdsadmin'; -- mysql connection 60 秒以上経過しているコネクションを表示する"
+mysql -e "KILL ${MYSQL_CONNECTION_ID:?}; -- mysql 接続を殺す"
+mysql -e "SHOW STATUS LIKE 'Conn%'; -- mysql 起動してからの累計接続数を表示する"
+mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only'; -- mysql Master か Replica か判定 (Master は OFF, Replica は ON)"
+mysql -e "SELECT @@global.tx_isolation, @@session.tx_isolation; -- mysql transaction isolation level トランザクション分離レベル"
+mysql -e "SHOW GLOBAL VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolation level トランザクション分離レベル"
+mysql -e "SHOW SESSION VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolation level トランザクション分離レベル"
 
 # mysql create database データベースを作成する
 mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4 IF NOT EXISTS '${MYSQL_DB:?}';"
