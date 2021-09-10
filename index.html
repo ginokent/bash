@@ -551,6 +551,9 @@ docker run -it --rm --network common redis:4.0 sh -c "redis-cli -h redis_4_0 -p 
 docker run -it --rm --network common redis:3.2 sh -c "redis-cli -h redis_3_2 -p 6379"
 docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis_2_8 -p 6379"
 
+# nats
+docker run -it --rm --network common -p 4222:4222 -p 8222:8222 -p 6222:6222 nats:2.5-alpine
+
 # docker : コンテナから CLI を実行する（ローカル環境を汚さないため）。
 alias     mysql-docker='docker run -it --rm mysql:8.0 mysql'
 alias redis-cli-docker='docker run -it --rm redis:5.0 redis-cli'
