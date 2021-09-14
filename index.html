@@ -206,29 +206,17 @@ test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubuserconte
 test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
 export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\033[1;31m\\\]\$(__git_ps1)\\\[\\\033[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\033[1;31m\]\$(__git_ps1)\[\033[00m\]}"; fi
 
-# git commit 空コミット
-git commit --allow-empty -m "first commit"
-
-# git : auther / commiter を更新する。
-git config --local user.name newtstat
-git config --local user.email 29125616+newtstat@users.noreply.github.com
-
-# git tag タグ作成＆リモートにプッシュ
-git tag -a 0.0.1 && git push origin 0.0.1
-# git tag タグ削除＆リモートにプッシュ
-git tag -d 0.0.1 && git push origin :0.0.1
-
-# git : リポジトリのルートディレクトリを出力する。
-git rev-parse --show-toplevel
-
-# git : ブランチ名を出力する。
-git rev-parse --abbrev-ref HEAD
-
-# git : [DANGER] 過去の commiter と auther を変更する。
-git filter-branch -f --env-filter "GIT_AUTHOR_NAME='newtstat'; GIT_AUTHOR_EMAIL='29125616+newtstat@users.noreply.github.com'; GIT_COMMITTER_NAME='newtstat'; GIT_COMMITTER_EMAIL='29125616+newtstat@users.noreply.github.com';" HEAD
-
-# git branch -d 不要なブランチを削除
-git branch -a 2>/dev/null | grep -Ev "^\*|^[[:blank:]]+(remotes/|main$|master$)" | xargs echo git branch -d
+GIT_NAME=newtstat
+GIT_EMAIL=29125616+newtstat@users.noreply.github.com
+git commit --allow-empty -m "first commit"  # git commit 空コミット
+git config --local user.name "${GIT_NAME:?}"  # git Auther, Commiter の name を更新
+git config --local user.email "${GIT_EMAIL:?}"  # git Auther, Commiter の email を更新
+git tag -a 0.0.1 && git push origin 0.0.1   # git tag タグ作成＆リモートにプッシュ
+git tag -d 0.0.1 && git push origin :0.0.1  # git tag タグ削除＆リモートにプッシュ
+git rev-parse --show-toplevel  # git リポジトリのルートディレクトリを出力
+git rev-parse --abbrev-ref HEAD  # git ブランチ名を出力
+git branch -a 2>/dev/null | grep -Ev "^\*|^[[:blank:]]+(remotes/|main$|master$)" | xargs echo git branch -d  # git branch -d 不要なブランチを削除
+git filter-branch -f --env-filter "GIT_AUTHOR_NAME='${GIT_NAME:?}'; GIT_AUTHOR_EMAIL='${GIT_EMAIL:?}'; GIT_COMMITTER_NAME='${GIT_NAME:?}'; GIT_COMMITTER_EMAIL='${GIT_EMAIL:?}';" HEAD  # git !!!DANGER!!! 過去の Auther と Commiter を変更
 
 
 
