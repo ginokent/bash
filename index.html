@@ -590,9 +590,6 @@ docker-compose exec api bash -c 'mysql -h db -P 3306 -u root --password=password
 # docker build
 curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/tag/v[0-9]+\.[0-9]+\.[0-9]+" | awk -F "releases/tag/v" "\$0=\$2" | tee /dev/stderr | while read -r VERSION; do printf "%s\n%s\n%s\n%s\n" "FROM hashicorp/terraform:${VERSION}" "RUN apk add --no-cache bash" "ENTRYPOINT []" "CMD terraform" | docker build -t "newtstat/terraform:${VERSION}" - && docker push "newtstat/terraform:${VERSION}"; done
 
-# docker login
-aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
-
 
 
 # ==================================================
@@ -646,9 +643,15 @@ aws-vault exec "${AWS_PROFILE:?}" -- aws sts get-caller-identity
 # cf. https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage.html
 aws iam create-policy --policy-name ForceMFA --policy-document https://newtstat.github.io/bash/aws/iam/policy/ForceMFA.json
 
+# wasabi storage
+aws --profile wasabi --endpoint-url=https://s3.ap-northeast-1.wasabisys.com s3 ls
+
 # aws ec2 describe-instances (with tags) インスタンス一覧 タグ名
 aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
 aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:cluster-name").Value),(.Tags[]|select(.Key=="eks:nodegroup-name").Value)]|@tsv'
+
+# docker login
+aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
 
 
 
