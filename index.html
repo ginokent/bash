@@ -98,10 +98,14 @@ cdiff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');
 # whilediff
 whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep "${WHILEDIFF_DURATION:=1}"; done)}
 
-# openssl : 証明書期限チェック。
-HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates
-# openssl : 証明書チェーンチェック。
-HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'
+
+openssl genrsa -out private.pem 2048  # 秘密鍵の生成
+openssl req -new -key private.pem -out csr.pem  # CSR Certificate Signing Request の生成
+openssl req -text -in csr.pem -noout  # CSR Certificate Signing Request の確認
+openssl x509 -req -days "$(echo "365 * 5000" | bc)" -in csr.pem -signkey private.pem -out crt.pem  # 自己証明書の作成
+openssl x509 -text -in crt.pem -noout  # 自己証明書の確認
+HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates  # openssl : 証明書期限チェック。
+HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'  # openssl : 証明書チェーンチェック。
 
 # find : 見つけたファイルの行数を出力する。 `+` 引数としてまとめて渡して実行。 `;` 個別に実行。
 find . -name "*.html" -exec wc -l {} \+
@@ -647,7 +651,7 @@ gcloud components update
 # gcloud TL;DR
 gcloud config configurations create "${GCP_CONFIG:?}"
 gcloud auth login
-gcloud config set project "${GOOGLE_PROJECT:?}"
+gcloud config set project "${GOOGLE_CLOUD_PROJECT:?}"
 gcloud config configurations list
 # gcloud 初期化
 gcloud init --console-only
@@ -667,20 +671,20 @@ gcloud auth revoke
 # gcloud アカウントを認証する - サービスアカウントの場合
 gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
 # gcloud プロジェクトを設定する。
-gcloud config set project "${GOOGLE_PROJECT:?}"
+gcloud config set project "${GOOGLE_CLOUD_PROJECT:?}"
 # gcloud 利用する configuration を切り替える。
 gcloud config configurations activate "${GCP_CONFIG:?}"
 # gcloud peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 # gcloud compute instances list : 構築順にソート
-gcloud --project "${GOOGLE_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
 # gcloud compute ssh
-gcloud compute ssh --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+gcloud compute ssh --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
 # gcloud start-iap-tunnel portforward
-gcloud compute start-iap-tunnel --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
+gcloud compute start-iap-tunnel --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
 # gcloud 変な operations が起こっていないか確認する。
 gcloud compute operations list --sort-by=TIMESTAMP
-gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_PROJECT:?}"
+gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_CLOUD_PROJECT:?}"
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i hostError
 gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 
@@ -688,8 +692,8 @@ gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
 gcloud container clusters create "${GKE_CLUSTER:?}"
 # gcloud kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
 # gcloud `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
-gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
-gcloud container clusters get-credentials --project "${GOOGLE_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
+gcloud container clusters get-credentials --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GKE_CLUSTER:?}"
+gcloud container clusters get-credentials --project "${GOOGLE_CLOUD_PROJECT:?}" --region "${GCP_REGION:?}" "${GKE_CLUSTER:?}"
 # gcloud logging read
 PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read '(resource.labels.container_name="AAA" OR resource.labels.container_name="BBB") AND "foobar" AND timestamp>="2021-06-15T00:00:00+09:00" AND timestamp<"2021-06-15T23:59:59+09:00"' --order="asc" --format="value(textPayload)"
 # gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
