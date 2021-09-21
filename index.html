@@ -100,10 +100,12 @@ whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${af
 
 
 openssl genrsa -out private.pem 2048  # 秘密鍵の生成
+openssl rsa -text -in private.pem -noout  # 秘密鍵の確認
 openssl req -new -key private.pem -out csr.pem  # CSR Certificate Signing Request の生成
 openssl req -text -in csr.pem -noout  # CSR Certificate Signing Request の確認
-openssl x509 -req -days "$(echo "365 * 5000" | bc)" -in csr.pem -signkey private.pem -out crt.pem  # 自己証明書の作成
+openssl x509 -req -days "$(echo "365 * 5000" | bc)" -signkey private.pem -in csr.pem -out crt.pem  # 自己証明書の生成
 openssl x509 -text -in crt.pem -noout  # 自己証明書の確認
+openssl req -x509 -sha256 -nodes -days "$(echo "365 * 5000" | bc)" -newkey rsa:2048 -subj /CN=localhost -keyout private.pem -out crt.pem  # 自己証明書の作成
 HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates  # openssl : 証明書期限チェック。
 HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'  # openssl : 証明書チェーンチェック。
 
