@@ -746,6 +746,16 @@ find "${PWD:?}" -name "ProjectVersion.txt" -print -exec cat {} \;
 
 
 # ==================================================
+# Hugo
+# ==================================================
+hugo new site . -f yml  # カレントディレクトリをルートとして新しく Hugo サイトを作成
+git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod --depth=1 && ( cd themes/PaperMod && git checkout v5.0 ) && echo 'theme: "PaperMod"' >> config.yml  # Hugo テーマ themes/PaperMod を追加
+hugo new posts/20210926a.md  # 新しい記事を作成
+hugo server -D  # draft の記事を含めてサーバーを起動する
+
+
+
+# ==================================================
 # vim
 # ==================================================
 
