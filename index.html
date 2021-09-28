@@ -479,6 +479,10 @@ PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read
 # docker Docker
 # ==================================================
 
+# docker login
+gcloud auth configure-docker
+aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
+
 # docker : newtstat/ubuntu:18.04 の docker コンテナを起動する。
 docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$PWD:$PWD" --workdir "$PWD" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
 
@@ -637,9 +641,6 @@ aws --profile wasabi --endpoint-url=https://s3.ap-northeast-1.wasabisys.com s3 l
 # aws ec2 describe-instances (with tags) インスタンス一覧 タグ名
 aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
 aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:cluster-name").Value),(.Tags[]|select(.Key=="eks:nodegroup-name").Value)]|@tsv'
-
-# docker login
-aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
 
 
 
