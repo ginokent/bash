@@ -7,11 +7,11 @@ cd /tmp/benchmark || exit 1
 # ベンチマークファイル作成
 tee /tmp/benchmark/benchmark_test.go << "EOF"
 // ベンチマーク走らせる
-// $ go test -bench . -benchmem -test.run=none -test.benchtime=1000ms
+// $ go test -bench . -benchmem -run=none -benchtime=1000ms -count=10
 
 // alloc と free のトレースを見る
-// $ go test -c
-// $ GODEBUG=allocfreetrace=1 ./"$(basename "${PWD}")".test -test.run=none -test.bench=BenchmarkAppendQuote -test.benchtime=1ms > trace.log 2>&1
+// $ go test -c -o main.benchmark
+// $ GODEBUG=allocfreetrace=1 ./main.benchmark -run=none -bench=BenchmarkAppendQuote > trace.log 2>&1
 
 package benchmark_test
 
