@@ -7,8 +7,8 @@ cd /tmp/benchmark || exit 1
 # ベンチマークファイル作成
 tee /tmp/benchmark/benchmark_test.go << "EOF"
 // ベンチマーク走らせる
-// $ go test -bench . -benchmem -run=none -benchtime=1s -count=10 -cpuprofile=cpu1.prof | tee bench1.log
-// $ go test -bench . -benchmem -run=none -benchtime=1s -count=10 -cpuprofile=cpu2.prof | tee bench2.log
+// $ go test -v -bench . -benchmem -run=none -benchtime=500ms -count=10 -cpuprofile=cpu1.prof | tee bench1.log
+// $ go test -v -bench . -benchmem -run=none -benchtime=500ms -count=10 -cpuprofile=cpu2.prof | tee bench2.log
 // $ benchstat bench1.log bench2.log  # go get -u golang.org/x/perf/cmd/benchstat
 // $ go tool pprof -http=":8081" cpu.prof
 
