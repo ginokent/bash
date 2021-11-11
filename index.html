@@ -107,7 +107,7 @@ openssl x509 -req -days "$(echo "365 * 5000" | bc)" -signkey private.pem -in csr
 openssl x509 -text -in crt.pem -noout  # 自己証明書の確認
 openssl req -x509 -sha256 -nodes -days "$(echo "365 * 5000" | bc)" -newkey rsa:2048 -subj /CN=localhost -keyout private.pem -out crt.pem  # 自己証明書の作成
 HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates  # openssl : 証明書期限チェック。
-HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E 'Certificate chain|[is]:/'  # openssl : 証明書チェーンチェック。
+HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E "Certificate chain|[is]:"  # openssl : 証明書チェーンチェック。
 
 # find : 見つけたファイルの行数を出力する。 `+` 引数としてまとめて渡して実行。 `;` 個別に実行。
 find . -name "*.html" -exec wc -l {} \+
