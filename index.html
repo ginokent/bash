@@ -675,18 +675,19 @@ gcloud config configurations list
 gcloud config configurations create "${GCP_CONFIG:?}"
 # gcloud アカウントを設定する。
 gcloud config set account "${GCP_ACCOUNT:?}"
-# gcloud auth login ログインする
+# gcloud auth login : ログインする
 gcloud auth login
-# gcloud auth revoke ログアウトする
+# gcloud auth application-default login : ログインし Cloud SDK のデフォルトの認証情報として利用する
+gcloud auth application-default login
+# gcloud auth revoke : ログアウトする
 gcloud auth revoke
-# MEMO: gcloud auth application-default login
-# gcloud アカウントを認証する - サービスアカウントの場合
+# gcloud auth activate-service-account : サービスアカウントを用いて認証する
 gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
-# gcloud プロジェクトを設定する。
+# gcloud config set project : プロジェクトを設定する。
 gcloud config set project "${GOOGLE_CLOUD_PROJECT:?}"
-# gcloud 利用する configuration を切り替える。
+# gcloud config configurations activate : 利用する configuration を切り替える。
 gcloud config configurations activate "${GCP_CONFIG:?}"
-# gcloud peco で選択可能形式で configuration を切り替える。
+# gcloud config configurations activate : peco で選択可能形式で configuration を切り替える。
 gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 # gcloud compute instances list : 構築順にソート
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
