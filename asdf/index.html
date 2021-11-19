@@ -12,12 +12,12 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 prog_name=asdf
 
-Infoln "  ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
+RecINFO "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
 
-Infoln "Install ${prog_name:?}"
+RecINFO "Install ${prog_name:?}"
 
 if ! command -v git >/dev/null; then
-  Run bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash"
+  RecExec bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash"
 fi
 
 asdf_version="${ASDF_VERSION:=$(
@@ -28,35 +28,35 @@ asdf_version="${ASDF_VERSION:=$(
 )}"
 
 if test ! -d ~/.asdf; then
-  Run git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
+  RecExec git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
 fi
 
 # shellcheck disable=SC2016,SC2088
 if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
-  Infoln "Install asdf setting to ~/.bashrc"
-  Run touch ~/.bashrc
+  RecINFO "Install asdf setting to ~/.bashrc"
+  RecExec touch ~/.bashrc
   {
     echo '# asdf'
     echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
     echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
   } |
-  Run tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+  RecExec tee -a ~/.bashrc | sh -c "${pipe_info:?}"
 fi
 
 # shellcheck disable=SC1090
 test ! -f ~/.asdf/asdf.sh ||
-  Run source ~/.asdf/asdf.sh
+  RecExec source ~/.asdf/asdf.sh
 # shellcheck disable=SC1090
 test ! -f ~/.asdf/completions/asdf.bash ||
-  Run source ~/.asdf/completions/asdf.bash
+  RecExec source ~/.asdf/completions/asdf.bash
 
-Run asdf update
+RecExec asdf update
 
-Run asdf plugin-update --all || true
+RecExec asdf plugin-update --all || true
 
-Run asdf current || true
+RecExec asdf current || true
 
-Noticeln "${prog_name:?} installed"
+RecNOTICE "${prog_name:?} installed"
 
 
 
