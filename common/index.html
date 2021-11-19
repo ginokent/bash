@@ -29,13 +29,6 @@ CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is requ
 ErrorIfCommandNotFound () { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then Errorln "command \"${cmd:?}\" is required"; return 1; fi; done; } && export -f ErrorIfCommandNotFound
 ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; } && export -f ConfirmYesOrNo  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
-DebugJSONL    () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" debug    "${LINE:?}" 1>&2; done; }
-InfoJSONL     () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" info     "${LINE:?}" 1>&2; done; }
-WarningJSONL  () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" warning  "${LINE:?}" 1>&2; done; }
-ErrorJSONL    () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" error    "${LINE:?}" 1>&2; done; }
-CriticalJSONL () { DATE=$(TZ=UTC date +%FT%TZ); echo "$*" | while read -r LINE; do printf '{"ts":"%s","lv":"%q","msg":"%q"}\n' "${DATE:?}" critical "${LINE:?}" 1>&2; done; }
-RunJSONL      () { DebugJSONL "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; }
-
 RFC3339      () { date "+%FT%T%z" | sed "s/\(..\)\(..\)$/\1:\2/"; }
 _recJSON     () { unset _OUT && for f in "$@"; do _FLD="$(printf %s "${f:?}" | sed "s/\"/\\\\\"/g; s/$/\\\\n/g" | tr -d "[:cntrl:]" | sed "s/\\\\n$/\n/")" && _KEY=$(printf %s "${_FLD:?}" | sed "s/=.*//") && _VAL=$(printf %s "${_FLD:?}" | grep "${_KEY:?}=" | sed "s/^[^=]*=//") && _OUT="${_OUT-"{"}\"${_KEY:?}\":\"${_VAL-}\","; done && printf '%s}\n' "${_OUT:?}" | sed "s/,}$/}/"; }
 _recLog      () { _LVL="${1-}" _MSG="${2-}" && shift 2 && _recJSON timestamp="$(RFC3339)" severity="${_LVL:?}" caller="$0" message="${_MSG-}" "$@" 1>&2; }
@@ -131,7 +124,7 @@ fi
 export EnvIsLoaded=true
 
 # ログ出力
-Infoln "$(echo 'env:'; env | grep ^EnvIs | sort | awk '{print "  "$0}')"
+RecINFO "environment variables" env="$(env | grep ^EnvIs | sort | tr "\n" "," | sed "s/,$//")"
 
 
 
