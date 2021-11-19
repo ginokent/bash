@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC2034,SC2153
 cat >/dev/null << '#newtstat.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #newtstat.github.io/bash
@@ -134,6 +134,12 @@ tac() {
     awk "${awk_script}" /dev/stdin
   fi
 }
+
+# ==================================================
+# bash Bash
+# ==================================================
+echo "${BEFORE//\\n/\\\\n}"
+echo "${BEFORE//\"/\\\"}"
 
 
 
