@@ -43,7 +43,7 @@ RecCRITICAL  () { test "${REC_SEVERITY:-0}" -gt 600 2>/dev/null || _recLog CRITI
 RecALERT     () { test "${REC_SEVERITY:-0}" -gt 700 2>/dev/null || _recLog ALERT     "$@"; }
 RecEMERGENCY () { test "${REC_SEVERITY:-0}" -gt 800 2>/dev/null || _recLog EMERGENCY "$@"; }
 RecRun       () { RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")"; "$@"; }
-RecExec      () { _DRT='####DELIMITER####' && _ALL=$({ echo "${_DRT:?}$("$@")"; } 2>&1) && DLNO=$(echo "${_ALL-}" | sed -n "/${_DRT:?}/=") && RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")" stdout="$(echo "${_ALL-}" | tail -n +"${DLNO:?}" | sed "s/^${_DRT:?}//")" stderr="$(echo "${_ALL-}" | head -n "${DLNO:?}" | grep -v "^${_DRT:?}")"; }
+RecExec      () { _DRT='####DELIMITER####' && _ALL=$({ _all=$("$@") && _rtn=$? || _rtn=$? && echo "${_DRT:?}${_all-}" && return ${_rtn-0}; } 2>&1) && _RTN=$? || _RTN=$? && DLNO=$(echo "${_ALL-}" | sed -n "/${_DRT:?}/=") && RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")" stdout="$(echo "${_ALL-}" | tail -n +"${DLNO:?}" | sed "s/^${_DRT:?}//")" stderr="$(echo "${_ALL-}" | head -n "${DLNO:?}" | grep -v "^${_DRT:?}")" && return ${_RTN-0}; }
 
 # CPUアーキテクチャ判定用
 export EnvIsAMD64=false
