@@ -11,13 +11,13 @@ LANG_NAME=GOLANG
 lang_name=golang
 
 LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+RecINFO "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-Infoln "Start to install ${lang_name:?}"
+RecINFO "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
-Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
+RecExec asdf list "${lang_name}" || RecExec asdf plugin-add "${lang_name}"
 
 lang_version="${!LANG_VERSION_KEY:="$(
   asdf list-all "${lang_name}" |
@@ -26,32 +26,32 @@ lang_version="${!LANG_VERSION_KEY:="$(
     tail -n 1
 )"}"
 
-Run asdf install "${lang_name}" "${lang_version}"
+RecExec asdf install "${lang_name}" "${lang_version}"
 
-Run asdf global "${lang_name}" "${lang_version}"
+RecExec asdf global "${lang_name}" "${lang_version}"
 
-Run asdf reshim "${lang_name}"
+RecExec asdf reshim "${lang_name}"
 
-Run asdf current "${lang_name}"
+RecExec asdf current "${lang_name}"
 
-Run go install -v golang.org/x/lint/golint@latest
-Run go install -v golang.org/x/tools/gopls@latest
-Run go install -v golang.org/x/perf/cmd/benchstat@latest
-Run go install -v golang.org/x/tools/cmd/benchcmp@latest
-Run go install -v github.com/joho/godotenv/cmd/godotenv@latest
-Run go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-Run go install -v github.com/go-delve/delve/cmd/dlv@latest
-Run go install -v github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest
-Run go install -v github.com/ramya-rao-a/go-outline@latest
-Run go install -v github.com/cweill/gotests/gotests@latest
+RecExec go install -v golang.org/x/lint/golint@latest
+RecExec go install -v golang.org/x/tools/gopls@latest
+RecExec go install -v golang.org/x/perf/cmd/benchstat@latest
+RecExec go install -v golang.org/x/tools/cmd/benchcmp@latest
+RecExec go install -v github.com/joho/godotenv/cmd/godotenv@latest
+RecExec go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+RecExec go install -v github.com/go-delve/delve/cmd/dlv@latest
+RecExec go install -v github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest
+RecExec go install -v github.com/ramya-rao-a/go-outline@latest
+RecExec go install -v github.com/cweill/gotests/gotests@latest
 # gore
-Run go install -v github.com/x-motemen/gore/cmd/gore@latest
-Run go install -v github.com/mdempsky/gocode@latest
+RecExec go install -v github.com/x-motemen/gore/cmd/gore@latest
+RecExec go install -v github.com/mdempsky/gocode@latest
 
 
 if ! grep -q GOPATH ~/.bashrc; then
-  Infoln "Install GOPATH environment variables setting to ~/.bashrc"
-  Run tee -a ~/.bashrc << 'BASHRC'
+  RecINFO "Install GOPATH environment variables setting to ~/.bashrc"
+  RecExec tee -a ~/.bashrc << 'BASHRC'
 if command -v go 1>/dev/null; then
   export GOROOT="$(go env GOROOT)"
   export GOPATH=$HOME/go
