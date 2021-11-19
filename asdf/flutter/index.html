@@ -11,13 +11,13 @@ LANG_NAME=FLUTTER
 lang_name=flutter
 
 LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+RecINFO "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-Infoln "Start to install ${lang_name:?}"
+RecINFO "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
-Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
+RecExec asdf list "${lang_name}" || RecExec asdf plugin-add "${lang_name}"
 
 lang_version="${!LANG_VERSION_KEY:="$(
   asdf list-all "${lang_name}" |
@@ -26,13 +26,13 @@ lang_version="${!LANG_VERSION_KEY:="$(
     tail -n 1
 )"}"
 
-Run asdf install "${lang_name}" "${lang_version}"
+RecExec asdf install "${lang_name}" "${lang_version}"
 
-Run asdf global "${lang_name}" "${lang_version}"
+RecExec asdf global "${lang_name}" "${lang_version}"
 
-Run asdf reshim "${lang_name}"
+RecExec asdf reshim "${lang_name}"
 
-Run asdf current "${lang_name}"
+RecExec asdf current "${lang_name}"
 
 
 
