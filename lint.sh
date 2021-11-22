@@ -5,8 +5,8 @@ if [ ! "${BASH_VERSINFO:-0}" -ge 3 ]; then printf '\033[1;31m%s\033[0m\n' "bash 
 
 # func
 RFC3339      () { date "+%FT%T%z" | sed "s/\(..\)\(..\)$/\1:\2/"; }
-_recJSON     () { unset _OUT && for f in "$@"; do _FLD="$(printf %s "${f:?}" | sed "s/\"/\\\\\"/g; s/$/\\\\n/g" | tr -d "[:cntrl:]" | sed "s/\\\\n$/\n/")" && _KEY=$(printf %s "${_FLD:?}" | sed "s/=.*//") && _VAL=$(printf %s "${_FLD:?}" | grep "${_KEY:?}=" | sed "s/^[^=]*=//") && _OUT="${_OUT-"{"}\"${_KEY:?}\":\"${_VAL-}\","; done && printf '%s}\n' "${_OUT:?}" | sed "s/,}$/}/"; }
-_recLog      () { _LVL="${1-}" _MSG="${2-}" && shift 2 && _recJSON timestamp="$(RFC3339)" severity="${_LVL:?}" caller="$0" message="${_MSG-}" "$@" 1>&2; }
+RecJSONL     () { unset _jsonl _vflg && for a in "$@"; do if [ "${_vflg-}" ]; then _jsonl="${_jsonl:?}:\"$(printf %s "${a-}" | sed "s/\"/\\\\\"/g; s/$/\\\\n/g" | tr -d "[:cntrl:]" | sed "s/\\\\n$/\n/")\"" && unset _vflg && continue; fi && _jsonl="${_jsonl-}${_jsonl:+,}\"${a:?}\"" _vflg=1; done && [ $(($# % 2)) = 0 ] || _jsonl="${_jsonl:?}:\"\"" && printf "{%s}\n" "${_jsonl:?}"; }
+_recLog      () { _lvl="${1-}" _msg="${2-}" && shift 2 && RecJSONL timestamp "$(RFC3339)" severity "${_lvl:?}" caller "$0" message "${_msg-}" "$@" 1>&2; }
 RecDEFAULT   () { test "${REC_SEVERITY:-0}" -gt  -1 2>/dev/null || _recLog DEFAULT   "$@"; }
 RecDEBUG     () { test "${REC_SEVERITY:-0}" -gt 100 2>/dev/null || _recLog DEBUG     "$@"; }
 RecINFO      () { test "${REC_SEVERITY:-0}" -gt 200 2>/dev/null || _recLog INFO      "$@"; }
@@ -17,7 +17,7 @@ RecCRITICAL  () { test "${REC_SEVERITY:-0}" -gt 600 2>/dev/null || _recLog CRITI
 RecALERT     () { test "${REC_SEVERITY:-0}" -gt 700 2>/dev/null || _recLog ALERT     "$@"; }
 RecEMERGENCY () { test "${REC_SEVERITY:-0}" -gt 800 2>/dev/null || _recLog EMERGENCY "$@"; }
 RecRun       () { RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")"; "$@"; }
-RecExec      () { _DRT='####DELIMITER####' && _ALL=$({ echo "${_DRT:?}$("$@")"; } 2>&1) && DLNO=$(echo "${_ALL-}" | sed -n "/${_DRT:?}/=") && RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")" stdout="$(echo "${_ALL-}" | tail -n +"${DLNO:?}" | sed "s/^${_DRT:?}//")" stderr="$(echo "${_ALL-}" | head -n "${DLNO:?}" | grep -v "^${_DRT:?}")"; }
+RecExec      () { _drt='####D#E#L#I#M#I#T#E#R####' && _all=$({ _result=$("$@") && _rtn=$? || _rtn=$? && echo "${_drt:?}${_result-}" && return ${_rtn:-0}; } 2>&1) && _rtn=$? || _rtn=$? && _lno=$(echo "${_all-}" | sed -n "/${_drt:?}/=") && RecDEBUG "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s' " "$a"; else printf "%s " "$a"; fi; done | sed "s/ $//")" stdout "$(echo "${_all-}" | tail -n +"${_lno:?}" | sed "s/^${_drt:?}//")" stderr "$(echo "${_all-}" | head -n "${_lno:?}" | grep -v "^${_drt:?}")" && return ${_rtn:-0}; }
 
 # <<
 RecINFO "\"<\" と文字列が隣接すると HTML タグとして解釈される問題があるため、以下コマンドで、ヒアドキュメントの \"<<\" の後ろにスペースを追加するよう置換します。"
