@@ -648,8 +648,11 @@ aws iam create-policy --policy-name ForceMFA --policy-document https://newtstat.
 aws --profile wasabi --endpoint-url=https://s3.ap-northeast-1.wasabisys.com s3 ls
 
 # aws ec2 describe-instances (with tags) インスタンス一覧 タグ名
-aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
-aws --profile "${AWS_PROFILE:?}" --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:cluster-name").Value),(.Tags[]|select(.Key=="eks:nodegroup-name").Value)]|@tsv'
+aws --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="Name").Value)]'
+aws --region ap-northeast-1 ec2 describe-instances | jq -rc '.Reservations[].Instances[]|[.InstanceId,(.Tags[]|select(.Key=="eks:cluster-name").Value),(.Tags[]|select(.Key=="eks:nodegroup-name").Value)]|@tsv'
+
+# aws cloudfront
+aws cloudfront list-distributions | jq -r '.DistributionList.Items[]|select(.Aliases.Items|any(.=="'"${DOMAIN:?}"'"))|.Id'
 
 # To install the Session Manager plugin using the bundled installer (macOS) https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos
 curl -#fLR "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessionmanager-bundle.zip" -o "/tmp/sessionmanager-bundle.zip" && unzip -o -d /tmp /tmp/sessionmanager-bundle.zip && sudo /tmp/sessionmanager-bundle/install -i /usr/local/sessionmanagerplugin -b /usr/local/bin/session-manager-plugin
