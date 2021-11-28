@@ -503,7 +503,6 @@ docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debi
 docker run -it --rm -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOOGLE_APPLICATION_CREDENTIALS:?}":/credential.json:ro -v "$HOME/.ssh:/root/.ssh" -v "$HOME/.vim:/root/.vim" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" newtstat/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
 
 # docker env
-docker run -it --rm alpine sh
 docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) alpine sh
 
 # docker : よく使いそうな docker image たち
