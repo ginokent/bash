@@ -702,6 +702,8 @@ gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" config configurations activate "$(g
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
 # gcloud compute ssh
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute ssh --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+# gcloud compute ssh portforward
+ssh -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="bash -cx \"gcloud --project \"${GOOGLE_CLOUD_PROJECT:?}\" compute ssh --zone \"${GCE_ZONE:?}\" --tunnel-through-iap %r@%h\"" -N -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" -l "${SSH_USER:?}" "${GCE_INSTANCE:?}"
 # gcloud compute config-ssh
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute config-ssh --ssh-config-file=~/.ssh/"${GOOGLE_CLOUD_PROJECT:?}"
 # gcloud start-iap-tunnel portforward
