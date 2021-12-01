@@ -691,32 +691,34 @@ gcloud auth application-default login
 # gcloud auth revoke : ログアウトする
 gcloud auth revoke
 # gcloud auth activate-service-account : サービスアカウントを用いて認証する
-gcloud auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
 # gcloud config set project : プロジェクトを設定する。
-gcloud config set project "${GOOGLE_CLOUD_PROJECT:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" config set project "${GOOGLE_CLOUD_PROJECT:?}"
 # gcloud config configurations activate : 利用する configuration を切り替える。
-gcloud config configurations activate "${GCP_CONFIG:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" config configurations activate "${GCP_CONFIG:?}"
 # gcloud config configurations activate : peco で選択可能形式で configuration を切り替える。
-gcloud config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" config configurations activate "$(gcloud config configurations list | tail -n +2 | peco | awk '$0=$1')"
 # gcloud compute instances list : 構築順にソート
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
 # gcloud compute ssh
-gcloud compute ssh --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute ssh --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+# gcloud compute config-ssh
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute config-ssh --ssh-config-file=~/.ssh/"${GOOGLE_CLOUD_PROJECT:?}"
 # gcloud start-iap-tunnel portforward
-gcloud compute start-iap-tunnel --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute start-iap-tunnel --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
 # gcloud 変な operations が起こっていないか確認する。
-gcloud compute operations list --sort-by=TIMESTAMP
-gcloud compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_CLOUD_PROJECT:?}"
-gcloud compute operations list --sort-by=TIMESTAMP | grep -i hostError
-gcloud compute operations list --sort-by=TIMESTAMP | grep -i err
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute operations list --sort-by=TIMESTAMP
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute operations list --sort-by=TIMESTAMP --project "${GOOGLE_CLOUD_PROJECT:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute operations list --sort-by=TIMESTAMP | grep -i hostError
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute operations list --sort-by=TIMESTAMP | grep -i err
 # gcloud endpoints quota list 割り当て確認
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" alpha endpoints quota list
 # gcloud kubernetes cluster を作成する。
-gcloud container clusters create "${GKE_CLUSTER:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" container clusters create "${GKE_CLUSTER:?}"
 # gcloud kubectl コマンドの設定ファイル ~/.kube/config を指定したクラスターのもので更新する。
 # gcloud `Unable to connect to the server: x509: certificate signed by unknown authority` が出た時に使う。
-gcloud container clusters get-credentials --project "${GOOGLE_CLOUD_PROJECT:?}" --zone "${GKE_REGION_OR_ZONE:?}" "${GKE_CLUSTER:?}"
-gcloud container clusters get-credentials --project "${GOOGLE_CLOUD_PROJECT:?}" --region "${GKE_REGION_OR_ZONE:?}" "${GKE_CLUSTER:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" container clusters get-credentials --zone "${GKE_REGION_OR_ZONE:?}" "${GKE_CLUSTER:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" container clusters get-credentials --region "${GKE_REGION_OR_ZONE:?}" "${GKE_CLUSTER:?}"
 # gcloud logging read
 PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read '(resource.labels.container_name="AAA" OR resource.labels.container_name="BBB") AND "foobar" AND timestamp>="2021-06-15T00:00:00+09:00" AND timestamp<"2021-06-15T23:59:59+09:00"' --order="asc" --format="value(textPayload)"
 # gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
