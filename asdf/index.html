@@ -17,7 +17,7 @@ RecINFO "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
 RecINFO "Install ${prog_name:?}"
 
 if ! command -v git >/dev/null; then
-  RecExec bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash"
+  RecRun bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash"
 fi
 
 asdf_version="${ASDF_VERSION:=$(
@@ -28,33 +28,33 @@ asdf_version="${ASDF_VERSION:=$(
 )}"
 
 if test ! -d ~/.asdf; then
-  RecExec git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
+  RecRun git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
 fi
 
 # shellcheck disable=SC2016,SC2088
 if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
   RecINFO "Install asdf setting to ~/.bashrc"
-  RecExec touch ~/.bashrc
+  RecRun touch ~/.bashrc
   {
     echo '# asdf'
     echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
     echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
   } |
-  RecExec tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+  RecRun tee -a ~/.bashrc | sh -c "${pipe_info:?}"
 fi
 
 # shellcheck disable=SC1090
 test ! -f ~/.asdf/asdf.sh ||
-  RecExec source ~/.asdf/asdf.sh
+  RecRun source ~/.asdf/asdf.sh
 # shellcheck disable=SC1090
 test ! -f ~/.asdf/completions/asdf.bash ||
-  RecExec source ~/.asdf/completions/asdf.bash
+  RecRun source ~/.asdf/completions/asdf.bash
 
-RecExec asdf update
+RecRun asdf update
 
-RecExec asdf plugin-update --all || true
+RecRun asdf plugin-update --all || true
 
-RecExec asdf current || true
+RecRun asdf current || true
 
 RecNOTICE "${prog_name:?} installed"
 

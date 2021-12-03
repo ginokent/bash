@@ -17,7 +17,7 @@ RecINFO "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
-RecExec asdf list "${lang_name}" || RecExec asdf plugin-add "${lang_name}"
+RecRun asdf list "${lang_name}" || RecRun asdf plugin-add "${lang_name}"
 
 lang_version="${!LANG_VERSION_KEY:="$(
   asdf list-all "${lang_name}" |
@@ -26,13 +26,13 @@ lang_version="${!LANG_VERSION_KEY:="$(
     tail -n 1
 )"}"
 
-RecExec asdf install "${lang_name}" "${lang_version}"
+RecRun asdf install "${lang_name}" "${lang_version}"
 
-RecExec asdf global "${lang_name}" "${lang_version}"
+RecRun asdf global "${lang_name}" "${lang_version}"
 
-RecExec asdf reshim "${lang_name}"
+RecRun asdf reshim "${lang_name}"
 
-RecExec asdf current "${lang_name}"
+RecRun asdf current "${lang_name}"
 
 
 

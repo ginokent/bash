@@ -125,7 +125,7 @@ fi
 export EnvIsLoaded=true
 
 # ログ出力
-RecINFO "environment variables" env="$(env | grep ^EnvIs | sort | tr "\n" "," | sed "s/,$//")"
+RecINFO "environment variables" env="$(env | grep ^EnvIs | sort | tr "\n" "," | sed "s/,\([^ ]\)/, \1/g; s/,$//")"
 
 
 
