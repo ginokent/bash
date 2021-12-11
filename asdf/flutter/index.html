@@ -11,9 +11,9 @@ LANG_NAME=FLUTTER
 lang_name=flutter
 
 LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-RecINFO "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+RecInfo "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-RecINFO "Start to install ${lang_name:?}"
+RecInfo "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 

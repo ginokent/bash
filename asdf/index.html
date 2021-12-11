@@ -12,9 +12,9 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 prog_name=asdf
 
-RecINFO "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
+RecInfo "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
 
-RecINFO "Install ${prog_name:?}"
+RecInfo "Install ${prog_name:?}"
 
 if ! command -v git >/dev/null; then
   RecRun bash -c "${httpGet} https://newtstat.github.io/bash/git/ | bash"
@@ -33,7 +33,7 @@ fi
 
 # shellcheck disable=SC2016,SC2088
 if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
-  RecINFO "Install asdf setting to ~/.bashrc"
+  RecInfo "Install asdf setting to ~/.bashrc"
   RecRun touch ~/.bashrc
   {
     echo '# asdf'
@@ -56,7 +56,7 @@ RecRun asdf plugin-update --all || true
 
 RecRun asdf current || true
 
-RecNOTICE "${prog_name:?} installed"
+RecNotice "${prog_name:?} installed"
 
 
 

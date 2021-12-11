@@ -11,9 +11,9 @@ LANG_NAME=GOLANG
 lang_name=golang
 
 LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-RecINFO "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+RecInfo "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
 
-RecINFO "Start to install ${lang_name:?}"
+RecInfo "Start to install ${lang_name:?}"
 
 command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
 
@@ -50,7 +50,7 @@ RecRun go install -v github.com/mdempsky/gocode@latest
 
 
 if ! grep -q GOPATH ~/.bashrc; then
-  RecINFO "Install GOPATH environment variables setting to ~/.bashrc"
+  RecInfo "Install GOPATH environment variables setting to ~/.bashrc"
   RecRun tee -a ~/.bashrc << 'BASHRC'
 if command -v go 1>/dev/null; then
   export GOROOT="$(go env GOROOT)"
