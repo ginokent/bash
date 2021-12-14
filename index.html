@@ -710,6 +710,7 @@ gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute ssh --zone "${GCP_ZONE:?}" 
 ssh -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="bash -cx \"gcloud --project ${GOOGLE_CLOUD_PROJECT:?} compute ssh --zone ${GCE_ZONE:?} --tunnel-through-iap %r@%h -- -t -N -L ${LOCAL_PORT:?}:${REMOTE_HOST:?}:${REMOTE_PORT:?}\"" -l "${SSH_USER:?}" "${GCE_INSTANCE:?}"
 # gcloud compute config-ssh
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute config-ssh --ssh-config-file=~/.ssh/"${GOOGLE_CLOUD_PROJECT:?}"
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute firewall-rules create "ssh-via-iap" --description="allow SSH vis IAP" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges="35.235.240.0/20" --target-tags="ssh-via-iap"
 # gcloud start-iap-tunnel portforward
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute start-iap-tunnel --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
 # gcloud 変な operations が起こっていないか確認する。
