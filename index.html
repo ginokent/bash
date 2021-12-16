@@ -88,9 +88,8 @@ ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HO
 ssh -fN -L 3306:"${MYSQL_HOSTNAME:?}":3306 "${BASTION_HOST:?}"
 ssh -fN -L 6379:"${REDIS_HOSTNAME:?}":6379 "${BASTION_HOST:?}"
 
-# while ssh
-echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -t -t -- hostname < /dev/null; done
 # while ssh : Pseudo-terminal will not be allocated because stdin is not a terminal.
+echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -n -T -- hostname; done
 echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -T -- hostname < /dev/null; done
 
 # rsync : 網羅的なコマンド例。
@@ -710,7 +709,10 @@ gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute ssh --zone "${GCP_ZONE:?}" 
 ssh -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="bash -cx \"gcloud --project ${GOOGLE_CLOUD_PROJECT:?} compute ssh --zone ${GCE_ZONE:?} --tunnel-through-iap %r@%h -- -t -N -L ${LOCAL_PORT:?}:${REMOTE_HOST:?}:${REMOTE_PORT:?}\"" -l "${SSH_USER:?}" "${GCE_INSTANCE:?}"
 # gcloud compute config-ssh
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute config-ssh --ssh-config-file=~/.ssh/"${GOOGLE_CLOUD_PROJECT:?}"
+# gcloud compute firewall-rules create
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute firewall-rules create "ssh-via-iap" --description="allow SSH vis IAP" --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:22 --source-ranges="35.235.240.0/20" --target-tags="ssh-via-iap"
+# gcloud compute instances create terraform
+gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances create "terraform" --zone="${GCP_ZONE:?}" --machine-type="e2-highcpu-2" --network-interface="network-tier=PREMIUM,subnet=default" --maintenance-policy=MIGRATE --service-account="terraform@${GOOGLE_CLOUD_PROJECT:?}.iam.gserviceaccount.com" --scopes="https://www.googleapis.com/auth/cloud-platform" --tags="ssh-via-iap" --create-disk="auto-delete=yes,boot=yes,device-name=terraform,image=projects/ubuntu-os-cloud/global/images/$(gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute images list --filter="family=ubuntu-2004-lts" --format="value(name)"),mode=rw,size=20,type=projects/${GOOGLE_CLOUD_PROJECT:?}/zones/${GCP_ZONE:?}/diskTypes/pd-balanced" --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
 # gcloud start-iap-tunnel portforward
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute start-iap-tunnel --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}" 22 --local-host-port=localhost:25252
 # gcloud 変な operations が起こっていないか確認する。
