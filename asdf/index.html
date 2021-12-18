@@ -56,15 +56,13 @@ RecRun asdf current || true
 
 RecNotice "${prog_name:?} installed"
 
-asdfCommonInstall () {
+utilASDFInstall () {
   lang_name="${1:?}"
   lang_version="${2:?}"
   pre_hook_command="${3-}"
   post_hook_command="${4-}"
 
-  if [ "${pre_hook_command-}" ]; then
-    RecRun bash -c "${pre_hook_command:?}"
-  fi
+  test -z "${pre_hook_command-}" || RecRun bash -c "${pre_hook_command:?}"
 
   RecNotice "Start to install ${lang_name:?}"
 
@@ -78,10 +76,8 @@ asdfCommonInstall () {
 
   RecRun asdf current "${lang_name:?}"
 
-  if [ "${post_hook_command-}" ]; then
-    RecRun bash -c "${post_hook_command:?}"
-  fi
-} && export -f asdfCommonInstall
+  test -z "${post_hook_command-}" || RecRun bash -c "${post_hook_command:?}"
+} && export -f utilASDFInstall
 
 
 # (C) 2018 newtstat </code></pre></div>
