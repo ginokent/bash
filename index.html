@@ -158,6 +158,9 @@ ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(STDIN.read))'
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 ruby -e "require 'time'; puts Time.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
 
+# bundle install で Gem::RemoteFetcher::UnknownHostError が出る際の対処。 IPv6 で名前解決してほしくない。
+dig +short A rubygems.org | awk '{printf "%-16s rubygems.org\n", $0}' | sudo tee -a /etc/hosts
+
 
 
 # ==================================================
