@@ -28,7 +28,7 @@ asdf_version="${ASDF_VERSION:=$(
 if test ! -d ~/.asdf; then
   RecRun git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
 else
-  RecRun bash -c "cd ~/.asdf && git pull --prune --all && git checkout \"${asdf_version:?}\""
+  RecRun bash -c "cd ~/.asdf && git fetch --prune --all && git checkout \"${asdf_version:?}\""
 fi
 
 # shellcheck disable=SC2016,SC2088
@@ -39,8 +39,7 @@ if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
     echo '# asdf'
     echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
     echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
-  } |
-  RecRun tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+  } | RecRun tee -a ~/.bashrc | sh -c "${pipe_info:?}"
 fi
 
 # shellcheck disable=SC1090
@@ -49,9 +48,7 @@ test ! -f ~/.asdf/asdf.sh || source ~/.asdf/asdf.sh
 test ! -f ~/.asdf/completions/asdf.bash || source ~/.asdf/completions/asdf.bash
 
 RecRun asdf update
-
 RecRun asdf plugin-update --all || true
-
 RecRun asdf current || true
 
 RecNotice "${prog_name:?} installed"
