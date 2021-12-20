@@ -59,7 +59,7 @@ utilASDFInstall () {
   RecNotice "Start installing ${lang_name:?}"
 
   if test "${pre_hook_command-}"; then
-    RecNotice "Run pre hook"
+    RecInfo "Run pre hook"
     RecRun bash -c "${pre_hook_command:?}"
   fi
 
@@ -73,7 +73,7 @@ utilASDFInstall () {
   RecRun asdf current "${lang_name:?}"
 
   if test "${post_hook_command-}"; then
-    RecNotice "Run post hook"
+    RecInfo "Run post hook"
     RecRun bash -c "${post_hook_command:?}"
   fi
 

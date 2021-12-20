@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -E -e -o pipefail -u
+cat >/dev/null << '#newtstat.github.io/bash'
+<link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
+#newtstat.github.io/bash
+##
+
+utilASDFInstall () {
+  lang_name="${1:?}"
+  lang_version="${2:?}"
+  pre_hook_command="${3-}"
+  post_hook_command="${4-}"
+
+  RecNotice "Start installing ${lang_name:?}"
+
+  if test "${pre_hook_command-}"; then
+    RecInfo "Run pre hook"
+    RecRun bash -c "${pre_hook_command:?}"
+  fi
+
+  if ! asdf list "${lang_name:?}" >/dev/null 2>&1; then
+    RecRun asdf plugin-add "${lang_name:?}"
+  fi
+
+  RecRun asdf install "${lang_name:?}" "${lang_version:?}"
+  RecRun asdf global "${lang_name:?}" "${lang_version:?}"
+  RecRun asdf reshim "${lang_name:?}"
+  RecRun asdf current "${lang_name:?}"
+
+  if test "${post_hook_command-}"; then
+    RecInfo "Run post hook"
+    RecRun bash -c "${post_hook_command:?}"
+  fi
+
+  RecNotice "End installing ${lang_name:?}"
+} && export -f utilASDFInstall
+
+
+
+# (C) 2018 newtstat </code></pre></div>
