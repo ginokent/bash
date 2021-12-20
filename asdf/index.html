@@ -10,14 +10,11 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-prog_name=asdf
-
-RecInfo "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
-
-RecInfo "Install ${prog_name:?}"
-
 command -v git 1>/dev/null || RecRun bash -c "${httpGet:?} https://newtstat.github.io/bash/git/ | bash"
 
+RecNotice "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
+
+prog_name=asdf
 asdf_version="${ASDF_VERSION:=$(
   git ls-remote --quiet --refs --tags https://github.com/asdf-vm/asdf.git |
     grep -Eo "v[0-9]+\.[0-9]+\.[0-9]+" |
@@ -26,14 +23,13 @@ asdf_version="${ASDF_VERSION:=$(
 )}"
 
 if test ! -d ~/.asdf; then
+  RecNotice "Install ${prog_name:?}"
   RecRun git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
-else
-  RecRun bash -c "cd ~/.asdf && git fetch --prune --all && git checkout \"${asdf_version:?}\""
 fi
 
 # shellcheck disable=SC2016,SC2088
 if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
-  RecInfo "Install asdf setting to ~/.bashrc"
+  RecNotice "Install asdf setting to ~/.bashrc"
   RecRun touch ~/.bashrc
   {
     echo '# asdf'
@@ -59,21 +55,28 @@ utilASDFInstall () {
   pre_hook_command="${3-}"
   post_hook_command="${4-}"
 
-  test -z "${pre_hook_command-}" || RecRun bash -c "${pre_hook_command:?}"
+  RecNotice "Install ${lang_name:?} start"
 
-  RecNotice "Start to install ${lang_name:?}"
+  if test "${pre_hook_command-}"; then
+    RecNotice "Run pre hook"
+    RecRun bash -c "${pre_hook_command:?}"
+  fi
 
-  RecRun asdf list "${lang_name:?}" || RecRun asdf plugin-add "${lang_name:?}"
+  if ! asdf list "${lang_name:?}" >/dev/null 2>&1; then
+    RecRun asdf plugin-add "${lang_name:?}"
+  fi
 
   RecRun asdf install "${lang_name:?}" "${lang_version:?}"
-
   RecRun asdf global "${lang_name:?}" "${lang_version:?}"
-
   RecRun asdf reshim "${lang_name:?}"
-
   RecRun asdf current "${lang_name:?}"
 
-  test -z "${post_hook_command-}" || RecRun bash -c "${post_hook_command:?}"
+  if test "${pre_hook_command-}"; then
+    RecNotice "Run post hook"
+    RecRun bash -c "${post_hook_command:?}"
+  fi
+
+  RecNotice "Install ${lang_name:?} end"
 } && export -f utilASDFInstall
 
 
