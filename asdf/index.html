@@ -71,7 +71,7 @@ utilASDFInstall () {
   RecRun asdf reshim "${lang_name:?}"
   RecRun asdf current "${lang_name:?}"
 
-  if test "${pre_hook_command-}"; then
+  if test "${post_hook_command-}"; then
     RecNotice "Run post hook"
     RecRun bash -c "${post_hook_command:?}"
   fi
