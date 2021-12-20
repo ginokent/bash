@@ -130,7 +130,8 @@ fi
 export EnvIsLoaded=true
 
 # ログ出力
-RecInfo "$(env | grep ^EnvIs | sort)"
+RecInfo "Env:"
+RecInfo "$(env | grep ^EnvIs | sort | sed 's/^/  /')"
 
 
 
