@@ -12,10 +12,10 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 command -v git 1>/dev/null || RecRun bash -c "${httpGet:?} https://newtstat.github.io/bash/git/ | bash"
 
-RecNotice "Start installing asdf"
-
 if [ "${EnvASDFIsLoaded:-false}" != true ]; then
   export EnvASDFIsLoaded=true
+
+  RecNotice "Start installing asdf"
 
   RecInfo "ASDF_VERSION=${ASDF_VERSION:-DEFAULT_VERSION}"
 
