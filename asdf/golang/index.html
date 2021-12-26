@@ -7,62 +7,18 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-LANG_NAME=GOLANG
-lang_name=golang
+eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/asdf/")"
 
-LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-RecInfo "${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
-
-RecInfo "Start to install ${lang_name:?}"
-
-command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
-
-RecRun asdf list "${lang_name}" || RecRun asdf plugin-add "${lang_name}"
-
-lang_version="${!LANG_VERSION_KEY:="$(
-  asdf list-all "${lang_name}" |
-    grep -Eo '^[0-9]+\.[0-9]+(\.[0-9]+)?$' |
-    sort -V |
-    tail -n 1
-)"}"
-
-RecRun asdf install "${lang_name}" "${lang_version}"
-
-RecRun asdf global "${lang_name}" "${lang_version}"
-
-RecRun asdf reshim "${lang_name}"
-
-RecRun asdf current "${lang_name}"
-
-RecRun go install -v golang.org/x/lint/golint@latest
-RecRun go install -v golang.org/x/tools/gopls@latest
-RecRun go install -v golang.org/x/perf/cmd/benchstat@latest
-RecRun go install -v golang.org/x/tools/cmd/benchcmp@latest
-RecRun go install -v github.com/joho/godotenv/cmd/godotenv@latest
-RecRun go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-RecRun go install -v github.com/go-delve/delve/cmd/dlv@latest
-RecRun go install -v github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest
-RecRun go install -v github.com/ramya-rao-a/go-outline@latest
-RecRun go install -v github.com/cweill/gotests/gotests@latest
-# gore
-RecRun go install -v github.com/x-motemen/gore/cmd/gore@latest
-RecRun go install -v github.com/mdempsky/gocode@latest
-
-
-if ! grep -q GOPATH ~/.bashrc; then
-  RecInfo "Install GOPATH environment variables setting to ~/.bashrc"
-  RecRun tee -a ~/.bashrc << 'BASHRC'
+utilASDFInstall golang "$(asdf latest golang)" "" "if ! grep -q 'export GOPATH=' ~/.bashrc; then
+  echo '# GOPATH
 if command -v go 1>/dev/null; then
-  export GOROOT="$(go env GOROOT)"
-  export GOPATH=$HOME/go
-  export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+  export GOPATH=\"\$HOME/go\"
+  export PATH=\"\$PATH:\$GOPATH/bin\"
 elif [ -d /usr/local/go ]; then
-  export GOROOT="$(/usr/local/go/bin/go env GOROOT)"
-  export GOPATH=$HOME/go
-  export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-fi
-BASHRC
-fi
+  export GOPATH=\"\$HOME/go\"
+  export PATH=\"\$PATH:\$GOPATH/bin\"
+fi' >>~/.bashrc
+fi"
 
 
 
