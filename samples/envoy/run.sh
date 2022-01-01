@@ -1,5 +1,5 @@
 #!/bin/bash
-set -Eeou pipefail
+set -Eeu -o pipefail
 cd "$(dirname "$0")" || exit 1
 
 # export for func
