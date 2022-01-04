@@ -42,10 +42,12 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
     } | RecRun tee -a ~/.bashrc | sh -c "${pipe_info:?}"
   fi
 
+  set +u
   # shellcheck disable=SC1090
   test ! -f ~/.asdf/asdf.sh || source ~/.asdf/asdf.sh
   # shellcheck disable=SC1090
   test ! -f ~/.asdf/completions/asdf.bash || source ~/.asdf/completions/asdf.bash
+  set -u
 
   RecRun asdf update
   RecRun asdf plugin-update --all || true
