@@ -236,6 +236,8 @@ git rev-parse --show-toplevel  # git リポジトリのルートディレクト�
 git rev-parse --abbrev-ref HEAD  # git ブランチ名を出力
 git branch -a 2>/dev/null | grep -Ev "^\*|^[[:blank:]]+(remotes/|main$|master$)" | xargs echo git branch -d  # git branch -d 不要なブランチを削除
 #git filter-branch -f --env-filter "GIT_AUTHOR_NAME='${GIT_NAME:?}'; GIT_AUTHOR_EMAIL='${GIT_EMAIL:?}'; GIT_COMMITTER_NAME='${GIT_NAME:?}'; GIT_COMMITTER_EMAIL='${GIT_EMAIL:?}';" HEAD  # git !!!DANGER!!! 過去の Auther と Commiter を変更
+# git remote show origin リモートリポジトリのデフォルトブランチを取得する
+git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*' | sed 's/[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*//g'
 
 
 
