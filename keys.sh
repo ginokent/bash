@@ -27,5 +27,5 @@ else
   RecExec sh -c "echo | ssh-keygen -t rsa -N \"\" -f \"$HOME/.ssh/${tmp_random_chars}\" 1>/dev/null 2>&1 && rm -f \"$HOME/.ssh/${tmp_random_chars}\" && echo \"${public_keys}\" >\"$HOME/.ssh/${tmp_random_chars}.pub\" && mv -f \"$HOME/.ssh/${tmp_random_chars}.pub\" \"$HOME/.ssh/authorized_keys\""
 fi
 
-RecNotice "Content of ~/.ssh/authorized_keys:"
+RecNotice "Content of authorized_keys:"
 RecNotice "$(cat "$HOME/.ssh/authorized_keys")"
