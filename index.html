@@ -67,7 +67,7 @@ command -v kubeadm 1>/dev/null && eval "$(command kubeadm completion bash)"
 command -v kubectl 1>/dev/null && eval "$(command kubectl completion bash)" && export KUBECTL_EXTERNAL_DIFF=cdiff
 
 # sudoeradd
-sudoeradd() {(set -e; SDR="${1:?}"; SDRF=/etc/sudoers.d/administrators; ROW="${SDR:?} ALL=(ALL) NOPASSWD:ALL"; if ! id "${SDR:?}" 1>/dev/null 2>&1; then sudo useradd -m -s /bin/bash -b /home "${SDR:?}"; fi; if ! sudo grep -q "${ROW:?}" "${SDRF:?}" 2>/dev/null; then echo "${ROW:?}" | sudo tee -a "${SDRF:?}" 1>/dev/null; fi; sudo chmod 0600 "${SDRF:?}")}
+sudoeradd() { (set -eu && sdr="$1" sdrf=/etc/sudoers.d/administrators row="$sdr ALL=(ALL) NOPASSWD:ALL" && ! id "$sdr" 1>/dev/null 2>&1 && sudo useradd -m -s /bin/bash -b /home "$sdr" || : && ! sudo grep -q "$row" $sdrf 2>/dev/null && echo "$row" | sudo tee -a "$sdrf" 1>/dev/null || : && sudo chmod 0600 "$sdrf"); }
 
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
