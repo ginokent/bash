@@ -503,7 +503,7 @@ aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username 
 docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$PWD:$PWD" --workdir "$PWD" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
-docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$(git rev-parse --show-toplevel)" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
+docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$PWD" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
@@ -519,6 +519,7 @@ docker run -it --rm alpine sh
 docker run -it --rm debian:10 bash
 docker run -it --rm debian:9 bash
 docker run -it --rm debian:8 bash
+docker run -it --rm -v "$PWD":"$PWD" --workdir "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy sudo curl systemd; bash -l"
 docker run -it --rm ubuntu:20.04 bash
 docker run -it --rm ubuntu:18.04 bash
 docker run -it --rm ubuntu:16.04 bash
