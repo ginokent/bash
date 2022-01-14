@@ -519,7 +519,7 @@ docker run -it --rm alpine sh
 docker run -it --rm debian:10 bash
 docker run -it --rm debian:9 bash
 docker run -it --rm debian:8 bash
-docker run -it --rm -v "$PWD":"$PWD" --workdir "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy sudo curl systemd; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" --workdir "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy sudo curl psmisc systemd; bash -l"
 docker run -it --rm ubuntu:20.04 bash
 docker run -it --rm ubuntu:18.04 bash
 docker run -it --rm ubuntu:16.04 bash
