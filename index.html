@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090,SC2034,SC2153
+# shellcheck disable=SC1090,SC2009,SC2034,SC2153
 cat >/dev/null << '#newtstat.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #newtstat.github.io/bash
@@ -68,6 +68,10 @@ command -v kubectl 1>/dev/null && eval "$(command kubectl completion bash)" && e
 
 # sudoeradd
 sudoeradd() { (set -eu && sdr="$1" sdrf=/etc/sudoers.d/administrators row="$sdr ALL=(ALL) NOPASSWD:ALL" && ! id "$sdr" 1>/dev/null 2>&1 && sudo useradd -m -s /bin/bash -b /home "$sdr" || : && ! sudo grep -q "$row" $sdrf 2>/dev/null && echo "$row" | sudo tee -a "$sdrf" 1>/dev/null || : && sudo chmod 0600 "$sdrf"); }
+
+# pgrep
+ps -o pid,command | grep -E "^[0-9]+ [^ ]*ssh .*"  # pgrep では確認できないプロセスコマンドも出力したい場合
+pgrep -f "^[^ ]*ssh .*"
 
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
