@@ -647,6 +647,12 @@ export GPG_TTY="$(tty)"
 gpg --full-generate-key
 pass init "${EMAIL:?}"
 
+# gpg
+gpg --default-new-key-algo rsa4096 --generate-key
+gpg --list-keys
+gpg --list-secret-keys
+gpg --output "${EMAIL:?}.gpg" --export "${EMAIL:?}"
+
 # aws-valut add 資格情報の登録
 aws-vault add "${AWS_PROFILE:?}"
 
