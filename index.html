@@ -713,6 +713,8 @@ gcloud auth login
 gcloud auth application-default login
 # gcloud auth revoke : ログアウトする
 gcloud auth revoke
+# gcloud --impersonate-service-account auth print-access-token 死んでもクレデンシャルファイルは発行するな
+GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud --impersonate-service-account="${SERVICEACCOUNT_NAME:?}@${GOOGLE_CLOUD_PROJECT:?}.iam.gserviceaccount.com" auth print-access-token)
 # gcloud auth activate-service-account : サービスアカウントを用いて認証する
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
 # gcloud config set project : プロジェクトを設定する。
