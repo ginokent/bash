@@ -771,6 +771,13 @@ gcloud services enable run.googleapis.com
 
 
 # ==================================================
+# terraform Terraform
+# ==================================================
+terraform walk "$(terraform find-tf .)" -- direnv exec . terraform init -upgrade
+
+
+
+# ==================================================
 # VMware ESXi
 # ==================================================
 
