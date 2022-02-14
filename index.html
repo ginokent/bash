@@ -629,6 +629,9 @@ kubectl -n kube-system logs "$(kubectl -n kube-system get --no-headers pods -o n
 kubectl exec -n kube-system "$(kubectl -n kube-system get --no-headers pods -o name | grep -E "aws-node-[0-9A-Za-z]+" | tail -n 1)" -c aws-node -- env | grep AWS
 kubectl -n kube-system rollout restart daemonset aws-node
 
+kubectl delete node lima-rancher-desktop
+kubectl -n kube-system delete deployment.apps/metrics-server deployment.apps/local-path-provisioner deployment.apps/coredns deployment.apps/traefik daemonset.apps/svclb-traefik
+
 # kubetail regex
 kubetail "^app-[0-9a-z]+-[0-9a-z]+" --regex --context "${KUBECTL_CONTEXT:?}" --namespace default --since 300s
 
