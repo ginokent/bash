@@ -7,19 +7,23 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 utilASDFInstall () {
   lang_name="${1:?}"
-  lang_version="${2:?}"
-  pre_hook_command="${3-}"
-  post_hook_command="${4-}"
+  lang_version="${2:-}"
+  pre_hook_command="${3:-}"
+  post_hook_command="${4:-}"
 
   RecNotice "Start installing ${lang_name:?}"
 
-  if test "${pre_hook_command-}"; then
+  if [[ -n "${pre_hook_command:-}" ]]; then
     RecInfo "Run pre hook"
     RecRun bash -c "${pre_hook_command:?}"
   fi
 
-  if ! asdf list "${lang_name:?}" >/dev/null 2>&1; then
+  if ! asdf list "${lang_name:?}" 1>/dev/null 2>&1; then
     RecRun asdf plugin-add "${lang_name:?}"
+  fi
+
+  if [[ -z "${lang_version:-}" ]]; then
+    lang_version=$(asdf latest "${lang_name:?}")
   fi
 
   RecRun asdf install "${lang_name:?}" "${lang_version:?}"
@@ -27,7 +31,7 @@ utilASDFInstall () {
   RecRun asdf reshim "${lang_name:?}"
   RecRun asdf current "${lang_name:?}"
 
-  if test "${post_hook_command-}"; then
+  if test "${post_hook_command:-}"; then
     RecInfo "Run post hook"
     RecRun bash -c "${post_hook_command:?}"
   fi
