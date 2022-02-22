@@ -76,6 +76,9 @@ pgrep -f "^[^ ]*ssh .*"
 # wget : 1 つの HTML ファイルとして保存する。
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
+# ping
+while sleep 1; do echo "$(LANG=C date "+%Y-%m-%dT%H:%M:%S%z" | tr '\n' ' ') $(ping -t 1 -c 1 one.one.one.one | tr '\n' ' ' | sed 's/---.*//')"; done
+
 # ssh-keygen : 秘密鍵を作成する。
 ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://newtstat.github.io/bash/keys" -N ""
 ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://newtstat.github.io/bash/keys" -N ""
