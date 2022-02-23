@@ -77,7 +77,7 @@ pgrep -f "^[^ ]*ssh .*"
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
 # ping
-while sleep 1; do echo "$(LANG=C date "+%Y-%m-%dT%H:%M:%S%z" | tr '\n' ' ') $(ping -t 1 -c 1 one.one.one.one | tr '\n' ' ' | sed 's/---.*//')"; done
+while :; do echo "$(date "+%Y-%m-%dT%H:%M:%S%z") $(ping -t 1 -c 2 one.one.one.one | tr -d '\n' | sed 's/---.*//')"; done
 
 # ssh-keygen : 秘密鍵を作成する。
 ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://newtstat.github.io/bash/keys" -N ""
@@ -523,6 +523,9 @@ docker run -it --rm -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOO
 
 # docker env
 docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) alpine sh
+docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) debian:11 bash
+docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) ubuntu:20.04 bash
+docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) centos:7 bash
 
 # docker : よく使いそうな docker image たち
 docker run -it --rm alpine sh
