@@ -14,7 +14,7 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 URL="https://github.com/tmux/tmux/archive/refs/tags/${TMUX_VERSION:?}.tar.gz"
 FILE="tmux-${TMUX_VERSION:?}.tar.gz"
 
-post_hook_command="if ! grep -q git-completion.bash ~/.tmux.conf; then
+post_hook_command="if ! grep -q git-completion.bash ~/.tmux.conf 2>/dev/null; then
 tee -a ~/.tmux.conf >/dev/null <<'EOF'
 set -g mouse on
 bind-key -T copy-mode    WheelUpPane   send -N1 -X scroll-up
