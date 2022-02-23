@@ -51,27 +51,29 @@ RecRun() { _dlm='####R#E#C#D#E#L#I#M#I#T#E#R####' _all=$({ _out=$("$@") && _rtn=
 echo "${SHELL-}" | grep -q bash$ && export -f _recRFC3339 _recCmd RecDefault RecDebug RecInfo RecWarning RecError RecCritical RecAlert RecEmergency RecExec RecRun
 
 utilInstall () {
-  lang_name="${1:?}"
+  check_command="${1:?}"
   install_command="${2:?}"
   pre_hook_command="${3:-}"
   post_hook_command="${4:-}"
 
-  RecNotice "Start installing ${lang_name:?}"
+  RecNotice "Start installation"
 
   if [[ -n "${pre_hook_command:-}" ]]; then
     RecInfo "Run pre hook command"
     RecRun bash -c "${pre_hook_command:?}"
   fi
 
-  RecInfo "Run install command"
-  RecRun bash -c "${install_command:?}"
+  if bash -c "${check_command:?}" 1>/dev/null 2>&1; then
+    RecInfo "Run install command"
+    RecRun bash -c "${install_command:?}"
+  fi
 
   if test "${post_hook_command:-}"; then
     RecInfo "Run post hook command"
     RecRun bash -c "${post_hook_command:?}"
   fi
 
-  RecNotice "End installing ${lang_name:?}"
+  RecNotice "Installation completed"
 } && export -f utilInstall
 
 # CPUアーキテクチャ判定用
