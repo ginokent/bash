@@ -7,18 +7,17 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-post_hook_command="
-shell=\$(basename \"\${SHELL:?}\")
-shellprofile=\${SHELLPROFILE:=\$HOME/.\${shell:?}_profile}
-shellrc=\${SHELLRC:=\$HOME/.\${shell:?}rc}
-touch \"\${shellprofile:?}\" \"\${shellrc:?}\"
-if ! grep -q \"eval ...direnv hook .\" \"\${shellprofile:?}\" \"\${shellrc:?}\" 2>/dev/null; then
-tee -a \"\${shellrc:?}\" >/dev/null <<'EOF'
+# shellcheck disable=SC2016
+post_hook_command='
+touch ~/.bash_profile ~/.bashrc
+if ! grep -Eq "eval ...direnv hook bash.." ~/.bash_profile ~/.bashrc; then
+tee -a ~/.bashrc >/dev/null <<"EOF"
 
-# direnv hook
-eval \"\$(direnv hook \"\$(basename \"\${SHELL:?}\")\")\"
+# direnv hook 
+eval "$(direnv hook bash)"
 EOF
-fi"
+fi
+'
 
 # shellcheck disable=SC2154
 if [ "${EnvIsDarwin-}" = true ]; then
