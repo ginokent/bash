@@ -16,11 +16,17 @@ touch ~/.tmux.conf
 if ! grep -Eq "set -g mouse .." ~/.tmux.conf; then
 tee -a ~/.tmux.conf <<"EOF"
 
+# window
+set-window-option -g mode-keys vi
+# mouse
 set -g mouse on
 bind-key -T copy-mode    WheelUpPane   send -N1 -X scroll-up
 bind-key -T copy-mode-vi WheelUpPane   send -N1 -X scroll-up
 bind-key -T copy-mode    WheelDownPane send -N1 -X scroll-down
 bind-key -T copy-mode-vi WheelDownPane send -N1 -X scroll-down
+# color
+set -g default-terminal "screen-256color"
+set -g terminal-overrides "xterm:colors=256"
 EOF
 fi
 '
