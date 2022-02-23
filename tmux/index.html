@@ -10,51 +10,44 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-echo "  TMUX_VERSION=${TMUX_VERSION:-fixed}" | bash -c "${pipe_info:?}"
-[[ ${TMUX_VERSION+x} ]] || export TMUX_VERSION=3.2
-prog_name=tmux
-bin_dir=/usr/local/bin
-
 echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
+prog_name=tmux
+[[ ${TMUX_VERSION:-} ]] || export TMUX_VERSION=3.2
 URL="https://github.com/tmux/tmux/archive/refs/tags/${TMUX_VERSION:?}.tar.gz"
-FILE="tmux-$(basename "${URL:?}")"
-# shellcheck disable=SC2154
-if [ "${EnvIsDarwin-}" = true ]; then
-  command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  commands_for_install="brew install ${prog_name:?}"
-elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
-  commands_for_install="yum install -y automake bison gcc less libevent-devel ncurses-devel make tar wget && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V"
-elif [ "${EnvIsUbuntu-}" = true ]; then
-  commands_for_install="apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y automake bison gcc less libevent-dev libncurses-dev make pkg-config tar wget && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V"
-else
-  echo "OS not supported" | bash -c "${pipe_error:?}"
-  exit 1
-fi
+FILE="tmux-${TMUX_VERSION:?}.tar.gz"
 
-# shellcheck disable=SC2154
-if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
-  sudo -E bash -cx "${commands_for_install:?}"
-else
-  bash -cx "${commands_for_install:?}"
-fi
-
-
-
-if ! grep -q git-completion.bash ~/.bashrc; then
-  echo "add git-completion.bash settings to ~/.bashrc" | bash -c "${pipe_info:?}"
-  tee -a ~/.tmux.conf << "BASHRC"
+post_hook_command="if ! grep -q git-completion.bash ~/.tmux.conf; then
+tee -a ~/.tmux.conf <<'EOF'
 set -g mouse on
 bind-key -T copy-mode    WheelUpPane   send -N1 -X scroll-up
 bind-key -T copy-mode-vi WheelUpPane   send -N1 -X scroll-up
 bind-key -T copy-mode    WheelDownPane send -N1 -X scroll-down
 bind-key -T copy-mode-vi WheelDownPane send -N1 -X scroll-down
-BASHRC
+EOF
+fi"
+
+# shellcheck disable=SC2154
+if [ "${EnvIsDarwin-}" = true ]; then
+  command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  utilInstall \
+    "brew install ${prog_name:?}" \
+    "command -v brew 1>/dev/null || bash -c \"\$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"" \
+    "${post_hook_command:?}"
+elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
+  utilInstall \
+    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
+    "yum install -y automake bison gcc gzip less libevent-devel ncurses-devel make tar wget" \
+    "${post_hook_command:?}"
+elif [ "${EnvIsUbuntu-}" = true ]; then
+  utilInstall \
+    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
+    "apt-get update -qy && DEBIAN_FRONTEND=noninteractive apt-get install -qy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
+    "${post_hook_command:?}"
+else
+  echo "OS not supported" | bash -c "${pipe_error:?}"
+  exit 1
 fi
-
-
-
-echo "${prog_name:?} installed" | bash -c "${pipe_notice:?}"
 
 
 
