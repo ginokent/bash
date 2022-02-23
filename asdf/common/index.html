@@ -15,25 +15,25 @@ utilASDFInstall () {
 
   if [[ -n "${pre_hook_command:-}" ]]; then
     RecInfo "Run pre hook command"
-    RecRun bash -c "${pre_hook_command:?}"
+    RecExec bash -c "${pre_hook_command:?}"
   fi
 
   if ! asdf list "${lang_name:?}" 1>/dev/null 2>&1; then
-    RecRun asdf plugin-add "${lang_name:?}"
+    RecExec asdf plugin-add "${lang_name:?}"
   fi
 
   if [[ -z "${lang_version:-}" ]]; then
     lang_version=$(asdf latest "${lang_name:?}")
   fi
 
-  RecRun asdf install "${lang_name:?}" "${lang_version:?}"
-  RecRun asdf global "${lang_name:?}" "${lang_version:?}"
-  RecRun asdf reshim "${lang_name:?}"
-  RecRun asdf current "${lang_name:?}"
+  RecExec asdf install "${lang_name:?}" "${lang_version:?}"
+  RecExec asdf global "${lang_name:?}" "${lang_version:?}"
+  RecExec asdf reshim "${lang_name:?}"
+  RecExec asdf current "${lang_name:?}"
 
   if test "${post_hook_command:-}"; then
     RecInfo "Run post hook command"
-    RecRun bash -c "${post_hook_command:?}"
+    RecExec bash -c "${post_hook_command:?}"
   fi
 
   RecNotice "End installing ${lang_name:?}"

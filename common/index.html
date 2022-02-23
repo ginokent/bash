@@ -30,7 +30,7 @@ CommandNotFound () { ! command -v "${1:?"CommandNotFound: \$1 as command is requ
 ErrorIfCommandNotFound () { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then Errorln "command \"${cmd:?}\" is required"; return 1; fi; done; } && export -f ErrorIfCommandNotFound
 ConfirmYesOrNo () { echo -n "${1:?}"; read -r YES_OR_NO; echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; } && export -f ConfirmYesOrNo  # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
-# MIT License Copyright (c) 2021 newtstat https://github.com/newtstat/rec.sh
+# MIT License Copyright (c) 2021 newtstat https://github.com/rec-logger/rec.sh
 # Common
 _recRFC3339() { date "+%Y-%m-%dT%H:%M:%S%z" | sed "s/\(..\)$/:\1/"; }
 _recCmd() { for a in "$@"; do if echo "${a:-}" | grep -Eq "[[:blank:]]"; then printf "'%s' " "${a:-}"; else printf "%s " "${a:-}"; fi; done | sed "s/ $//"; }
@@ -60,17 +60,17 @@ utilInstall () {
 
   if [[ -n "${pre_hook_command:-}" ]]; then
     RecInfo "Run pre hook command"
-    RecRun bash -c "${pre_hook_command:?}"
+    RecExec bash -c "${pre_hook_command:?}"
   fi
 
   if bash -c "${check_command:?}" 1>/dev/null 2>&1; then
     RecInfo "Run install command"
-    RecRun bash -c "${install_command:?}"
+    RecExec bash -c "${install_command:?}"
   fi
 
   if test "${post_hook_command:-}"; then
     RecInfo "Run post hook command"
-    RecRun bash -c "${post_hook_command:?}"
+    RecExec bash -c "${post_hook_command:?}"
   fi
 
   RecNotice "Installation completed"
