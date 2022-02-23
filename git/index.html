@@ -28,14 +28,14 @@ if [[ "${EnvIsDebian-}" = true ]] || [[ "${EnvIsUbuntu-}" = true ]]; then
   utilInstall \
     "! ls /usr/local/bin/git" \
     'mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version' \
-    "sudo yum makecache && sudo yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget" \
+    "apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget" \
     "${post_hook_command:?}"
 elif [[ "${EnvIsCentOS-}" = true ]] || [[ "${EnvIsRockyLinux-}" = true ]] || [[ "${EnvIsAmazonLinux-}" = true ]]; then
   # shellcheck disable=SC2016
   utilInstall \
     "! ls /usr/local/bin/git" \
     'mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version' \
-    "apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget" \
+    "sudo yum makecache && sudo yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget" \
     "${post_hook_command:?}"
 else
   RecCritical "OS not supported"
