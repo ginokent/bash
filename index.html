@@ -523,17 +523,17 @@ docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) 
 
 # docker : よく使いそうな docker image たち
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" alpine sh
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:11 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:10 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:9 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:8 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:18.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:16.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:14.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:8 bash -c "yum install -y curl sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:7 bash -c "yum install -y curl sudo; bash -l"
-docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:6 bash -c "yum install -y curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:11 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:10 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:9  bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:8  bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:18.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:16.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:14.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:8 bash -c "yum install -y ca-certificates curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:7 bash -c "yum install -y ca-certificates curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:6 bash -c "yum install -y ca-certificates curl sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" rockylinux/rockylinux:8 bash -c "yum install -y curl sudo; bash -l"
 
 # plantuml Plant UML
