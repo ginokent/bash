@@ -37,7 +37,7 @@ elif [ "${EnvIsDebian-}" = true ] || [ "${EnvIsUbuntu-}" = true ]; then
   utilInstall \
     "! ls /usr/local/bin/tmux" \
     "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
-    "apt-get update -qy && DEBIAN_FRONTEND=noninteractive apt-get install -qy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
+    "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
     "${post_hook_command:?}"
 elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
   utilInstall \

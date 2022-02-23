@@ -20,6 +20,7 @@ fi
 '
 
 URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
+
 # shellcheck disable=SC2154
 if [ "${EnvIsDarwin-}" = true ]; then
   command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
