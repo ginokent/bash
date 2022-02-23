@@ -12,7 +12,7 @@ shell=\$(basename \"\${SHELL:?}\")
 shellprofile=\${SHELLPROFILE:=\$HOME/.\${shell:?}_profile}
 shellrc=\${SHELLRC:=\$HOME/.\${shell:?}rc}
 touch \"\${shellprofile:?}\" \"\${shellrc:?}\"
-if ! grep -q \"eval ...?direnv hook .\" \"\${shellprofile:?}\" \"\${shellrc:?}\" 2>/dev/null; then
+if ! grep -q \"eval ...direnv hook .\" \"\${shellprofile:?}\" \"\${shellrc:?}\" 2>/dev/null; then
 tee -a \"\${shellrc:?}\" >/dev/null <<'EOF'
 
 # direnv hook
