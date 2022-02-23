@@ -7,6 +7,8 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
+URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
+
 # shellcheck disable=SC2016
 post_hook_command='
 touch ~/.bash_profile ~/.bashrc
@@ -18,8 +20,6 @@ eval "$(direnv hook bash)"
 EOF
 fi
 '
-
-URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
 
 # shellcheck disable=SC2154
 if [ "${EnvIsDarwin-}" = true ]; then

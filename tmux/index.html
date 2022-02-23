@@ -36,14 +36,14 @@ if [ "${EnvIsDarwin-}" = true ]; then
 elif [ "${EnvIsDebian-}" = true ] || [ "${EnvIsUbuntu-}" = true ]; then
   utilInstall \
     "! ls /usr/local/bin/tmux" \
-    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
-    "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
+    "set -x && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
+    "set -x && apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
     "${post_hook_command:?}"
 elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
   utilInstall \
     "! ls /usr/local/bin/tmux" \
-    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
-    "yum install -y automake bison gcc gzip less libevent-devel ncurses-devel make tar wget" \
+    "set -x && mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
+    "set -x && yum install -y automake bison gcc gzip less libevent-devel ncurses-devel make tar wget" \
     "${post_hook_command:?}"
 else
   RecCritical "OS not supported"
