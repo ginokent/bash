@@ -518,29 +518,22 @@ docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
 
-# docker : terraform
-docker run -it --rm -e GOOGLE_APPLICATION_CREDENTIALS=/credential.json -v "${GOOGLE_APPLICATION_CREDENTIALS:?}":/credential.json:ro -v "$HOME/.ssh:/root/.ssh" -v "$HOME/.vim:/root/.vim" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" newtstat/terraform:0.12.23 bash -c "cd $(pwd) && bash -l"
-
 # docker env
 docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) alpine sh
-docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) debian:11 bash
-docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) ubuntu:20.04 bash
-docker run -it --rm -v "$(pwd -P)":"$(pwd -P)" -w "$(pwd -P)" --env-file <(env) centos:7 bash
 
 # docker : よく使いそうな docker image たち
-docker run -it --rm alpine sh
-docker run -it --rm debian:10 bash
-docker run -it --rm debian:9 bash
-docker run -it --rm debian:8 bash
-docker run -it --rm -v "$PWD":"$PWD" --workdir "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy sudo curl psmisc systemd; bash -l"
-docker run -it --rm ubuntu:20.04 bash
-docker run -it --rm ubuntu:18.04 bash
-docker run -it --rm ubuntu:16.04 bash
-docker run -it --rm ubuntu:14.04 bash
-docker run -it --rm centos:8 bash
-docker run -it --rm centos:7 bash
-docker run -it --rm centos:6 bash
-docker run -it --rm rockylinux/rockylinux:8 bash
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" alpine sh
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:10 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:9 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:8 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:18.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:16.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:14.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:8 bash -c "yum install -y curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:7 bash -c "yum install -y curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" centos:6 bash -c "yum install -y curl sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" rockylinux/rockylinux:8 bash -c "yum install -y curl sudo; bash -l"
 
 # plantuml Plant UML
 docker run -d --rm -p 8931:8080 plantuml/plantuml-server:jetty
