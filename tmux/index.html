@@ -32,17 +32,17 @@ if [ "${EnvIsDarwin-}" = true ]; then
     "brew install tmux" \
     "command -v brew 1>/dev/null || bash -c \"\$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"" \
     "${post_hook_command:?}"
+elif [ "${EnvIsDebian-}" = true ] || [ "${EnvIsUbuntu-}" = true ]; then
+  utilInstall \
+    "! ls /usr/local/bin/tmux" \
+    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
+    "apt-get update -qy && DEBIAN_FRONTEND=noninteractive apt-get install -qy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
+    "${post_hook_command:?}"
 elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
   utilInstall \
     "! ls /usr/local/bin/tmux" \
     "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
     "yum install -y automake bison gcc gzip less libevent-devel ncurses-devel make tar wget" \
-    "${post_hook_command:?}"
-elif [ "${EnvIsUbuntu-}" = true ]; then
-  utilInstall \
-    "! ls /usr/local/bin/tmux" \
-    "mkdir -p /usr/local/src && cd /usr/local/src && wget -cSv ${URL:?} -O ${FILE:?} && tar xzf ${FILE:?} && cd $(basename -s .tar.gz "${FILE:?}") && sh autogen.sh && ./configure && make && make install && cd .. && tmux -V" \
-    "apt-get update -qy && DEBIAN_FRONTEND=noninteractive apt-get install -qy automake bison gcc gzip less libevent-dev libncurses-dev make pkg-config tar wget" \
     "${post_hook_command:?}"
 else
   RecCritical "OS not supported"
