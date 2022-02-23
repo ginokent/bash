@@ -5,61 +5,47 @@ cat >/dev/null << '#newtstat.github.io/bash'
 #newtstat.github.io/bash
 ##
 
-# Run the following command to execute this script:
-#   $ curl https://newtstat.github.io/bash/direnv/ | bash
-
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-echo "  DIRENV_VERSION=latest" | sh -c "${pipe_info:?}"
-echo "  SHELLRC=${SHELLRC:--USE_DEFAULT}" | sh -c "${pipe_info:?}"
-prog_name=direnv
-bin_dir=/usr/local/bin
-shellrc=${SHELLRC:-$HOME/.bashrc}
+post_hook_command="
+shell=\$(basename \"\${SHELL:?}\")
+shellprofile=\${SHELLPROFILE:=\$HOME/.\${shell:?}_profile}
+shellrc=\${SHELLRC:=\$HOME/.\${shell:?}rc}
+touch \"\${shellprofile:?}\" \"\${shellrc:?}\"
+if ! grep -q \"eval ...?direnv hook .\" \"\${shellprofile:?}\" \"\${shellrc:?}\" 2>/dev/null; then
+tee -a \"\${shellrc:?}\" >/dev/null <<'EOF'
 
-echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
+# direnv hook
+eval \"\$(direnv hook \$(basename \"\${SHELL:?}\"))\"
+EOF
+fi"
 
-if ! command -v "${prog_name:?}" 1>/dev/null; then
-  # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" = true ]; then
-    command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    commands_for_install="brew install ${prog_name:?}"
-  elif [ "${EnvIsLinux}" = true ] && [ "${EnvIsAMD64}" = true ]; then
-    url="https://github.com/direnv/direnv/releases/latest/download/direnv.$(uname -s | tr '[:upper:]' '[:lower:]')-amd64"
-    commands_for_install="
-      ${httpGet:?} \"${url:?}\" >${bin_dir:?}/${prog_name:?} && chmod +x ${bin_dir:?}/${prog_name:?}
-    "
-  else
-    echo "OS not supported" | sh -c "${pipe_error:?}"
-    exit 1
-  fi
-
-  # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
-    sudo -E bash -cx "${commands_for_install:?}"
-  else
-    bash -cx "${commands_for_install:?}"
-  fi
-
-  if ! command -v "${prog_name:?}" 1>/dev/null; then
-    echo "${prog_name:?} not installed" | sh -c "${pipe_error:?}"
-    exit 1
-  fi
+# shellcheck disable=SC2154
+if [ "${EnvIsDarwin-}" = true ]; then
+  command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  utilInstall \
+    "! command -v direnv" \
+    "brew install direnv" \
+    "command -v brew 1>/dev/null || bash -c \"\$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"" \
+    "${post_hook_command:?}"
+elif [ "${EnvIsDebian-}" = true ] || [ "${EnvIsUbuntu-}" = true ]; then
+  URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
+  utilInstall \
+    "! command -v direnv" \
+    "sudo ${httpGet:?} \"${URL:?}\" -o /usr/local/bin/direnv && sudo chmod +x /usr/local/bin/direnv" \
+    "" \
+    "${post_hook_command:?}"
+elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
+  URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
+  utilInstall \
+    "! command -v direnv" \
+    "sudo ${httpGet:?} \"${URL:?}\" -o /usr/local/bin/direnv && sudo chmod +x /usr/local/bin/direnv" \
+    "" \
+    "${post_hook_command:?}"
+else
+  RecCritical "OS not supported"
+  exit 1
 fi
-
-echo "${prog_name:?} installed" | sh -c "${pipe_notice:?}"
-
-AddDirenvHook () {
-  file="${1:?}"
-  if ! grep -q "^eval....direnv.hook.bash.." "${file:?}"; then
-    echo "Add direnv hook to ${file:?}" | sh -c "${pipe_info:?}"
-    if [ -w "${file:?}" ]; then
-      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| tee -a "${file:?}" 1>/dev/null
-    else
-      printf "\n%s\n%s\n" "# direnv hook" "eval \"\$(direnv hook $(basename "${SHELL:?}"))\""| sudo tee -a "${file:?}" 1>/dev/null
-    fi
-  fi
-}
-AddDirenvHook "${shellrc:?}"
 
 
 

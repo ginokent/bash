@@ -5,9 +5,6 @@ cat >/dev/null << '#newtstat.github.io/bash'
 #newtstat.github.io/bash
 ##
 
-# Run the following command to execute this script:
-#   $ curl https://newtstat.github.io/bash/direnv/ | bash
-
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 [[ ${TMUX_VERSION:-} ]] || export TMUX_VERSION=3.2
