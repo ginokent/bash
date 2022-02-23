@@ -5,54 +5,42 @@ cat >/dev/null << '#newtstat.github.io/bash'
 #newtstat.github.io/bash
 ##
 
-# Run the following command to execute this script:
-#   $ curl https://newtstat.github.io/bash/direnv/ | bash
-
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-echo "  GIT_VERSION=latest" | sh -c "${pipe_info:?}"
-prog_name=git
-bin_dir=/usr/local/bin
+# shellcheck disable=SC2016
+post_hook_command='
+touch ~/.bash_profile ~/.bashrc
+if ! grep -Eq "git-completion.bash" ~/.bash_profile ~/.bashrc; then
+tee -a ~/.bashrc >/dev/null <<"EOF"
 
-echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
-
-# shellcheck disable=SC2154
-if [ "${EnvIsDarwin}" = true ]; then
-  command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  commands_for_install="brew install ${prog_name:?}"
-elif [ "${EnvIsCentOS}" = true ] || [ "${EnvIsAmazonLinux2}" = true ]; then
-  # shellcheck disable=SC2016
-  commands_for_install='yum makecache && yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget && mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version'
-elif [ "${EnvIsUbuntu}" = true ]; then
-  # shellcheck disable=SC2016
-  commands_for_install='apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget && cd /usr/local/src && mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version'
-else
-  echo "OS not supported" | sh -c "${pipe_error:?}"
-  exit 1
-fi
-
-# shellcheck disable=SC2154
-if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null && { [ ! -w "${bin_dir:?}" ] || { [ -e "${bin_dir:?}/${prog_name:?}" ] && [ ! -w "${bin_dir:?}/${prog_name:?}" ]; }; }; then
-  sudo -E bash -cx "${commands_for_install:?}"
-else
-  bash -cx "${commands_for_install:?}"
-fi
-
-
-
-if ! grep -q git-completion.bash ~/.bashrc; then
-  echo "add git-completion.bash settings to ~/.bashrc" | sh -c "${pipe_info:?}"
-  cat >>~/.bashrc << "BASHRC"
 # git
 test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash"; test -f ~/.git-completion.bash && source "$_"
 test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
-#export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
-BASHRC
+export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1
+#if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\e[1;31m\\\]\$(__git_ps1)\\\[\\\e[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\e[1;31m\]\$(__git_ps1)\[\e[00m\]}"; fi
+EOF
 fi
+'
 
-
-
-echo "${prog_name:?} installed" | sh -c "${pipe_notice:?}"
+# shellcheck disable=SC2154
+if [[ "${EnvIsDebian-}" = true ]] || [[ "${EnvIsUbuntu-}" = true ]]; then
+  # shellcheck disable=SC2016
+  utilInstall \
+    "! ls /usr/local/bin/git" \
+    'mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version' \
+    "sudo yum makecache && sudo yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc make less tar perl-ExtUtils-MakeMaker wget" \
+    "${post_hook_command:?}"
+elif [[ "${EnvIsCentOS-}" = true ]] || [[ "${EnvIsRockyLinux-}" = true ]] || [[ "${EnvIsAmazonLinux-}" = true ]]; then
+  # shellcheck disable=SC2016
+  utilInstall \
+    "! ls /usr/local/bin/git" \
+    'mkdir -p /usr/local/src && cd /usr/local/src && URL=https://www.kernel.org/pub/software/scm/git/ && FILE=$(wget -qO- $URL | grep -o -E git-[0-9\\.]+.tar.gz | sort -uV | tail -n 1) && wget -cSv $URL$FILE && tar vxzf $FILE && DIR=$(basename -s .tar.gz $FILE) && cd $DIR && make prefix=/usr/local all && make prefix=/usr/local install && cd .. && rm -rf $FILE $DIR && /usr/local/bin/git --version' \
+    "apt-get update && apt-get install -y libcurl4-gnutls-dev libexpat1-dev libssl-dev libz-dev gcc gettext make less tar wget" \
+    "${post_hook_command:?}"
+else
+  RecCritical "OS not supported"
+  exit 1
+fi
 
 
 

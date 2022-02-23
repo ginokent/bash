@@ -19,6 +19,7 @@ EOF
 fi
 '
 
+URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
 # shellcheck disable=SC2154
 if [ "${EnvIsDarwin-}" = true ]; then
   command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -28,14 +29,12 @@ if [ "${EnvIsDarwin-}" = true ]; then
     "command -v brew 1>/dev/null || bash -c \"\$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"" \
     "${post_hook_command:?}"
 elif [ "${EnvIsDebian-}" = true ] || [ "${EnvIsUbuntu-}" = true ]; then
-  URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
   utilInstall \
     "! command -v direnv" \
     "sudo ${httpGet:?} \"${URL:?}\" -o /usr/local/bin/direnv && sudo chmod +x /usr/local/bin/direnv" \
     "" \
     "${post_hook_command:?}"
 elif [ "${EnvIsCentOS-}" = true ] || [ "${EnvIsRockyLinux-}" = true ] || [ "${EnvIsAmazonLinux-}" = true ]; then
-  URL="https://github.com/direnv/direnv/releases/latest/download/direnv.linux-amd64"
   utilInstall \
     "! command -v direnv" \
     "sudo ${httpGet:?} \"${URL:?}\" -o /usr/local/bin/direnv && sudo chmod +x /usr/local/bin/direnv" \
