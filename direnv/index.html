@@ -16,7 +16,7 @@ if ! grep -q \"eval ...?direnv hook .\" \"\${shellprofile:?}\" \"\${shellrc:?}\"
 tee -a \"\${shellrc:?}\" >/dev/null <<'EOF'
 
 # direnv hook
-eval \"\$(direnv hook \$(basename \"\${SHELL:?}\"))\"
+eval \"\$(direnv hook \"\$(basename \"\${SHELL:?}\")\")\"
 EOF
 fi"
 
