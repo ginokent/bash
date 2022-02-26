@@ -657,10 +657,12 @@ gpg --expert --full-generate-key
 read -p Name-Real: -r NAMEREAL && read -p Name-Email: -r NAMEEMAIL && read -p Passphrase: -s -r PASSPHRASE && echo && printf "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" Key-Type:RSA Key-Length:4096 Key-Usage:cert Subkey-Type:RSA Subkey-Length:4096 Subkey-Usage:encrypt,sign,auth Name-Real:"${NAMEREAL:?}" Name-Email:"${NAMEEMAIL:?}" Expire-Date:0 Passphrase:"${PASSPHRASE:?}" | gpg --expert --full-generate-key --batch -
 read -p Passphrase: -s -r PASSPHRASE && gpg --symmetric --batch TARGET_FILE --passphrase "${PASSPHRASE:?}"
 read -p Passphrase: -s -r PASSPHRASE && gpg --decrypt --batch ENCRYPTED_FILE --passphrase "${PASSPHRASE:?}"
-gpg --list-keys
-gpg --list-secret-keys
+gpg --with-keygrip --list-keys
+gpg --with-keygrip --list-secret-keys
 gpg --armor --export --output "${KEYID:?}.gpg" "${KEYID:?}"
 gpg --armor --export-secret-keys --output "${KEYID:?}.secret.gpg" "${KEYID:?}"
+gpg --with-keygrip --list-secret-key
+ls ~/.gnupg/private-keys-v1.d/
 
 # aws-valut add 資格情報の登録
 aws-vault add "${AWS_PROFILE:?}"
