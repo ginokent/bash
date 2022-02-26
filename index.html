@@ -659,10 +659,9 @@ read -p Passphrase: -s -r PASSPHRASE && echo && gpg --symmetric --batch TARGET_F
 read -p Passphrase: -s -r PASSPHRASE && echo && gpg --decrypt --batch ENCRYPTED_FILE --passphrase "${PASSPHRASE:?}"
 gpg --with-keygrip --list-keys
 gpg --with-keygrip --list-secret-keys
-gpg --armor --export --output "${KEYID:?}.gpg" "${KEYID:?}"
-gpg --armor --export-secret-keys --output "${KEYID:?}.secret.gpg" "${KEYID:?}"
-gpg --with-keygrip --list-secret-key
 ls -ld ~/.gnupg/private-keys-v1.d/*
+gpg --armor --export --output "${KEY_ID:?}.gpg" "${KEY_ID:?}"
+gpg --armor --export-secret-keys --output "${SECRET_KEY_ID:?}.secret.gpg" "${SECRET_KEY_ID:?}"
 
 # aws-valut add 資格情報の登録
 aws-vault add "${AWS_PROFILE:?}"
