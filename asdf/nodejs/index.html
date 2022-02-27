@@ -7,67 +7,85 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-LANG_NAME=NODEJS
-lang_name=nodejs
+eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/asdf/")"
 
-LANG_VERSION_KEY="${LANG_NAME}_VERSION"
-Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+utilASDFInstall nodejs lts "" ""
 
-Infoln "Start to install ${lang_name:?}"
+#utilASDFInstall nodejs lts "
+#if command -v gpg 1>/dev/null; then
+#  if [[ \${EnvIsDarwin:-false} = true ]]; then
+#    command -v brew 1>/dev/null || bash -c \"\$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"
+#    brew install gnupg
+#  elif [[ \${EnvIsAMD64:-false} = true ]] && { [[ \${EnvIsDebian:-false} = true ]] || [[ \${EnvIsUbuntu:-false} = true ]]; }; then
+#    sudo apt-get update -qqy && sudo apt-get install -qqy gnupg
+#  else
+#    RecCritical \"OS not supported\"
+#    exit 1
+#  fi
+#fi
+#" ""
 
-command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
-
-Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
-
-if ! command -v gpg 1>/dev/null; then
-  Infoln "Install gpg for resolving dependencies"
-  if [ "${EnvIsDarwin:-false}" = true ]; then
-    command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    commands_for_install="brew install gnupg"
-  elif [ "${EnvIsUbuntu:-false}" = true ] && [ "${EnvIsAMD64:-false}" = true ]; then
-    commands_for_install="apt-get install -y gnupg"
-  else
-    echo "OS not supported" | sh -c "${pipe_error:?}"
-    exit 1
-  fi
-
-  # shellcheck disable=SC2154
-  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
-    sudo -E bash -cx "${commands_for_install:?}"
-  else
-    bash -cx "${commands_for_install:?}"
-  fi
-fi
-# If GnuPG keys are not imported, import from bash script
-imported="$(
-  grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring |
-    while read -r LINE; do
-      if gpg --list-keys | grep -q "${LINE}"; then
-        echo true
-      else
-        echo false
-      fi
-    done |
-    sort -u
-)"
-if [[ "${imported:?}" != "true" ]]; then
-  Run bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-fi
-
-lang_version="${!LANG_VERSION_KEY:="$(
-  asdf list-all "${lang_name}" |
-    grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+$' |
-    sort -V |
-    tail -n 1
-)"}"
-
-Run asdf install "${lang_name}" "${lang_version}"
-
-Run asdf global "${lang_name}" "${lang_version}"
-
-Run asdf reshim "${lang_name}"
-
-Run asdf current "${lang_name}"
+#LANG_NAME=NODEJS
+#lang_name=nodejs
+#
+#LANG_VERSION_KEY="${LANG_NAME}_VERSION"
+#Infoln "  ${LANG_VERSION_KEY}=${!LANG_VERSION_KEY:-DEFAULT_VERSION}"
+#
+#Infoln "Start to install ${lang_name:?}"
+#
+#command -v asdf 1>/dev/null || eval "$(bash -c "${httpGet} https://newtstat.github.io/bash/asdf/")" || exit 1
+#
+#Run asdf list "${lang_name}" || Run asdf plugin-add "${lang_name}"
+#
+#if ! command -v gpg 1>/dev/null; then
+#  Infoln "Install gpg for resolving dependencies"
+#  if [ "${EnvIsDarwin:-false}" = true ]; then
+#    command -v brew 1>/dev/null || bash -c "$(${httpGet} https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#    commands_for_install="brew install gnupg"
+#  elif [ "${EnvIsUbuntu:-false}" = true ] && [ "${EnvIsAMD64:-false}" = true ]; then
+#    commands_for_install="apt-get install -y gnupg"
+#  else
+#    echo "OS not supported" | sh -c "${pipe_error:?}"
+#    exit 1
+#  fi
+#
+#  # shellcheck disable=SC2154
+#  if [ "${EnvIsDarwin}" != true ] && command -v sudo 1>/dev/null; then
+#    sudo -E bash -cx "${commands_for_install:?}"
+#  else
+#    bash -cx "${commands_for_install:?}"
+#  fi
+#fi
+## If GnuPG keys are not imported, import from bash script
+#imported="$(
+#  grep -Eo '[0-9A-Z]{40}' ~/.asdf/plugins/nodejs/bin/import-release-team-keyring |
+#    while read -r LINE; do
+#      if gpg --list-keys | grep -q "${LINE}"; then
+#        echo true
+#      else
+#        echo false
+#      fi
+#    done |
+#    sort -u
+#)"
+#if [[ "${imported:?}" != "true" ]]; then
+#  Run bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+#fi
+#
+#lang_version="${!LANG_VERSION_KEY:="$(
+#  asdf list-all "${lang_name}" |
+#    grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+$' |
+#    sort -V |
+#    tail -n 1
+#)"}"
+#
+#Run asdf install "${lang_name}" "${lang_version}"
+#
+#Run asdf global "${lang_name}" "${lang_version}"
+#
+#Run asdf reshim "${lang_name}"
+#
+#Run asdf current "${lang_name}"
 
 
 
