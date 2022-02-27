@@ -10,7 +10,7 @@ cat >/dev/null << '#newtstat.github.io/bash'
 
 httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-command -v git 1>/dev/null || RecRun bash -c "${httpGet:?} https://newtstat.github.io/bash/git/ | bash"
+command -v git 1>/dev/null || RecExec bash -c "${httpGet:?} https://newtstat.github.io/bash/git/ | bash"
 
 if [ "${EnvASDFIsLoaded:-false}" != true ]; then
   export EnvASDFIsLoaded=true
@@ -28,18 +28,18 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
 
   if test ! -d ~/.asdf; then
     RecInfo "Install asdf"
-    RecRun git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
+    RecExec git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "${asdf_version:?}"
   fi
 
   # shellcheck disable=SC2016,SC2088
   if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
     RecInfo "Install asdf setting to ~/.bashrc"
-    RecRun touch ~/.bashrc
+    RecExec touch ~/.bashrc
     {
       echo '# asdf'
       echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
       echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
-    } | RecRun tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+    } | RecExec tee -a ~/.bashrc | sh -c "${pipe_info:?}"
   fi
 
   set +u
@@ -49,9 +49,9 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
   test ! -f ~/.asdf/completions/asdf.bash || source ~/.asdf/completions/asdf.bash
   set -u
 
-  RecRun asdf update
-  RecRun asdf plugin-update --all || true
-  RecRun asdf current || true
+  RecExec asdf update
+  RecExec asdf plugin-update --all || true
+  RecExec asdf current || true
 
   RecNotice "End installing asdf"
 
@@ -65,21 +65,21 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
 
     if test "${pre_hook_command-}"; then
       RecInfo "Run pre hook"
-      RecRun bash -c "${pre_hook_command:?}"
+      RecExec bash -c "${pre_hook_command:?}"
     fi
 
     if ! asdf list "${lang_name:?}" >/dev/null 2>&1; then
-      RecRun asdf plugin-add "${lang_name:?}"
+      RecExec asdf plugin-add "${lang_name:?}"
     fi
 
-    RecRun asdf install "${lang_name:?}" "${lang_version:?}"
-    RecRun asdf global "${lang_name:?}" "${lang_version:?}"
-    RecRun asdf reshim "${lang_name:?}"
-    RecRun asdf current "${lang_name:?}"
+    RecExec asdf install "${lang_name:?}" "${lang_version:?}"
+    RecExec asdf global "${lang_name:?}" "${lang_version:?}"
+    RecExec asdf reshim "${lang_name:?}"
+    RecExec asdf current "${lang_name:?}"
 
     if test "${post_hook_command-}"; then
       RecInfo "Run post hook"
-      RecRun bash -c "${post_hook_command:?}"
+      RecExec bash -c "${post_hook_command:?}"
     fi
 
     RecNotice "End installing ${lang_name:?}"
