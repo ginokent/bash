@@ -30,19 +30,19 @@ if [ -z "${public_keys-}" ]; then
   exit 1
 fi
 
-if [ -f "$HOME/.ssh/authorized_keys" ]; then
+if [ -f ~/.ssh/authorized_keys ]; then
   RecNotice "Append public key to authorized_keys"
   echo "${public_keys}" | while read -r LINE; do
-    if ! grep -q "$LINE" "$HOME/.ssh/authorized_keys"; then
-      RecExec sh -c "echo \"$LINE\" >>\"$HOME/.ssh/authorized_keys\""
+    if ! grep -q "$LINE" ~/.ssh/authorized_keys; then
+      RecExec sh -c "echo \"$LINE\" >> ~/.ssh/authorized_keys"
     fi
   done
 else
   RecNotice "Generate authorized_keys by public key"
   tmp_random_chars="tmp$(LANG=C LC_ALL=C tr -dc 0-9A-Za-z </dev/urandom | head -c 13 || true)"
   # sudo apt-get install -y openssh-client
-  RecExec sh -c "echo | ssh-keygen -t rsa -N \"\" -f \"$HOME/.ssh/${tmp_random_chars}\" 1>/dev/null 2>&1 && rm -f \"$HOME/.ssh/${tmp_random_chars}\" && echo \"${public_keys}\" >\"$HOME/.ssh/${tmp_random_chars}.pub\" && mv -f \"$HOME/.ssh/${tmp_random_chars}.pub\" \"$HOME/.ssh/authorized_keys\""
+  RecExec sh -c "echo | ssh-keygen -t rsa -N \"\" -f ~/.ssh/${tmp_random_chars} 1>/dev/null 2>&1 && rm -f ~/.ssh/${tmp_random_chars} && echo \"${public_keys}\" > ~/.ssh/${tmp_random_chars}.pub && mv -f ~/.ssh/${tmp_random_chars}.pub ~/.ssh/authorized_keys"
 fi
 
 RecNotice "Content of authorized_keys:"
-RecNotice "$(cat "$HOME/.ssh/authorized_keys")"
+RecNotice "$(cat ~/.ssh/authorized_keys)"
