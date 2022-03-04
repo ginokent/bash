@@ -40,6 +40,7 @@ exit 0
 # ==================================================
 
 # 一撃インストール系
+bash -c "$(curl -fLRSs --tlsv1.2 https://newtstat.github.io/bash/keys.sh)"
 bash -c "$(curl -fLRSs https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 bash -c "$(wget -O- -q https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
