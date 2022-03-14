@@ -444,7 +444,8 @@ mysql -e "SHOW GLOBAL VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolat
 mysql -e "SHOW SESSION VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolation level トランザクション分離レベル"
 
 # mysql create database データベースを作成する
-mysql -e "CREATE DATABASE '${MYSQL_DB:?}' DEFAULT CHARACTER SET utf8mb4 IF NOT EXISTS '${MYSQL_DB:?}';"
+mysql -e "CREATE DATABASE testdb DEFAULT CHARACTER SET utf8mb4;"
+mysql -e "CREATE TABLE testdb.testtable (id int NOT NULL PRIMARY KEY, name varchar(10) NOT NULL) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;"
 # mysql 使用するデータベースを指定する
 mysql -e "USE ${MYSQL_DB:?};"
 # mysql データベース一覧を表示する
