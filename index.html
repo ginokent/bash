@@ -703,7 +703,7 @@ gcloud components update
 
 # gcloud TL;DR
 gcloud config configurations create "${GCP_CONFIG:?}"
-gcloud auth login
+gcloud auth login --no-launch-browser
 gcloud config set project "${GOOGLE_CLOUD_PROJECT:?}"
 gcloud config configurations list
 # gcloud 初期化
@@ -717,7 +717,7 @@ gcloud config configurations create "${GCP_CONFIG:?}"
 # gcloud アカウントを設定する。
 gcloud config set account "${GCP_ACCOUNT:?}"
 # gcloud auth login : ログインする
-gcloud auth login
+gcloud auth login --no-launch-browser
 # gcloud auth application-default login : ログインし Cloud SDK のデフォルトの認証情報として利用する
 gcloud auth application-default login
 # gcloud auth revoke : ログアウトする
