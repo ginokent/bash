@@ -252,7 +252,7 @@ git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*
 # ==================================================
 # gh github GitHub
 # ==================================================
-gh issue list --repo newtstat/todo --json title --jq 'sort_by(.title)|.[].title'
+gh issue list --repo newtstat/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
 
 
 
