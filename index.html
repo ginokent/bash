@@ -382,6 +382,7 @@ brew install bash bash-completion coreutils make
 
 # sslscan https://github.com/rbsec/sslscan
 brew install sslscan
+sslscan --no-fallback --no-renegotiation --no-compression --no-heartbleed --no-ciphersuites --no-groups example.com
 
 # mac Mac で DNS キャッシュクリア
 sudo killall -HUP mDNSResponder
