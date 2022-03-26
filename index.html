@@ -109,6 +109,10 @@ cdiff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');
 # whilediff
 whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep "${WHILEDIFF_DURATION:=1}"; done)}
 
+# myip checkip
+curl -fLRSs https://domains.google.com/checkip
+curl -fLRSs https://checkip.amazonaws.com
+
 # openssl
 openssl genrsa -out private.pem 2048  # 秘密鍵の生成
 openssl rsa -text -in private.pem -noout  # 秘密鍵の確認
