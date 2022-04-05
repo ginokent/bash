@@ -9,7 +9,7 @@ httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { comman
 
 eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/asdf/")"
 
-utilASDFInstall golang "$(asdf latest golang)" "" "if ! grep -q 'export GOPATH=' ~/.bashrc; then
+utilASDFInstall golang latest "" "if ! grep -q 'export GOPATH=' ~/.bashrc; then
   echo '# GOPATH
 if command -v go 1>/dev/null; then
   export GOPATH=\"\$HOME/go\"
