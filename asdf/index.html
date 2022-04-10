@@ -32,7 +32,7 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
   fi
 
   # shellcheck disable=SC2016,SC2088
-  if { ! echo "$PATH" | grep -Eq "/\.asdf/shims"; } && { ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; }; then
+  if [[ ! $PATH =~ /\.asdf/shims ]] && { ! grep -Eq '/\.asdf/asdf.sh' ~/.bashrc >/dev/null 2>&1; }; then
     RecInfo "Install asdf setting to ~/.bashrc"
     RecExec touch ~/.bashrc
     {
