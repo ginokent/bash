@@ -32,14 +32,14 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
   fi
 
   # shellcheck disable=SC2016,SC2088
-  if ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; then
+  if { ! echo "$PATH" | grep -Eq "/\.asdf/shims"; } && { ! grep -q '~/.asdf/' ~/.bashrc >/dev/null 2>&1; }; then
     RecInfo "Install asdf setting to ~/.bashrc"
     RecExec touch ~/.bashrc
     {
       echo '# asdf'
       echo 'test ! -f ~/.asdf/asdf.sh || source "$_"'
       echo 'test ! -f ~/.asdf/completions/asdf.bash || source "$_"'
-    } | RecExec tee -a ~/.bashrc | sh -c "${pipe_info:?}"
+    } | RecExec tee -a ~/.bashrc
   fi
 
   set +u
