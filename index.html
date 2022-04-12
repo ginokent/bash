@@ -798,7 +798,8 @@ gcloud services enable run.googleapis.com
 # ==================================================
 # terraform Terraform
 # ==================================================
-terraform walk-dir "$(terraform find-tf .)" -- direnv exec . terraform fmt
+find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -P 10 -I {} bash -c "cd {} && terraform fmt ."
+terraform fmt -recursive .
 
 
 
