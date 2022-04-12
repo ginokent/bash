@@ -344,6 +344,9 @@ man ps
 # ps.sh : ps コマンドの代わり。
 ps_sh() { _piddirs=$(find /proc -maxdepth 1 -type d -name "[0-9]*"); printf "UID\tPID\tPPID\tCMD\n"; echo "$_piddirs" | sed s@/proc/@@ | while read -r PID; do if [ -d "/proc/$PID" ]; then printf "%s\t%d\t%d\t%s\n" "$(stat -c "%U" "/proc/$PID")" "$PID" "$(cut -d" " -f4 "/proc/$PID/stat")" "$(cat -e "/proc/$PID/cmdline" | sed "s/\^@$//; s/\^@/ /g")"; fi; done; } && ps_sh
 
+# healthcheck
+healthcheck() { curl -o /dev/null -w "| url=${1:?} code=%{http_code} exit=" -fLRs "${1:?}" && echo $? || echo $?; }; export -f healthcheck; while sleep 1; do echo "$(date +%FT%T) $(healthcheck https://google.com) $(healthcheck https://github.com)"; done
+
 # alias : Linux 用よく使う alias 詰め合わせ。
 alias rm='rm -i'; alias cp='cp -i'; alias mv='mv -i'; alias ls='ls --color=auto'; alias ll='ls -alF';
 
