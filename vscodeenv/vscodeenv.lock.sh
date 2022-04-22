@@ -20,13 +20,13 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.terraform@2.21.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ionutvmi.path-autocomplete@1.19.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension jebbs.plantuml@2.17.2 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.12.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.13.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension monokai.theme-monokai-pro-vscode@1.1.20 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-azuretools.vscode-docker@1.21.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-azuretools.vscode-docker@1.22.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-dotnettools.csharp@1.24.4 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-kubernetes-tools.vscode-kubernetes-tools@1.3.7 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.python@2022.4.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.vscode-pylance@2022.4.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.vscode-pylance@2022.4.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-toolsai.jupyter-keymap@1.0.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-toolsai.jupyter-renderers@1.0.6 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-toolsai.jupyter@2022.3.1000901801 --force
@@ -39,5 +39,5 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension tht13.html-preview-vscode@0.2.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.19.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yzhang.markdown-all-in-one@3.4.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yzhang.markdown-all-in-one@3.4.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension zxh404.vscode-proto3@0.5.5 --force
