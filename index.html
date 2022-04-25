@@ -804,8 +804,8 @@ gcloud services enable run.googleapis.com
 # ==================================================
 # terraform Terraform
 # ==================================================
-find . -name "*.go" -exec grep -El "^import [\(\"]" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -P 10 -I {} bash -c "cd {} && go get -u"
-find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -P 10 -I {} bash -c "cd {} && terraform fmt ."
+find . -name "*.go" -exec grep -El "^import [\(\"]" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && go get -u" || true && go mod tidy
+find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform fmt ."
 terraform fmt -recursive .
 
 
