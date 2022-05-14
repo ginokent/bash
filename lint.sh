@@ -4,7 +4,7 @@ if [ ! "${BASH_VERSINFO:-0}" -ge 3 ]; then printf '\033[1;31m%s\033[0m\n' "bash 
 # このリポジトリ向け lint
 
 # func
-# MIT License Copyright (c) 2021 newtstat https://github.com/newtstat/rec.sh
+# MIT License Copyright (c) 2021 ginokent https://github.com/ginokent/rec.sh
 _recRFC3339() { date "+%FT%T%z" | sed "s/\(..\)$/:\1/"; }
 _recEscape() { printf %s "${1:-}" | sed "s/\"/\\\"/g; s/\r/\\\r/g; s/\t/\\\t/g; s/$/\\\n/g" | tr -d "[:cntrl:]" | sed "s/\\\n$/\n/"; }
 _recJSON() { _svr="${1:?}" _msg="$(_recEscape "${2:-}")" && shift 2 && unset _fld _val && for a in "$@"; do if [ "${_val:-}" ]; then _fld="${_fld:?}:\"$(_recEscape "${a:-}")\"" && unset _val && continue; fi && _fld="${_fld:-}${_fld:+,}\"${a:?}\"" _val=1; done && [ $(($# % 2)) = 0 ] || _fld="${_fld:?}:\"\"" && printf "{%s}\n" "\"${REC_TIMESTAMP_KEY:=timestamp}\":\"$(_recRFC3339)\",\"${REC_SEVERITY_KEY:=severity}\":\"${_svr:?}\",\"${REC_CALLER_KEY:=caller}\":\"$0\",\"${REC_MESSAGE_KEY:=message}\":\"${_msg:?}\"${_fld:+,}${_fld:-}"; }
@@ -28,4 +28,4 @@ RecRun bash -c 'git grep -l "<<[^[:space:]]" | grep -v "lint\.sh" | xargs -I{} p
 # httpGet
 RecInfo "httpGet を更新します。"
 # shellcheck disable=SC2016
-RecRun bash -c 'git grep -l -E " ##httpGetDoNotRemoveThisComment##" | grep -Ev "^releases/|lint.sh" | xargs -I {} perl -0pe "s@\n.*##httpGetDoNotRemoveThisComment##@\nhttpGet=\"\\\$( { command -v curl 1>/dev/null \\&\\& printf \"curl -fLRSs\"; } || { command -v wget 1>/dev/null \\&\\& printf \"wget -O- -q\"; } )\" \\&\\& export httpGet; [ \"\\\${httpGet:?\"curl or wget are required\"}\" ] || exit 1; [ \"\\\${EnvIsLoaded:-false}\" = true ] || eval \"\\\$(sh -c \"\\\${httpGet} https://newtstat.github.io/bash/common/\")\" || exit 1  ##httpGetDoNotRemoveThisComment##@g" -i {} || true'
+RecRun bash -c 'git grep -l -E " ##httpGetDoNotRemoveThisComment##" | grep -Ev "^releases/|lint.sh" | xargs -I {} perl -0pe "s@\n.*##httpGetDoNotRemoveThisComment##@\nhttpGet=\"\\\$( { command -v curl 1>/dev/null \\&\\& printf \"curl -fLRSs\"; } || { command -v wget 1>/dev/null \\&\\& printf \"wget -O- -q\"; } )\" \\&\\& export httpGet; [ \"\\\${httpGet:?\"curl or wget are required\"}\" ] || exit 1; [ \"\\\${EnvIsLoaded:-false}\" = true ] || eval \"\\\$(sh -c \"\\\${httpGet} https://ginokent.github.io/bash/common/\")\" || exit 1  ##httpGetDoNotRemoveThisComment##@g" -i {} || true'

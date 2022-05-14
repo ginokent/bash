@@ -4,7 +4,7 @@ set -E -e -o pipefail
 cd "$(dirname "$0")" || exit 1
 
 VERSION=$(basename "$(cd "$(dirname "$0")"; pwd)")
-URL_BASE=newtstat.github.io/bash
+URL_BASE=ginokent.github.io/bash
 GIT_REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
 
 copy_and_overwrite () {

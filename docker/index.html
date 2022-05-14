@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 set -Eeu -o pipefail
-cat >/dev/null << '#newtstat.github.io/bash'
+cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#newtstat.github.io/bash
+#ginokent.github.io/bash
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://newtstat.github.io/bash/docker/ | bash
+#   $ curl https://ginokent.github.io/bash/docker/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://ginokent.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
 ##
-# https://hub.docker.com/r/newtstat/ubuntu
-# $ docker pull newtstat/ubuntu:18.04
+# https://hub.docker.com/r/ginokent/ubuntu
+# $ docker pull ginokent/ubuntu:18.04
 ##
-docker_newtstat_ubuntu_1804 () { (
+docker_ginokent_ubuntu_1804 () { (
   set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
@@ -27,13 +27,13 @@ docker_newtstat_ubuntu_1804 () { (
   mkdir -p "${TMPDIR:?}"
   cd "${TMPDIR:?}"
   
-  DOCKER_REPOSITORY=newtstat/ubuntu
+  DOCKER_REPOSITORY=ginokent/ubuntu
   DOCKER_TAG=${DOCKER_REPOSITORY}:18.04
   
   cat << "EOF" >Dockerfile
 FROM ubuntu:18.04
 
-LABEL maintainer="newtstat <29125616+newtstat@users.noreply.github.com>"
+LABEL maintainer="ginokent <29125616+ginokent@users.noreply.github.com>"
 
 ##
 # locale
@@ -79,7 +79,7 @@ EOF
   docker build --tag ${DOCKER_TAG} .
   
   echo 'docker run をテスト実行します。' | sh -c "${pipe_info:?}"
-  docker run --rm --name test_newtstat_ubuntu_1804 ${DOCKER_TAG} date
+  docker run --rm --name test_ginokent_ubuntu_1804 ${DOCKER_TAG} date
   
   echo "docker push ${DOCKER_TAG} を実行します。 (事前に \"docker login\" を実行する必要があります)" | sh -c "${pipe_info:?}"
   docker push ${DOCKER_TAG}
@@ -89,20 +89,20 @@ EOF
   docker push ${DOCKER_REPOSITORY}:latest
   
   echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
-)} && docker_newtstat_ubuntu_1804
+)} && docker_ginokent_ubuntu_1804
 
 ##
-# https://hub.docker.com/r/newtstat/sandbox
-# $ docker pull newtstat/sandbox:latest
+# https://hub.docker.com/r/ginokent/sandbox
+# $ docker pull ginokent/sandbox:latest
 ##
-docker tag newtstat/ubuntu:latest newtstat/sandbox:latest
-docker push newtstat/sandbox:latest
+docker tag ginokent/ubuntu:latest ginokent/sandbox:latest
+docker push ginokent/sandbox:latest
 
 ##
-# https://hub.docker.com/r/newtstat/terraform
-# $ docker pull newtstat/terraform:latest
+# https://hub.docker.com/r/ginokent/terraform
+# $ docker pull ginokent/terraform:latest
 ##
-docker_newtstat_terraform() { (
+docker_ginokent_terraform() { (
   set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
@@ -116,13 +116,13 @@ docker_newtstat_terraform() { (
   cd "${TMPDIR:?}"
   
   VERSION=0.12.23
-  DOCKER_REPOSITORY=newtstat/terraform
+  DOCKER_REPOSITORY=ginokent/terraform
   DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
   
   cat << EOF >Dockerfile
-FROM newtstat/ubuntu:18.04
+FROM ginokent/ubuntu:18.04
 
-LABEL maintainer="newtstat <29125616+newtstat@users.noreply.github.com>"
+LABEL maintainer="ginokent <29125616+ginokent@users.noreply.github.com>"
 
 RUN set -x \
   && apt-get update \
@@ -150,13 +150,13 @@ EOF
   docker push "${DOCKER_REPOSITORY}:latest"
   
   echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
-)} && docker_newtstat_terraform
+)} && docker_ginokent_terraform
 
 ##
-# https://hub.docker.com/r/newtstat/awscli
-# $ docker pull newtstat/awscli:latest
+# https://hub.docker.com/r/ginokent/awscli
+# $ docker pull ginokent/awscli:latest
 ##
-docker_newtstat_awscli() { (
+docker_ginokent_awscli() { (
   set -E -e -o pipefail
   echo "${FUNCNAME[0]} を実行します。" | sh -c "${pipe_info:?}"
   if ! command -v docker 1>/dev/null; then
@@ -170,13 +170,13 @@ docker_newtstat_awscli() { (
   cd "${TMPDIR:?}"
   
   VERSION=1.17.12
-  DOCKER_REPOSITORY=newtstat/awscli
+  DOCKER_REPOSITORY=ginokent/awscli
   DOCKER_TAG="${DOCKER_REPOSITORY}:${VERSION}"
   
   cat << EOF >Dockerfile
 FROM python:3.8.2-buster
 
-LABEL maintainer="newtstat <29125616+newtstat@users.noreply.github.com>"
+LABEL maintainer="ginokent <29125616+ginokent@users.noreply.github.com>"
 
 RUN set -x \
   && apt-get update \
@@ -203,8 +203,8 @@ EOF
   docker push "${DOCKER_REPOSITORY}:latest"
   
   echo "正常に実行が完了しました。" | sh -c "${pipe_notice:?}"
-)} && docker_newtstat_awscli
+)} && docker_ginokent_awscli
 
 
 
-# (C) 2018 newtstat </code></pre></div>
+# (C) 2018 ginokent </code></pre></div>

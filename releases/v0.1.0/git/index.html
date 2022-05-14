@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e -E -o pipefail
-cat >/dev/null << '#newtstat.github.io/bash'
+cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#newtstat.github.io/bash
+#ginokent.github.io/bash
 ##
 
 # Run the following command to execute this script:
-#   $ curl https://newtstat.github.io/bash/releases/v0.1.0/direnv/ | bash
+#   $ curl https://ginokent.github.io/bash/releases/v0.1.0/direnv/ | bash
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://newtstat.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )"; export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${envIsLoaded:-false}" = true ] || eval "$(sh -c "exec ${httpGet} https://ginokent.github.io/bash/releases/v0.1.0/common/")" || exit 1 ##httpGet##
 
 echo "  GIT_VERSION=latest" | sh -c "${pipe_info:?}"
 prog_name=git
@@ -18,7 +18,7 @@ echo "$PATH" | grep -q "${bin_dir:?}" || export PATH="${bin_dir:?}:${PATH:?}"
 
 # shellcheck disable=SC2154
 if [ "${envIsDarwin}" = true ]; then
-  bash -c "$(sh -c "exec ${httpGet} https://newtstat.github.io/bash/releases/v0.1.0/brew/")"
+  bash -c "$(sh -c "exec ${httpGet} https://ginokent.github.io/bash/releases/v0.1.0/brew/")"
   commands_for_install="brew install ${prog_name:?}"
 elif [ "${envIsCentOS}" = true ] || [ "${envIsAmazonLinux2}" = true ]; then
   # shellcheck disable=SC2016
@@ -56,4 +56,4 @@ echo "${prog_name:?} installed" | sh -c "${pipe_ok:?}"
 
 
 
-# (C) 2018 newtstat </code></pre></div>
+# (C) 2018 ginokent </code></pre></div>

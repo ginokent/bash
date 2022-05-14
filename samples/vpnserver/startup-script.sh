@@ -24,7 +24,7 @@ Run      () { Infoln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s="
 Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && trap Catch ERR
 
 # install vpnserver
-Run sudo curl -LRSs https://newtstat.github.io/bash/samples/systemd/vpnserver.service -o /etc/systemd/system/vpnserver.service
+Run sudo curl -LRSs https://ginokent.github.io/bash/samples/systemd/vpnserver.service -o /etc/systemd/system/vpnserver.service
 Run sudo systemctl daemon-reload
 Run sudo systemctl enable vpnserver
 Run sudo systemctl restart vpnserver

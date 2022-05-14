@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC2009,SC2034,SC2153
-cat >/dev/null << '#newtstat.github.io/bash'
+cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#newtstat.github.io/bash
+#ginokent.github.io/bash
 ##
 
 
@@ -15,19 +15,19 @@ cat << "DOCUMENT"
 
 個人用コマンドチートシート。
 
-  curl -LRsS https://newtstat.github.io/bash/
+  curl -LRsS https://ginokent.github.io/bash/
 
 や
 
   _readline_helpme() {
-    command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://newtstat.github.io/bash/peco/)"
-    READLINE_LINE=$(curl -LRsS https://newtstat.github.io/bash/ | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up)
+    command -v peco 1>/dev/null || bash -c "$(curl -LRsS https://ginokent.github.io/bash/peco/)"
+    READLINE_LINE=$(curl -LRsS https://ginokent.github.io/bash/ | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | peco --layout bottom-up)
     READLINE_POINT=${#READLINE_LINE}
   } && bind -x '"\C-n":_readline_helpme'
 
 的に参照されることを期待しています。
 
-(C) 2018 newtstat
+(C) 2018 ginokent
 DOCUMENT
 exit 0
 
@@ -40,20 +40,20 @@ exit 0
 # ==================================================
 
 # 一撃インストール系
-bash -c "$(curl -fLRSs --tlsv1.2 https://newtstat.github.io/bash/keys.sh)"
+bash -c "$(curl -fLRSs --tlsv1.2 https://ginokent.github.io/bash/keys.sh)"
 bash -c "$(curl -fLRSs https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 bash -c "$(wget -O- -q https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 bash -c "$(curl -LRsS https://sdk.cloud.google.com/ | bash /dev/stdin --disable-prompts)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/git/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/asdf/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/asdf/golang/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/asdf/kubectl/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/asdf/kubetail/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/direnv/)"
-bash -c "$(curl -LRsS https://newtstat.github.io/bash/peco/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/git/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/asdf/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/asdf/golang/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/asdf/kubectl/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/asdf/kubetail/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/direnv/)"
+bash -c "$(curl -LRsS https://ginokent.github.io/bash/peco/)"
 bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash && sudo usermod -aG docker $(whoami)"
-curl -LR https://github.com/newtstat/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff && chmod -v +x /usr/bin/cdiff
-curl -LR https://github.com/newtstat/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl && chmod -v +x /usr/bin/kubectl
+curl -LR https://github.com/ginokent/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff && chmod -v +x /usr/bin/cdiff
+curl -LR https://github.com/ginokent/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl && chmod -v +x /usr/bin/kubectl
 curl -LR https://raw.githubusercontent.com/johanhaleby/kubetail/1.6.12/kubetail -o /usr/bin/kubetail && chmod -v +x /usr/bin/kubetail
 
 # yes を聞かれるコマンドの実装
@@ -81,9 +81,9 @@ wget --mirror --page-requisites --html-extension --convert-links https://github.
 while :; do echo "$(date "+%Y-%m-%dT%H:%M:%S%z") $(ping -t 1 -c 2 one.one.one.one | tr -d '\n' | sed 's/---.*//')"; done
 
 # ssh-keygen : 秘密鍵を作成する。
-ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://newtstat.github.io/bash/keys" -N ""
-ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://newtstat.github.io/bash/keys" -N ""
-ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://newtstat.github.io/bash/keys" -N ""
+ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://ginokent.github.io/bash/keys" -N ""
+ssh-keygen -t ecdsa -b 521 -f ecdsa_521.pem -C "https://ginokent.github.io/bash/keys" -N ""
+ssh-keygen -t rsa -b 4096 -f rsa_4096.pem -C "https://ginokent.github.io/bash/keys" -N ""
 # ssh-keygen : 公開鍵のフィンガープリントを表示する。
 ssh-keygen -E md5 -l -f _path_to_public_key_
 
@@ -217,7 +217,7 @@ python -c "import dateutil.parser; import sys; sys.stdout.write(str(dateutil.par
 # ==================================================
 # go golang Go Golang
 # ==================================================
-export GOPRIVATE=github.com/newtstat
+export GOPRIVATE=github.com/ginokent
 
 
 
@@ -236,8 +236,8 @@ test -f ~/.git-completion.bash || bash -cx "curl -LR https://raw.githubuserconte
 test -f ~/.git-prompt.sh || bash -cx "curl -LR https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh"; test -f ~/.git-prompt.sh && source "$_"
 export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWSTASHSTATE=1; if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then export PS1="${PS1//"\\\$"/\\\$\\\[\\\033[1;31m\\\]\$(__git_ps1)\\\[\\\033[00m\\\]}"; else export PS1="${PS1//"\\\$"/\$\[\033[1;31m\]\$(__git_ps1)\[\033[00m\]}"; fi
 
-GIT_NAME=newtstat
-GIT_EMAIL=29125616+newtstat@users.noreply.github.com
+GIT_NAME=ginokent
+GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 git ls-files "*\.go"  # マッチするファイルを ls
 git commit --allow-empty -m "first commit"  # git commit 空コミット
 git config --local user.name "${GIT_NAME:?}"  # git Auther, Commiter の name を更新
@@ -256,7 +256,7 @@ git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*
 # ==================================================
 # gh github GitHub
 # ==================================================
-gh issue list --repo newtstat/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
+gh issue list --repo ginokent/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
 
 
 
@@ -313,7 +313,7 @@ tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 nm /usr/lib/libcrypto.*
 
 # apt まとめてインストールするためのコマンドを生成する。
-curl -LRsS https://newtstat.github.io/bash/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
+curl -LRsS https://ginokent.github.io/bash/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
 
 # du : ルートディレクトリより 1 階層掘って使用量を出力する。
 du -h -d 1 --exclude=/proc /
@@ -351,7 +351,7 @@ healthcheck() { curl -o /dev/null -w "| url=${1:?} code=%{http_code} exit=" -fLR
 alias rm='rm -i'; alias cp='cp -i'; alias mv='mv -i'; alias ls='ls --color=auto'; alias ll='ls -alF';
 
 # nmcli
-nmcli c mod ens0 ipv4.method manual ipv4.addresses 10.0.0.1/24 ipv4.gateway 10.0.0.254 ipv4.dns 10.0.0.254,8.8.8.8,1.1.1.1 ipv4.dns-search newtstat.localdomain
+nmcli c mod ens0 ipv4.method manual ipv4.addresses 10.0.0.1/24 ipv4.gateway 10.0.0.254 ipv4.dns 10.0.0.254,8.8.8.8,1.1.1.1 ipv4.dns-search ginokent.localdomain
 
 # CoreOS で tc コマンドを使う。
 # ref. tc コマンドでネットワーク遅延やパケットロスを疑似的に発生させるメモ - ようへいの日々精進XP https://inokara.hateblo.jp/entry/2016/02/14/191853
@@ -533,11 +533,11 @@ PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read
 gcloud auth configure-docker
 aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
 
-# docker : newtstat/ubuntu:18.04 の docker コンテナを起動する。
-docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$PWD:$PWD" --workdir "$PWD" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
+# docker : ginokent/ubuntu:18.04 の docker コンテナを起動する。
+docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$PWD:$PWD" --workdir "$PWD" ginokent/ubuntu:18.04 bash -l && docker exec -it work bash -l
 
 # docker : 今いる Git リポジトリをボリュームとしてマウントし docker コンテナを起動する。
-docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$PWD" newtstat/ubuntu:18.04 bash -l && docker exec -it work bash -l
+docker run -dit --rm --name work -v "$HOME/.ssh:/root/.ssh:ro" -v "$HOME/.vimrc:/root/.vimrc" -v "$HOME/.gitconfig:/root/.gitconfig" -v "$(git rev-parse --show-toplevel):$(git rev-parse --show-toplevel)" --workdir "$PWD" ginokent/ubuntu:18.04 bash -l && docker exec -it work bash -l
 
 # docker : docker --cap-add=SYS_ADMIN と /sys/fs/cgroup の例。極めて強い権限のため取り扱い注意。
 docker run -it --rm --cap-add=SYS_ADMIN -v /sys/fs/cgroup:/sys/fs/cgroup:ro debian:10.2 bash
@@ -603,7 +603,7 @@ docker run -it --rm --network common -p 4222:4222 -p 8222:8222 -p 6222:6222 nats
 # docker : コンテナから CLI を実行する（ローカル環境を汚さないため）。
 alias     mysql-docker='docker run -it --rm mysql:8.0 mysql'
 alias redis-cli-docker='docker run -it --rm redis:5.0 redis-cli'
-alias       aws-docker='docker run -it --rm -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_PROFILE}" -v ~/.aws:/root/.aws newtstat/awscli aws'
+alias       aws-docker='docker run -it --rm -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_PROFILE}" -v ~/.aws:/root/.aws ginokent/awscli aws'
 
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
@@ -634,7 +634,7 @@ docker-compose down --rmi all
 docker-compose exec api bash -c 'mysql -h db -P 3306 -u root --password=password'
 
 # docker build
-curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/tag/v[0-9]+\.[0-9]+\.[0-9]+" | awk -F "releases/tag/v" "\$0=\$2" | tee /dev/stderr | while read -r VERSION; do printf "%s\n%s\n%s\n%s\n" "FROM hashicorp/terraform:${VERSION}" "RUN apk add --no-cache bash" "ENTRYPOINT []" "CMD terraform" | docker build -t "newtstat/terraform:${VERSION}" - && docker push "newtstat/terraform:${VERSION}"; done
+curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/tag/v[0-9]+\.[0-9]+\.[0-9]+" | awk -F "releases/tag/v" "\$0=\$2" | tee /dev/stderr | while read -r VERSION; do printf "%s\n%s\n%s\n%s\n" "FROM hashicorp/terraform:${VERSION}" "RUN apk add --no-cache bash" "ENTRYPOINT []" "CMD terraform" | docker build -t "ginokent/terraform:${VERSION}" - && docker push "ginokent/terraform:${VERSION}"; done
 
 
 
@@ -696,7 +696,7 @@ aws-vault exec "${AWS_PROFILE:?}" -- aws sts get-caller-identity
 # MFA を矯正する IAM ポリシーを作成
 # cf. https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/tutorial_users-self-manage-mfa-and-creds.html
 # cf. https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage.html
-aws iam create-policy --policy-name ForceMFA --policy-document https://newtstat.github.io/bash/aws/iam/policy/ForceMFA.json
+aws iam create-policy --policy-name ForceMFA --policy-document https://ginokent.github.io/bash/aws/iam/policy/ForceMFA.json
 
 # wasabi storage
 aws --profile wasabi --endpoint-url=https://s3.ap-northeast-1.wasabisys.com s3 ls
@@ -876,4 +876,4 @@ while :; do top -b -c -d 1 -n 1 -o "%CPU" -w 512 | awk '{print "'"$(TZ=Asia/Toky
 #   ここまで
 # ====================================================================================================
 
-# (C) 2018 newtstat </code></pre>
+# (C) 2018 ginokent </code></pre>

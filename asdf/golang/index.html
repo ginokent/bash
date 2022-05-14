@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -Eeu -o pipefail
-cat >/dev/null << '#newtstat.github.io/bash'
+cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
-#newtstat.github.io/bash
+#ginokent.github.io/bash
 ##
 
-httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
+httpGet="$( { command -v curl 1>/dev/null && printf "curl -fLRSs"; } || { command -v wget 1>/dev/null && printf "wget -O- -q"; } )" && export httpGet; [ "${httpGet:?"curl or wget are required"}" ] || exit 1; [ "${EnvIsLoaded:-false}" = true ] || eval "$(sh -c "${httpGet} https://ginokent.github.io/bash/common/")" || exit 1  ##httpGetDoNotRemoveThisComment##
 
-eval "$(sh -c "${httpGet} https://newtstat.github.io/bash/asdf/")"
+eval "$(sh -c "${httpGet} https://ginokent.github.io/bash/asdf/")"
 
 utilASDFInstall golang latest "" "if [[ -z \"\${GOPATH:-}\" ]] && { ! grep -Eq 'export GOPATH=[^[:space:]]+' ~/.bashrc; }; then
   echo '# GOPATH
@@ -18,4 +18,4 @@ fi"
 
 
 
-# (C) 2018 newtstat </code></pre></div>
+# (C) 2018 ginokent </code></pre></div>
