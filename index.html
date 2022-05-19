@@ -114,6 +114,7 @@ curl -fLRSs https://domains.google.com/checkip
 curl -fLRSs https://checkip.amazonaws.com
 
 # openssl
+openssl genpkey -algorithm ed25519 -out private.pem  # 秘密鍵の生成
 openssl genrsa -out private.pem 2048  # 秘密鍵の生成
 openssl rsa -text -in private.pem -noout  # 秘密鍵の確認
 openssl req -new -key private.pem -out csr.pem  # CSR Certificate Signing Request の生成
