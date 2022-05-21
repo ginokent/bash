@@ -78,7 +78,7 @@ pgrep -f "^[^ ]*ssh .*"
 wget --mirror --page-requisites --html-extension --convert-links https://github.com/
 
 # ping
-while :; do echo "$(date "+%Y-%m-%dT%H:%M:%S%z") $(ping -t 1 -c 2 one.one.one.one | tr -d '\n' | sed 's/---.*//')"; done
+while :; do echo "$(date "+%Y-%m-%dT%H:%M:%S%z") $({ ping -t 1 -c 2 one.one.one.one 2>&1 || sleep 1; } | tr -d '\n' | sed 's/---.*//')"; done
 
 # ssh-keygen : 秘密鍵を作成する。
 ssh-keygen -t ed25519 -f ed25519_256.pem -C "https://ginokent.github.io/bash/keys" -N ""
