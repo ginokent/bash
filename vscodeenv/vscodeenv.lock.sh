@@ -10,6 +10,7 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.flutter@3.38.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension DavidAnson.vscode-markdownlint@0.47.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension DiemasMichiels.emulate@1.6.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Gruntfuggly.todo-tree@0.0.215 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Unity.unity-debug@3.0.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.19 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.13.2 --force
@@ -39,5 +40,6 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension tht13.html-preview-vscode@0.2.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.19.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension xaver.clang-format@1.9.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yzhang.markdown-all-in-one@3.4.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension zxh404.vscode-proto3@0.5.5 --force
