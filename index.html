@@ -552,6 +552,7 @@ docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:11 bash -c "apt-get update
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:10 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:9  bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" debian:8  bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
+docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:22.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:20.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:18.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
 docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" ubuntu:16.04 bash -c "apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy ca-certificates curl psmisc sudo; bash -l"
