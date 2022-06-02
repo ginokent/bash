@@ -542,6 +542,7 @@ PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read
 
 # docker login
 gcloud auth configure-docker
+gcloud auth configure-docker asia-docker.pkg.dev --quiet
 aws --region "${AWS_REGION:?}" ecr get-login-password | docker login --username AWS --password-stdin https://"${ECR_REPO:?}"
 
 # docker : ginokent/ubuntu:18.04 の docker コンテナを起動する。
