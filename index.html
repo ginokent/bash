@@ -258,6 +258,7 @@ git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*
 # gh github GitHub
 # ==================================================
 gh issue list --repo ginokent/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
+gh pr view --web || gh pr create --web
 
 
 
