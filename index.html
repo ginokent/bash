@@ -429,6 +429,19 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 #   macOS : ~/Library/Application\ Support/JetBrains/Toolbox/apps/AndroidStudio
 #   Linux : ~/.local/share/JetBrains/Toolbox/apps/AndroidStudio
 
+# flutter doctor で以下の様にコケたら、
+#  |[!] Android toolchain - develop for Android devices (Android SDK version 32.1.0-rc1)
+#  |    ✗ cmdline-tools component is missing
+#  |      Run `path/to/sdkmanager --install "cmdline-tools;latest"`
+#  |      See https://developer.android.com/studio/command-line for more details.
+#  |    ✗ Android license status unknown.
+#  |      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+#  |      See https://flutter.dev/docs/get-started/install/macos#android-setup for more details.
+# 以下からコマンドラインをインストールし、
+#   Preferences > Appearance & Behavior > System Settings > Android SDK > [x] Android SDK Command-line Tools (latest)
+# 以下で JAVA_HOME を通す。
+# shellcheck disable=SC2155
+export JAVA_HOME="$(find "$HOME/Library/Application Support/JetBrains/Toolbox/apps/AndroidStudio" -type d -name Home | sort -V | tail -n 1 || true)" && echo "${JAVA_HOME:-}"
 
 
 # ==================================================
