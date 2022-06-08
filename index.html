@@ -373,6 +373,10 @@ tc qdisc del    dev eth0 root
 # Mac
 # ==================================================
 
+# xcode XCode
+xcode-select --install
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
 # 侍エンジニア塾への通信をすべて REJECT する
 sudo pfctl -s rules
 sudo tee -a /etc/pf.conf <<"EOF"
@@ -412,10 +416,6 @@ sudo killall -HUP mDNSResponder
 # mac Mac のホスト名変更
 scutil --get ComputerName ; scutil --get LocalHostName ; scutil --get HostName
 scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostname:?}"
-
-# xcode XCode
-xcode-select --install
-sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 # iCloud
 ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
