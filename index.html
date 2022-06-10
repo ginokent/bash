@@ -113,6 +113,9 @@ whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${af
 curl -fLRSs -w '\n' https://domains.google.com/checkip
 curl -fLRSs https://checkip.amazonaws.com
 
+#
+throughput() { avgRTT=$(ping -c 10 -s 65507 "${1:?"target"}" | grep rtt | cut -d/ -f5) && mbps=$(echo "scale=2; (65535 * 8 * 2) / ${avgRTT:?} / 1000" | bc) && echo "${mbps:?} Mbps"; }
+
 # openssl
 openssl genpkey -algorithm ed25519 -out private.pem  # 秘密鍵の生成
 openssl genrsa -out private.pem 2048  # 秘密鍵の生成
