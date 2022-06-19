@@ -59,9 +59,12 @@ RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 80 --
 RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 443 --jump ACCEPT
 
 # SoftEther VPN Server
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 500 --jump ACCEPT
 RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 500 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1194 --jump ACCEPT
 RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
 RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1701 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1701 --jump ACCEPT
 RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 4500 --jump ACCEPT
 RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
 
