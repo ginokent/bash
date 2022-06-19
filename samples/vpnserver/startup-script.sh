@@ -1,81 +1,120 @@
 #!/bin/bash
 set -Eeu -o pipefail
-cd "$(dirname "$0")" || exit 1
-export LOG_DISABLECOLOR=true
 
-# export for func
-[ "${LOG_COLOR:-}" = false ] || export enablecolor=true
-export  pipe_debug="awk \"{print \\\"${enablecolor:+\\\\033[0;34m}\$(date +%Y-%m-%dT%H:%M:%S%z) [ debug] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
-export   pipe_info="awk \"{print \\\"${enablecolor:+\\\\033[0;32m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  info] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
-export pipe_notice="awk \"{print \\\"${enablecolor:+\\\\033[0;36m}\$(date +%Y-%m-%dT%H:%M:%S%z) [notice] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
-export   pipe_warn="awk \"{print \\\"${enablecolor:+\\\\033[0;33m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  warn] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
-export  pipe_error="awk \"{print \\\"${enablecolor:+\\\\033[0;31m}\$(date +%Y-%m-%dT%H:%M:%S%z) [ error] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
-export   pipe_crit="awk \"{print \\\"${enablecolor:+\\\\033[1;31m}\$(date +%Y-%m-%dT%H:%M:%S%z) [  crit] \\\"\\\$0\\\"${enablecolor:+\\\\033[0m}\\\"}\" /dev/stdin"
+# MIT License Copyright (c) 2021 ginokent https://github.com/rec-logger/rec.sh
+# Common
+_recRFC3339() { date "+%Y-%m-%dT%H:%M:%S%z" | sed "s/\(..\)$/:\1/"; }
+_recCmd() { for a in "$@"; do if echo "${a:-}" | grep -Eq "[[:blank:]]"; then printf "'%s' " "${a:-}"; else printf "%s " "${a:-}"; fi; done | sed "s/ $//"; }
+# Color
+RecDefault() { test "  ${REC_SEVERITY:-0}" -gt 000 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;35m  DEFAULT\\033[0m] \"\$0\"\"}" 1>&2; }
+RecDebug() { test "    ${REC_SEVERITY:-0}" -gt 100 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;34m    DEBUG\\033[0m] \"\$0\"\"}" 1>&2; }
+RecInfo() { test "     ${REC_SEVERITY:-0}" -gt 200 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;32m     INFO\\033[0m] \"\$0\"\"}" 1>&2; }
+RecNotice() { test "   ${REC_SEVERITY:-0}" -gt 300 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;36m   NOTICE\\033[0m] \"\$0\"\"}" 1>&2; }
+RecWarning() { test "  ${REC_SEVERITY:-0}" -gt 400 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;33m  WARNING\\033[0m] \"\$0\"\"}" 1>&2; }
+RecError() { test "    ${REC_SEVERITY:-0}" -gt 500 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;31m    ERROR\\033[0m] \"\$0\"\"}" 1>&2; }
+RecCritical() { test " ${REC_SEVERITY:-0}" -gt 600 2>/dev/null || echo "$*" | awk "{print \"$(_recRFC3339) [\\033[0;1;31m CRITICAL\\033[0m] \"\$0\"\"}" 1>&2; }
+RecAlert() { test "    ${REC_SEVERITY:-0}" -gt 700 2>/dev/null || echo "$*" | awk "{print   \"$(_recRFC3339) [\\033[0;41m    ALERT\\033[0m] \"\$0\"\"}" 1>&2; }
+RecEmergency() { test "${REC_SEVERITY:-0}" -gt 800 2>/dev/null || echo "$*" | awk "{print \"$(_recRFC3339) [\\033[0;1;41mEMERGENCY\\033[0m] \"\$0\"\"}" 1>&2; }
+RecExec() { RecInfo "$ $(_recCmd "$@")" && "$@"; }
+RecRun() { _dlm="####R#E#C#D#E#L#I#M#I#T#E#R####" _all=$({ _out=$("$@") && _rtn=$? || _rtn=$? && printf "\n%s" "${_dlm:?}${_out:-}" && return ${_rtn:-0}; } 2>&1) && _rtn=$? || _rtn=$? && _dlmno=$(echo "${_all:-}" | sed -n "/${_dlm:?}/=") && _cmd=$(_recCmd "$@") && _stdout=$(echo "${_all:-}" | tail -n +"${_dlmno:-1}" | sed "s/^${_dlm:?}//") && _stderr=$(echo "${_all:-}" | head -n "${_dlmno:-1}" | grep -v "^${_dlm:?}") && RecInfo "$ ${_cmd:-}" && { [ -z "${_stdout:-}" ] || RecInfo "${_stdout:?}"; } && { [ -z "${_stderr:-}" ] || RecWarning "${_stderr:?}"; } && return ${_rtn:-0}; }
+# export functions for bash
+# shellcheck disable=SC3045
+echo "${SHELL-}" | grep -q bash$ && export -f _recRFC3339 _recCmd RecDefault RecDebug RecInfo RecWarning RecError RecCritical RecAlert RecEmergency RecExec RecRun
 
-# func
-export severity="${LOG_SEVERITY:--1}"
-Debugln  () { [ "${severity:--1}" -gt 100 ] 2>/dev/null || echo "$*" | bash -c "${pipe_debug:?}"  1>&2; }
-Infoln   () { [ "${severity:--1}" -gt 200 ] 2>/dev/null || echo "$*" | bash -c "${pipe_info:?}"   1>&2; }
-Noticeln () { [ "${severity:--1}" -gt 300 ] 2>/dev/null || echo "$*" | bash -c "${pipe_notice:?}" 1>&2; }
-Warnln   () { [ "${severity:--1}" -gt 400 ] 2>/dev/null || echo "$*" | bash -c "${pipe_warn:?}"   1>&2; }
-Errorln  () { [ "${severity:--1}" -gt 500 ] 2>/dev/null || echo "$*" | bash -c "${pipe_error:?}"  1>&2; }
-Critln   () { [ "${severity:--1}" -gt 600 ] 2>/dev/null || echo "$*" | bash -c "${pipe_crit:?}"   1>&2; }
-Run      () { Infoln "$ $(s=" "; i=1; for a in "$@"; do if [ $i = $# ]; then s=""; fi; if echo "$a" | grep -Eq "[[:blank:]]"; then printf "'%s'$s" "$a"; else printf "%s$s" "$a"; fi; done;)"; "$@"; }
-Catch    () { err=$?; Errorln "exit ${err-}"; return ${err-}; } && trap Catch ERR
+# clear
+RecExec sudo -E iptables --flush
+RecExec sudo -E iptables --delete-chain
 
-# install vpnserver
-Run sudo curl -LRSs https://ginokent.github.io/bash/samples/systemd/vpnserver.service -o /etc/systemd/system/vpnserver.service
-Run sudo systemctl daemon-reload
-Run sudo systemctl enable vpnserver
-Run sudo systemctl restart vpnserver
+# init
+RecExec sudo -E iptables --policy INPUT   DROP
+RecExec sudo -E iptables --policy FORWARD DROP
+RecExec sudo -E iptables --policy OUTPUT  ACCEPT
 
-# INIT
-Run iptables --flush INPUT
-Run iptables --policy INPUT ACCEPT
-
-# DROP invalid packets
-Run iptables --append INPUT --protocol tcp --tcp-flags ALL NONE --jump DROP               # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
-Run iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
-
-# ESTABLISHED
-Run iptables --append INPUT --match state --state ESTABLISHED,RELATED --jump ACCEPT
-
-# Internal
-Run iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 10.0.0.0/8 --jump ACCEPT
-Run iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 172.16.0.0/12 --jump ACCEPT
-Run iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 192.168.0.0/16 --jump ACCEPT
-
-# SSH
-Run iptables --append INPUT --protocol tcp --match tcp --dport 22 --jump ACCEPT
-
-# HTTP
-Run iptables --append INPUT --protocol tcp --match tcp --dport 80 --jump ACCEPT
-
-# HTTPS
-Run iptables --append INPUT --protocol tcp --match tcp --dport 443 --jump ACCEPT
-
-# SoftEther VPN Server
-Run iptables --append INPUT --protocol udp --match udp --dport 500 --jump ACCEPT
-Run iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
-Run iptables --append INPUT --protocol tcp --match tcp --dport 1701 --jump ACCEPT
-Run iptables --append INPUT --protocol udp --match udp --dport 4500 --jump ACCEPT
-Run iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
-
-# ICMP
-Run iptables -A INPUT --protocol icmp --jump ACCEPT
+# # DROP invalid packets
+# RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL NONE --jump DROP               # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
+# RecExec sudo -E iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
 
 # loopback interface
-Run iptables -A INPUT --in-interface lo --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --in-interface lo --jump ACCEPT
+
+# ESTABLISHED
+RecExec sudo -E iptables --append INPUT --match state --state ESTABLISHED,RELATED --jump ACCEPT
+
+# ICMP
+RecExec sudo -E iptables --append INPUT --protocol icmp --jump ACCEPT
+
+# # Internal
+# RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 10.0.0.0/8 --jump ACCEPT
+# RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 172.16.0.0/12 --jump ACCEPT
+# RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 192.168.0.0/16 --jump ACCEPT
+
+# SSH
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 25252 --jump ACCEPT
+
+# HTTP
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 80 --jump ACCEPT
+
+# HTTPS
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 443 --jump ACCEPT
+
+# SoftEther VPN Server
+RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 500 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1701 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 4500 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
 
 # LOG
-#iptables -A INPUT -j LOG --log-prefix 'drop_packet: '
+RecExec sudo -E iptables --append INPUT --jump LOG --log-prefix "drop_packet:" 
 
-# DROP
-Run iptables -A INPUT -j DROP
+# # DROP
+# RecExec sudo -E iptables -A INPUT -j DROP
 
 # SAVE
-if grep -q "=Ubuntu" /etc/lsb-release 2>/dev/null; then
-  export DEBIAN_FRONTEND=noninteractive
-  Run apt-get install -y iptables-persistent
-  Run /etc/init.d/netfilter-persistent save
+export DEBIAN_FRONTEND=noninteractive
+RecExec sudo -E apt-get install -qqy iptables-persistent
+RecExec sudo -E /etc/init.d/netfilter-persistent save
+
+if [[ ! -x /usr/local/vpnserver/vpnserver ]]; then
+  export url="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v4.38-9760-rtm/softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-x64-64bit.tar.gz"
+  RecExec sudo -E apt-get install -qqy gcc make
+  RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local"
+  RecExec sudo -E chown -R root:root /usr/local/vpnserver
+  RecExec sudo -E chmod 600 /usr/local/vpnserver/*
+  RecExec sudo -E chmod 700 /usr/local/vpnserver/vpncmd
+  RecExec sudo -E chmod 700 /usr/local/vpnserver/vpnserver
+  
+  RecExec sudo -E tee /etc/systemd/system/vpnserver.service <<'EOF'
+[Unit]
+Description=SoftEther VPN Server
+After=network.target network-online.target
+#
+[Service]
+ExecStart=/usr/local/vpnserver/vpnserver start
+ExecStop=/usr/local/vpnserver/vpnserver stop
+Type=forking
+RestartSec=3s
+#
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  RecExec sudo -E systemctl daemon-reload
+  RecExec sudo -E systemctl enable vpnserver
+  RecExec sudo -E systemctl start vpnserver
+  RecExec sleep 5
+  RecExec sudo -E systemctl status vpnserver
+
+  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd
+
+  RecExec sudo -E tee /usr/local/vpnserver/startup-script <<"EOF"
+Hub DEFAULT
+SecureNatEnable
+UserCreate /GROUP:none /REALNAME:none /NOTE:none vpnuser000
+UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
+IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
+EOF
+
+  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/startup-script
 fi
