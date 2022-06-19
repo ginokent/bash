@@ -26,13 +26,32 @@ RecExec sudo -E iptables --flush
 RecExec sudo -E iptables --delete-chain
 
 # init
-RecExec sudo -E iptables --policy INPUT   DROP
-RecExec sudo -E iptables --policy FORWARD DROP
+RecExec sudo -E iptables --policy INPUT   ACCEPT
+RecExec sudo -E iptables --policy FORWARD ACCEPT
 RecExec sudo -E iptables --policy OUTPUT  ACCEPT
 
-# # DROP invalid packets
-# RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL NONE --jump DROP               # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
-# RecExec sudo -E iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
+# Stealth Scan
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,ACK SYN,ACK --match state --state NEW --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL NONE                --jump DROP # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,FIN SYN,FIN         --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,RST SYN,RST         --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags FIN,RST FIN,RST         --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,FIN FIN             --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,PSH PSH             --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,URG URG             --jump DROP
+
+# Fragment
+RecExec sudo -E iptables --append INPUT --fragment --jump DROP
+
+# Ping of Death
+RecExec sudo -E iptables --append INPUT --protocol icmp --icmp-type echo-request --match hashlimit --hashlimit 1/s --hashlimit-burst 10 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_PING_OF_DEATH -j DROP
+
+# SYN Flood Attack
+RecExec sudo -E iptables --append INPUT --protocol tcp --syn --match hashlimit --hashlimit 200/s --hashlimit-burst 3 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_SYN_FLOOD --jump DROP
+
+# Drop not syn but new
+RecExec sudo -E iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
 
 # loopback interface
 RecExec sudo -E iptables --append INPUT --in-interface lo --jump ACCEPT
@@ -71,8 +90,9 @@ RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 5555 
 # LOG
 RecExec sudo -E iptables --append INPUT --jump LOG --log-prefix "drop_packet:" 
 
-# # DROP
-# RecExec sudo -E iptables -A INPUT -j DROP
+# DROP
+RecExec sudo -E iptables --append INPUT   --jump DROP
+RecExec sudo -E iptables --append FORWARD --jump DROP
 
 # SAVE
 export DEBIAN_FRONTEND=noninteractive
