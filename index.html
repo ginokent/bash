@@ -128,6 +128,9 @@ openssl req -x509 -sha256 -nodes -days "$(echo "365 * 5000" | bc)" -newkey rsa:2
 HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates  # openssl : 証明書期限チェック。
 HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E "Certificate chain|[is]:"  # openssl : 証明書チェーンチェック。
 
+# QR Code
+zbarimg qrcode.png
+
 # ffmpeg
 ffmpeg -ss HH:MM:SS -to HH:MM:SS -i input.mp4 -c copy output.mp4
 ffmpeg -ss seconds_from_start -t duration -i input.mp4 -c copy output.mp4
