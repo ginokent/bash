@@ -25,10 +25,6 @@ Run      () { Infoln "$ $(for a in "$@"; do if echo "$a" | grep -Eq "[[:blank:]]
 
 Trap     () { trap -- "${1:?};$(trap -p "${2:?}" | sed "s/trap -- '\(.*\)' ${2:?}/\1/; s/'\\\''/'/g")" "${2:?}"; } && export -f Trap
 Catch    () { err=$?; RecWarning "exit ${err-}"; return ${err-}; } && export -f Catch && Trap Catch ERR
-CdScriptDir() { cd "$(dirname -- "$0")" || { RecError "failed to cd $(dirname -- "$0")" && return 1; }; } && export -f CdScriptDir
-CommandNotFound() { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; } && export -f CommandNotFound
-ErrorIfCommandNotFound() { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then RecError "command \"${cmd:?}\" is required" && return 1; fi; done; } && export -f ErrorIfCommandNotFound
-ConfirmYesOrNo() { echo -n "${1:?}" && read -r YES_OR_NO || true && echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; } && export -f ConfirmYesOrNo # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
 # MIT License Copyright (c) 2021 ginokent https://github.com/rec-logger/rec.sh
 # Common
@@ -49,6 +45,11 @@ RecRun() { _dlm='####R#E#C#D#E#L#I#M#I#T#E#R####' _all=$({ _out=$("$@") && _rtn=
 # bash
 # shellcheck disable=SC3045
 echo "${SHELL-}" | grep -q bash$ && export -f _recRFC3339 _recCmd RecDefault RecDebug RecInfo RecWarning RecError RecCritical RecAlert RecEmergency RecExec RecRun
+
+CdScriptDir() { cd "$(dirname -- "$0")" || { RecError "failed to cd $(dirname -- "$0")" && return 1; }; } && export -f CdScriptDir
+CommandNotFound() { ! command -v "${1:?"CommandNotFound: \$1 as command is required"}" >/dev/null; } && export -f CommandNotFound
+ErrorIfCommandNotFound() { for cmd in "$@"; do if CommandNotFound "${cmd:?}"; then RecError "command \"${cmd:?}\" is required" && return 1; fi; done; } && export -f ErrorIfCommandNotFound
+ConfirmYesOrNo() { echo -n "${1:?}" && read -r YES_OR_NO || true && echo "${YES_OR_NO-N}" | grep -Eq "^Y|^y"; } && export -f ConfirmYesOrNo # NOTE: HowToUse: if ConfirmYesOrNo "overwrite? [y/N]: "; then do_something; fi
 
 utilInstall () {
   check_command="${1:?}"
