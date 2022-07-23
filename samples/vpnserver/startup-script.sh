@@ -26,40 +26,73 @@ RecExec sudo -E iptables --flush
 RecExec sudo -E iptables --delete-chain
 
 # init
-RecExec sudo -E iptables --policy INPUT   ACCEPT
+RecExec sudo -E iptables --policy INPUT ACCEPT
 RecExec sudo -E iptables --policy FORWARD ACCEPT
-RecExec sudo -E iptables --policy OUTPUT  ACCEPT
+RecExec sudo -E iptables --policy OUTPUT ACCEPT
 
 # Stealth Scan
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,ACK SYN,ACK --match state --state NEW --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL NONE                --jump DROP # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,FIN SYN,FIN         --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,RST SYN,RST         --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags FIN,RST FIN,RST         --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,FIN FIN             --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,PSH PSH             --jump DROP
-RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,URG URG             --jump DROP
+RecExec sudo -E iptables --new STEALTH_SCAN
+RecExec sudo -E iptables --append STEALTH_SCAN --jump LOG --log-prefix "stealth_scan_attack: "
+RecExec sudo -E iptables --append STEALTH_SCAN --jump DROP
+#
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,ACK SYN,ACK --match state --state NEW --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL NONE --jump STEALTH_SCAN # Drop NONE flag ("--tcp-flags ALL NONE" means NONE flag in ALL flags)
+#
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,FIN SYN,FIN --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags SYN,RST SYN,RST --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG --jump STEALTH_SCAN
+#
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags FIN,RST FIN,RST --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,FIN FIN --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,PSH PSH --jump STEALTH_SCAN
+RecExec sudo -E iptables --append INPUT --protocol tcp --tcp-flags ACK,URG URG --jump STEALTH_SCAN
 
 # Fragment
+RecExec sudo -E iptables --append INPUT --fragment --jump LOG --log-prefix "fragment_packet: "
 RecExec sudo -E iptables --append INPUT --fragment --jump DROP
 
 # Ping of Death
-RecExec sudo -E iptables --append INPUT --protocol icmp --icmp-type echo-request --match hashlimit --hashlimit 1/s --hashlimit-burst 10 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_PING_OF_DEATH -j DROP
+RecExec sudo -E iptables --new PING_OF_DEATH
+RecExec sudo -E iptables --append PING_OF_DEATH --protocol icmp --icmp-type echo-request --match hashlimit --hashlimit 1/s --hashlimit-burst 10 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_PING_OF_DEATH -j RETURN
+RecExec sudo -E iptables --append PING_OF_DEATH --jump LOG --log-prefix "ping_of_death_attack: "
+RecExec sudo -E iptables --append PING_OF_DEATH --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol icmp --icmp-type echo-request -j PING_OF_DEATH
 
 # SYN Flood Attack
-RecExec sudo -E iptables --append INPUT --protocol tcp --syn --match hashlimit --hashlimit 200/s --hashlimit-burst 3 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_SYN_FLOOD --jump DROP
+RecExec sudo -E iptables --new SYN_FLOOD
+RecExec sudo -E iptables --append SYN_FLOOD --protocol tcp --syn --match hashlimit --hashlimit 200/s --hashlimit-burst 3 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_SYN_FLOOD --jump RETURN
+RecExec sudo -E iptables --append SYN_FLOOD --jump LOG --log-prefix "syn_flood_attack: "
+RecExec sudo -E iptables --append SYN_FLOOD --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --syn --jump SYN_FLOOD
+
+# HTTP DoS/DDoS Attack
+HTTP=80,443
+RecExec sudo -E iptables --new HTTP_DOS
+RecExec sudo -E iptables --append HTTP_DOS --protocol tcp --match multiport --dports $HTTP --match hashlimit --hashlimit 1/s --hashlimit-burst 100 --hashlimit-htable-expire 300000 --hashlimit-mode srcip --hashlimit-name t_HTTP_DOS --jump RETURN
+RecExec sudo -E iptables --append HTTP_DOS --jump LOG --log-prefix "http_dos_attack: "
+RecExec sudo -E iptables --append HTTP_DOS --jump DROP
+RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dports $HTTP --jump HTTP_DOS
+
+# IDENT port probe
+IDENT=113
+RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dports $IDENT --jump REJECT --reject-with tcp-reset
+
+# SSH Brute Force
+SSH=22,25252
+RecExec sudo -E iptables --append INPUT --protocol tcp --syn --match multiport --dports $SSH --match recent --name ssh_attack --set
+RecExec sudo -E iptables --append INPUT --protocol tcp --syn --match multiport --dports $SSH --match recent --name ssh_attack --rcheck --seconds 60 --hitcount 3 --jump LOG --log-prefix "ssh_brute_force: "
+RecExec sudo -E iptables --append INPUT --protocol tcp --syn --match multiport --dports $SSH --match recent --name ssh_attack --rcheck --seconds 60 --hitcount 3 --jump REJECT --reject-with tcp-reset
 
 # Drop not syn but new
-RecExec sudo -E iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP  # Drop not syn but new
+RecExec sudo -E iptables --append INPUT --protocol tcp ! --syn --match state --state NEW --jump DROP
 
-# loopback interface
+# Accept loopback interface
 RecExec sudo -E iptables --append INPUT --in-interface lo --jump ACCEPT
 
-# ESTABLISHED
+# Accept ESTABLISHED
 RecExec sudo -E iptables --append INPUT --match state --state ESTABLISHED,RELATED --jump ACCEPT
 
-# ICMP
+# Accept ICMP
 RecExec sudo -E iptables --append INPUT --protocol icmp --jump ACCEPT
 
 # # Internal
@@ -68,30 +101,18 @@ RecExec sudo -E iptables --append INPUT --protocol icmp --jump ACCEPT
 # RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --source 192.168.0.0/16 --jump ACCEPT
 
 # SSH
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 22 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 25252 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport 22,25252 --jump ACCEPT
 
-# HTTP
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 80 --jump ACCEPT
-
-# HTTPS
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 443 --jump ACCEPT
+# HTTP,HTTPS
+RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport 80,443 --jump ACCEPT
 
 # SoftEther VPN Server
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 500 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 500 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1194 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1701 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1701 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 4500 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
-
-# LOG
-RecExec sudo -E iptables --append INPUT --jump LOG --log-prefix "drop_packet:" 
+RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport 500,1194,1701,5555 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol udp --match multiport --dport 500,1194,1701,4500 --jump ACCEPT
 
 # DROP
-RecExec sudo -E iptables --append INPUT   --jump DROP
+RecExec sudo -E iptables --append INPUT --jump LOG --log-prefix "drop_packet:"
+RecExec sudo -E iptables --append INPUT --jump DROP
 RecExec sudo -E iptables --append FORWARD --jump DROP
 
 # SAVE
@@ -107,7 +128,7 @@ if [[ ! -x /usr/local/vpnserver/vpnserver ]]; then
   RecExec sudo -E chmod 600 /usr/local/vpnserver/*
   RecExec sudo -E chmod 700 /usr/local/vpnserver/vpncmd
   RecExec sudo -E chmod 700 /usr/local/vpnserver/vpnserver
-  
+
   RecExec sudo -E tee /etc/systemd/system/vpnserver.service <<'EOF'
 [Unit]
 Description=SoftEther VPN Server
