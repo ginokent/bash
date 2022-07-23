@@ -21,6 +21,11 @@ RecRun() { _dlm="####R#E#C#D#E#L#I#M#I#T#E#R####" _all=$({ _out=$("$@") && _rtn=
 # shellcheck disable=SC3045
 echo "${SHELL-}" | grep -q bash$ && export -f _recRFC3339 _recCmd RecDefault RecDebug RecInfo RecWarning RecError RecCritical RecAlert RecEmergency RecExec RecRun
 
+waits() { _i=0 && while [ "$1" -gt "$_i" ]; do sleep 1 && if [ "$#" -ge 2 ]; then printf "%s" "${2:-}"; fi && _i=$((_i + 1)); done && echo "${3:-}"; }
+echo "${SHELL-}" | grep -q bash$ && export -f waits
+
+export DEBIAN_FRONTEND=noninteractive
+
 # clear
 RecExec sudo -E iptables --flush
 RecExec sudo -E iptables --delete-chain
@@ -116,49 +121,64 @@ RecExec sudo -E iptables --append INPUT --jump DROP
 RecExec sudo -E iptables --append FORWARD --jump DROP
 
 # SAVE
-export DEBIAN_FRONTEND=noninteractive
-RecExec sudo -E apt-get install -qqy iptables-persistent
+if [[ ! -e /etc/init.d/netfilter-persistent ]]; then
+  RecExec sudo -E apt-get update -qqy
+  RecExec sudo -E apt-get install -qqy iptables-persistent
+fi
 RecExec sudo -E /etc/init.d/netfilter-persistent save
 
-if [[ ! -x /usr/local/vpnserver/vpnserver ]]; then
+if [[ ! -e /usr/local/vpnserver ]] || [[ "${VPNSERVER_REINSTALL:-false}" = true ]]; then
+  export SERVICE_FILE=/etc/systemd/system/vpnserver.service
+  # clean up
+  if [[ -f "${SERVICE_FILE:?}" ]]; then
+    RecExec sudo -E systemctl daemon-reload
+    RecExec sudo -E systemctl stop vpnserver || true
+    RecExec sudo -E systemctl disable vpnserver || true
+    RecExec sudo -E rm -f "${SERVICE_FILE:?}" || true
+  fi
+  RecExec sudo -E rm -rf /usr/local/vpnserver
+  # download and install
   export url="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v4.38-9760-rtm/softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-x64-64bit.tar.gz"
-  RecExec sudo -E apt-get install -qqy gcc make
-  RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local"
-  RecExec sudo -E chown -R root:root /usr/local/vpnserver
-  RecExec sudo -E chmod 600 /usr/local/vpnserver/*
-  RecExec sudo -E chmod 700 /usr/local/vpnserver/vpncmd
-  RecExec sudo -E chmod 700 /usr/local/vpnserver/vpnserver
-
-  RecExec sudo -E tee /etc/systemd/system/vpnserver.service <<'EOF'
+  RecExec sudo -E apt-get update -qqy
+  RecExec sudo -E apt-get install -qqy bridge-utils gcc make
+  RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local && chown -R root:root /usr/local/vpnserver && chmod 700 /usr/local/vpnserver && chmod 600 /usr/local/vpnserver/* && chmod 700 /usr/local/vpnserver/vpncmd && chmod 700 /usr/local/vpnserver/vpnserver"
+  ETH=$(ip route | grep ^default | grep -Eo "(eth|en|wl|ww)[^ ]*[0-9]")
+  # setup systemd
+  RecExec sudo -E tee "${SERVICE_FILE:?}" <<EOF
 [Unit]
 Description=SoftEther VPN Server
-After=network.target network-online.target
+Wants=network-online.target
+After=network-online.target
 #
 [Service]
+WorkingDirectory=/usr/local/vpnserver
+ExecStartPre=/sbin/ip link set dev ${ETH:-eth0} promisc on
 ExecStart=/usr/local/vpnserver/vpnserver start
+# TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
+# ExecStartPost=/sbin/brctl addbr br0
+# ExecStartPost=/sbin/brctl addif ${ETH:-eth0} tap_tapdevice
+# ExecStartPost=/sbin/ip link set dev br0 up
 ExecStop=/usr/local/vpnserver/vpnserver stop
 Type=forking
-RestartSec=3s
+Restart=always
+RestartSec=10s
 #
 [Install]
 WantedBy=multi-user.target
 EOF
-
   RecExec sudo -E systemctl daemon-reload
   RecExec sudo -E systemctl enable vpnserver
   RecExec sudo -E systemctl start vpnserver
-  RecExec sleep 5
+  waits 8 .
   RecExec sudo -E systemctl status vpnserver
-
-  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd
-
-  RecExec sudo -E tee /usr/local/vpnserver/startup-script <<"EOF"
+  # setup vpnserver
+  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd | logger -i -t vpncmd -s 2>&1
+  RecExec sudo -E tee /usr/local/vpnserver/vpnserver-startup-script <<"EOF"
 Hub DEFAULT
 SecureNatEnable
 UserCreate /GROUP:none /REALNAME:none /NOTE:none vpnuser000
 UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
 IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
 EOF
-
-  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/startup-script
+  RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/vpnserver-startup-script | logger -i -t vpncmd -s 2>&1
 fi
