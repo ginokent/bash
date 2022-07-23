@@ -142,26 +142,36 @@ if [[ ! -e /usr/local/vpnserver ]] || [[ "${VPNSERVER_REINSTALL:-false}" = true 
   RecExec sudo -E apt-get update -qqy
   RecExec sudo -E apt-get install -qqy bridge-utils gcc make
   RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local && chown -R root:root /usr/local/vpnserver && chmod 700 /usr/local/vpnserver && chmod 600 /usr/local/vpnserver/* && chmod 700 /usr/local/vpnserver/vpncmd && chmod 700 /usr/local/vpnserver/vpnserver"
-  ETH=$(ip route | grep ^default | grep -Eo "(eth|en|wl|ww)[^ ]*[0-9]")
   # setup systemd
   RecExec sudo -E tee "${SERVICE_FILE:?}" <<EOF
 [Unit]
 Description=SoftEther VPN Server
 Wants=network-online.target
 After=network-online.target
+ConditionPathExists=!/usr/local/vpnserver/do_not_run
 #
 [Service]
 WorkingDirectory=/usr/local/vpnserver
-ExecStartPre=/sbin/ip link set dev ${ETH:-eth0} promisc on
 ExecStart=/usr/local/vpnserver/vpnserver start
 # TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
-# ExecStartPost=/sbin/brctl addbr br0
-# ExecStartPost=/sbin/brctl addif ${ETH:-eth0} tap_tapdevice
-# ExecStartPost=/sbin/ip link set dev br0 up
+ExecStartPost=/bin/sh -c "/sbin/brctl addbr br0 || true"
+ExecStartPre=/sbin/ip link set dev br0 promisc on
+ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.tap || /sbin/brctl addif br0 tap_vpnserver"
+ExecStartPost=/bin/sh -c "/sbin/ip link set dev br0 up"
 ExecStop=/usr/local/vpnserver/vpnserver stop
 Type=forking
+KillMode=control-group
 Restart=always
-RestartSec=10s
+RestartSec=4s
+StartLimitInterval=10s
+StartLimitBurst=5
+#
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/usr/local/vpnserver
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_NICE CAP_SYS_ADMIN CAP_SETUID
 #
 [Install]
 WantedBy=multi-user.target
@@ -174,11 +184,20 @@ EOF
   # setup vpnserver
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd | logger -i -t vpncmd -s 2>&1
   RecExec sudo -E tee /usr/local/vpnserver/vpnserver-startup-script <<"EOF"
+BridgeCreate DEFAULT /DEVICE:vpnserver /TAP:yes
 Hub DEFAULT
 SecureNatEnable
 UserCreate /GROUP:none /REALNAME:none /NOTE:none vpnuser000
 UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
-IPsecEnable /L2TP:yes /L2TPRAW:yes /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
+IPsecEnable /L2TP:yes /L2TPRAW:no /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
 EOF
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/vpnserver-startup-script | logger -i -t vpncmd -s 2>&1
+  RecExec sudo -E cat /root/.bash_history <<EOF
+less /etc/systemd/system/vpnserver.service
+systemctl daemon-reload
+systemctl enable vpnserver
+systemctl start vpnserver
+systemctl status vpnserver
+/usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd
+EOF
 fi
