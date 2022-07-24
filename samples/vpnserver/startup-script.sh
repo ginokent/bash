@@ -149,9 +149,13 @@ RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport
 # HTTP,HTTPS
 RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport 80,443 --jump ACCEPT
 
-# SoftEther VPN Server
-RecExec sudo -E iptables --append INPUT --protocol tcp --match multiport --dport 500,1194,1701,5555 --jump ACCEPT
-RecExec sudo -E iptables --append INPUT --protocol udp --match multiport --dport 500,1194,1701,4500 --jump ACCEPT
+# SoftEther VPN Server / OpenVPN
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 1194 --jump ACCEPT
+RecExec sudo -E iptables --append INPUT --protocol udp --match udp --dport 1194 --jump ACCEPT
+# SoftEther VPN Server / Management Tool
+RecExec sudo -E iptables --append INPUT --protocol tcp --match tcp --dport 5555 --jump ACCEPT
+# SoftEther VPN Server / L2TP IPsec
+RecExec sudo -E iptables --append INPUT --protocol udp --match multiport --dport 500,1701,4500 --jump ACCEPT
 
 # DROP
 RecExec sudo -E iptables --append INPUT --jump LOG --log-prefix "drop_packet:"
@@ -224,6 +228,10 @@ EOF
   RecExec sudo -E /bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.br0 || /sbin/brctl addbr br0"
   ## NOTE: If promiscuous mode can be enabled, append the following to startup-script.
   #BridgeCreate DEFAULT /DEVICE:vpnserver /TAP:yes
+  ## NOTE: If use SSTP VPN, append the following to startup-script.
+  #SstpEnable yes
+  ## NOTE: If use OpenVPN, append the following to startup-script.
+  #OpenVpnEnable yes /PORTS:1194
   RecExec sudo -E tee /usr/local/vpnserver/vpnserver-startup-script <<"EOF"
 Hub DEFAULT
 SecureNatEnable
