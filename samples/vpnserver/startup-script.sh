@@ -26,6 +26,39 @@ echo "${SHELL-}" | grep -q bash$ && export -f waits
 
 export DEBIAN_FRONTEND=noninteractive
 
+# common
+RecExec bash -c "curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=fzf VERSENV_PATH=/usr/bin bash"
+[[ -e /root/.bash_profile ]] || RecExec sudo -E tee /root/.bash_profile <<"EOF"
+# bashrc
+[[ ! -r ~/.bashrc ]] || source ~/.bashrc
+# history
+export HISTSIZE=100000
+histori() {
+  READLINE_LINE=$(HISTTIMEFORMAT='' history | awk "{a[i++]=\$0}END{for(j=i-1;j>=0;j--)print a[j]}" | sed 's/^[[:blank:]]*[0-9]*[[:blank:]]*//' | fzf --cycle --exact --extended -i --no-mouse --no-sort)
+  READLINE_POINT=${#READLINE_LINE}
+} && [[ -t 0 ]] && bind -x '"\C-r":histori'
+# alias
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ls='ls --color=auto'
+alias l='ls -F'
+alias la='ls -A'
+alias ll='ls -alF'
+alias crontab='crontab -i'
+alias fzf='fzf --cycle --exact --extended -i --no-mouse --no-sort'
+EOF
+RecExec sudo -E tee -a /root/.bash_history <<"EOF"
+curl -fLRSs -w '\n' https://domains.google.com/checkip
+curl -fLRSs https://checkip.amazonaws.com
+less /etc/systemd/system/vpnserver.service
+systemctl daemon-reload
+systemctl enable vpnserver
+systemctl start vpnserver
+systemctl status vpnserver
+/usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd
+EOF
+
 # clear
 RecExec sudo -E iptables --flush
 RecExec sudo -E iptables --delete-chain
@@ -154,10 +187,10 @@ ConditionPathExists=!/usr/local/vpnserver/do_not_run
 WorkingDirectory=/usr/local/vpnserver
 ExecStart=/usr/local/vpnserver/vpnserver start
 # TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
-ExecStartPost=/bin/sh -c "/sbin/brctl addbr br0 || true"
-ExecStartPre=/sbin/ip link set dev br0 promisc on
+ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.br0 || /sbin/brctl addbr br0"
 ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.tap || /sbin/brctl addif br0 tap_vpnserver"
-ExecStartPost=/bin/sh -c "/sbin/ip link set dev br0 up"
+ExecStartPost=/sbin/ip link set dev br0 promisc on
+ExecStartPost=/sbin/ip link set dev br0 up
 ExecStop=/usr/local/vpnserver/vpnserver stop
 Type=forking
 KillMode=control-group
@@ -192,12 +225,4 @@ UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
 IPsecEnable /L2TP:yes /L2TPRAW:no /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
 EOF
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/vpnserver-startup-script | logger -i -t vpncmd -s 2>&1
-  RecExec sudo -E cat /root/.bash_history <<EOF
-less /etc/systemd/system/vpnserver.service
-systemctl daemon-reload
-systemctl enable vpnserver
-systemctl start vpnserver
-systemctl status vpnserver
-/usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd
-EOF
 fi
