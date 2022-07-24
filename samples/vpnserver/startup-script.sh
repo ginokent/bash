@@ -27,7 +27,8 @@ echo "${SHELL-}" | grep -q bash$ && export -f waits
 export DEBIAN_FRONTEND=noninteractive
 
 # common
-RecExec bash -c "curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=fzf VERSENV_PATH=/usr/bin bash"
+RecExec sudo -E bash -c "printf 'Passw0rdR00t\nPassw0rdR00t\n' | passwd"
+RecExec sudo -E bash -c "curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=fzf VERSENV_PATH=/usr/bin bash"
 [[ -e /root/.bash_profile ]] || RecExec sudo -E tee /root/.bash_profile <<"EOF"
 # bashrc
 [[ ! -r ~/.bashrc ]] || source ~/.bashrc
@@ -187,6 +188,12 @@ ConditionPathExists=!/usr/local/vpnserver/do_not_run
 [Service]
 WorkingDirectory=/usr/local/vpnserver
 ExecStart=/usr/local/vpnserver/vpnserver start
+## NOTE: If promiscuous mode can be enabled, uncomment the following.
+#ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.br0: .+' || /sbin/brctl addbr br0"
+#ExecStartPost=/bin/sleep 4
+#ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.tap_vpnserver: .+ br0' || /sbin/brctl addif br0 tap_vpnserver"
+#ExecStartPost=/sbin/ip link set dev br0 promisc on
+#ExecStartPost=/sbin/ip link set dev br0 up
 ExecStop=/usr/local/vpnserver/vpnserver stop
 Type=forking
 KillMode=control-group
@@ -209,12 +216,13 @@ EOF
   RecExec sudo -E systemctl enable vpnserver
   RecExec sudo -E systemctl start vpnserver
   waits 8 .
-  RecExec sudo -E systemctl status vpnserver
+  RecExec sudo -E systemctl status vpnserver | cat
   # setup vpnserver
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd | logger -i -t vpncmd -s 2>&1
   RecExec sudo -E /bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.br0 || /sbin/brctl addbr br0"
+  ## NOTE: If promiscuous mode can be enabled, append the following to startup-script.
+  #BridgeCreate DEFAULT /DEVICE:vpnserver /TAP:yes
   RecExec sudo -E tee /usr/local/vpnserver/vpnserver-startup-script <<"EOF"
-BridgeCreate DEFAULT /DEVICE:vpnserver /TAP:yes
 Hub DEFAULT
 SecureNatEnable
 UserCreate /GROUP:none /REALNAME:none /NOTE:none vpnuser000
@@ -222,43 +230,4 @@ UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
 IPsecEnable /L2TP:yes /L2TPRAW:no /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
 EOF
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/vpnserver-startup-script | logger -i -t vpncmd -s 2>&1
-  # overwrite systemd
-  RecExec sudo -E tee "${SERVICE_FILE:?}" <<EOF
-[Unit]
-Description=SoftEther VPN Server
-Wants=network-online.target
-After=network-online.target
-ConditionPathExists=!/usr/local/vpnserver/do_not_run
-#
-[Service]
-WorkingDirectory=/usr/local/vpnserver
-ExecStart=/usr/local/vpnserver/vpnserver start
-# TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
-ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.br0: .+' || /sbin/brctl addbr br0"
-ExecStartPost=/bin/sleep 4
-ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.tap_vpnserver: .+ br0' || /sbin/brctl addif br0 tap_vpnserver"
-ExecStartPost=/sbin/ip link set dev br0 promisc on
-ExecStartPost=/sbin/ip link set dev br0 up
-ExecStop=/usr/local/vpnserver/vpnserver stop
-Type=forking
-KillMode=control-group
-Restart=always
-RestartSec=4s
-StartLimitInterval=10s
-StartLimitBurst=5
-#
-PrivateTmp=yes
-ProtectHome=yes
-ProtectSystem=full
-ReadOnlyDirectories=/
-ReadWriteDirectories=-/usr/local/vpnserver
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_NICE CAP_SYS_ADMIN CAP_SETUID
-#
-[Install]
-WantedBy=multi-user.target
-EOF
-  RecExec sudo -E systemctl daemon-reload
-  RecExec sudo -E systemctl enable vpnserver
-  RecExec sudo -E systemctl restart vpnserver
-  RecExec sudo -E systemctl status vpnserver
 fi
