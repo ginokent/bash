@@ -178,6 +178,7 @@ if [[ ! -e /usr/local/vpnserver ]] || [[ "${VPNSERVER_REINSTALL:-false}" = true 
   RecExec sudo -E apt-get install -qqy bridge-utils gcc make
   RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local && chown -R root:root /usr/local/vpnserver && chmod 700 /usr/local/vpnserver && chmod 600 /usr/local/vpnserver/* && chmod 700 /usr/local/vpnserver/vpncmd && chmod 700 /usr/local/vpnserver/vpnserver"
   # setup systemd
+  RecExec sudo -E bash -c "echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/98-vpnserver.conf && sysctl -p"
   RecExec sudo -E tee "${SERVICE_FILE:?}" <<EOF
 [Unit]
 Description=SoftEther VPN Server
@@ -187,7 +188,6 @@ ConditionPathExists=!/usr/local/vpnserver/do_not_run
 #
 [Service]
 WorkingDirectory=/usr/local/vpnserver
-ExecStartPre=sh -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 ExecStart=/usr/local/vpnserver/vpnserver start
 ## NOTE: If promiscuous mode can be enabled, uncomment the following.
 #ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.br0: .+' || /sbin/brctl addbr br0"
