@@ -52,6 +52,7 @@ RecExec sudo -E tee -a /root/.bash_history <<"EOF"
 curl -fLRSs -w '\n' https://domains.google.com/checkip
 curl -fLRSs https://checkip.amazonaws.com
 less /etc/systemd/system/vpnserver.service
+vim /etc/systemd/system/vpnserver.service
 systemctl daemon-reload
 systemctl enable vpnserver
 systemctl start vpnserver
@@ -186,11 +187,6 @@ ConditionPathExists=!/usr/local/vpnserver/do_not_run
 [Service]
 WorkingDirectory=/usr/local/vpnserver
 ExecStart=/usr/local/vpnserver/vpnserver start
-# TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
-ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.br0 || /sbin/brctl addbr br0"
-ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.tap || /sbin/brctl addif br0 tap_vpnserver"
-ExecStartPost=/sbin/ip link set dev br0 promisc on
-ExecStartPost=/sbin/ip link set dev br0 up
 ExecStop=/usr/local/vpnserver/vpnserver stop
 Type=forking
 KillMode=control-group
@@ -216,6 +212,7 @@ EOF
   RecExec sudo -E systemctl status vpnserver
   # setup vpnserver
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerPasswordSet Passw0rd | logger -i -t vpncmd -s 2>&1
+  RecExec sudo -E /bin/sh -c "/sbin/ip a | grep -Eq [0-9]+:.br0 || /sbin/brctl addbr br0"
   RecExec sudo -E tee /usr/local/vpnserver/vpnserver-startup-script <<"EOF"
 BridgeCreate DEFAULT /DEVICE:vpnserver /TAP:yes
 Hub DEFAULT
@@ -225,4 +222,43 @@ UserPasswordSet vpnuser000 /PASSWORD:vpnuser000password
 IPsecEnable /L2TP:yes /L2TPRAW:no /ETHERIP:yes /PSK:VPNPreSharedKey /DEFAULTHUB:DEFAULT
 EOF
   RecExec sudo -E /usr/local/vpnserver/vpncmd /SERVER localhost /PASSWORD:Passw0rd /IN:/usr/local/vpnserver/vpnserver-startup-script | logger -i -t vpncmd -s 2>&1
+  # overwrite systemd
+  RecExec sudo -E tee "${SERVICE_FILE:?}" <<EOF
+[Unit]
+Description=SoftEther VPN Server
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=!/usr/local/vpnserver/do_not_run
+#
+[Service]
+WorkingDirectory=/usr/local/vpnserver
+ExecStart=/usr/local/vpnserver/vpnserver start
+# TODO: https://serverfault.com/questions/832640/softether-vpn-has-very-slow-download-while-upload-is-high
+ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.br0: .+' || /sbin/brctl addbr br0"
+ExecStartPost=/bin/sleep 4
+ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.tap_vpnserver: .+ br0' || /sbin/brctl addif br0 tap_vpnserver"
+ExecStartPost=/sbin/ip link set dev br0 promisc on
+ExecStartPost=/sbin/ip link set dev br0 up
+ExecStop=/usr/local/vpnserver/vpnserver stop
+Type=forking
+KillMode=control-group
+Restart=always
+RestartSec=4s
+StartLimitInterval=10s
+StartLimitBurst=5
+#
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/usr/local/vpnserver
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SYS_NICE CAP_SYS_ADMIN CAP_SETUID
+#
+[Install]
+WantedBy=multi-user.target
+EOF
+  RecExec sudo -E systemctl daemon-reload
+  RecExec sudo -E systemctl enable vpnserver
+  RecExec sudo -E systemctl restart vpnserver
+  RecExec sudo -E systemctl status vpnserver
 fi
