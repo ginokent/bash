@@ -187,6 +187,7 @@ ConditionPathExists=!/usr/local/vpnserver/do_not_run
 #
 [Service]
 WorkingDirectory=/usr/local/vpnserver
+ExecStartPre=sh -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 ExecStart=/usr/local/vpnserver/vpnserver start
 ## NOTE: If promiscuous mode can be enabled, uncomment the following.
 #ExecStartPost=/bin/sh -c "/sbin/ip a | grep -Eq '[0-9]+:.br0: .+' || /sbin/brctl addbr br0"
