@@ -28,6 +28,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # common
 RecExec sudo -E bash -c "printf 'Passw0rdR00t\nPassw0rdR00t\n' | passwd"
+RecExec sudo -E apt-get update -qqy
+RecExec sudo -E apt-get install -qqy unzip
 RecExec sudo -E bash -c "curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=fzf VERSENV_PATH=/usr/bin bash"
 [[ -e /root/.bash_profile ]] || RecExec sudo -E tee /root/.bash_profile <<"EOF"
 # bashrc
@@ -157,7 +159,6 @@ RecExec sudo -E iptables --append FORWARD --jump DROP
 
 # SAVE
 if [[ ! -e /etc/init.d/netfilter-persistent ]]; then
-  RecExec sudo -E apt-get update -qqy
   RecExec sudo -E apt-get install -qqy iptables-persistent
 fi
 RecExec sudo -E /etc/init.d/netfilter-persistent save
@@ -174,7 +175,6 @@ if [[ ! -e /usr/local/vpnserver ]] || [[ "${VPNSERVER_REINSTALL:-false}" = true 
   RecExec sudo -E rm -rf /usr/local/vpnserver
   # download and install
   export url="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v4.38-9760-rtm/softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-x64-64bit.tar.gz"
-  RecExec sudo -E apt-get update -qqy
   RecExec sudo -E apt-get install -qqy bridge-utils gcc make
   RecExec sudo -E bash -c "mkdir -p ~/tmp && cd ~/tmp && curl -#fLR \"${url:?}\" -o ~/tmp/softether-vpnserver.tar.gz && tar xfz ~/tmp/softether-vpnserver.tar.gz && cd ~/tmp/vpnserver && make && mv ~/tmp/vpnserver /usr/local && chown -R root:root /usr/local/vpnserver && chmod 700 /usr/local/vpnserver && chmod 600 /usr/local/vpnserver/* && chmod 700 /usr/local/vpnserver/vpncmd && chmod 700 /usr/local/vpnserver/vpnserver"
   # setup systemd
