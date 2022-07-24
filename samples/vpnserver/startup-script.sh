@@ -29,7 +29,7 @@ export DEBIAN_FRONTEND=noninteractive
 # common
 RecExec sudo -E bash -c "printf 'Passw0rdR00t\nPassw0rdR00t\n' | passwd"
 RecExec sudo -E apt-get update -qqy
-RecExec sudo -E apt-get install -qqy curl openssl unzip wget
+RecExec sudo -E apt-get install -qqy curl iftop openssl unzip wget
 RecExec sudo -E bash -c "wget --secure-protocol=TLSv1_2 --dns-timeout=2 --connect-timeout=2 --show-progress -q https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-$(uname -m).tgz -O ~/speedtest.tgz && tar -C /usr/bin -xf ~/speedtest.tgz speedtest"
 RecExec sudo -E bash -c "curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=fzf VERSENV_PATH=/usr/bin bash"
 [[ -e /root/.bash_profile ]] || RecExec sudo -E tee /root/.bash_profile <<"EOF"
