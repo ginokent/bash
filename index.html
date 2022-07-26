@@ -689,9 +689,10 @@ curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/t
 # Kubernetes
 # ==================================================
 kubectl config current-context  # ~/.kube/config が向いている context を表示する
-kubectl rollout status deployment "${DEPLOYMENT_NAME:?}"  # Deplyment の rollout 状況の確認 wait コマンドに近い
-kubectl rollout restart deployment "${DEPLOYMENT_NAME:?}"  # Deplyment の Pod 再起動
-kubectl rollout undo deployment "${DEPLOYMENT_NAME:?}"  # 前のバージョンの Deplyment に切り戻し
+kubectl config get-contexts  # ~/.kube/config が向いている context を表示する
+kubectl rollout restart deployment.apps "${DEPLOYMENT_NAME:?}"  # Deplyment の Pod 再起動
+kubectl rollout status deployment.apps "${DEPLOYMENT_NAME:?}"  # Deplyment の rollout 状況の確認 wait コマンドに近い
+kubectl rollout undo deployment.apps "${DEPLOYMENT_NAME:?}"  # 前のバージョンの Deplyment に切り戻し
 kubectl --context="${KUBECTL_CONTEXT:?}" port-forward "service/${SERVICE_NAME:?}" "${LOCAL_PORT:?}:${SERVICE_PORT:?}"
 kubectl -n kube-system get deployments
 kubectl -n kube-system get --no-headers pods
