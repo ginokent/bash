@@ -3,7 +3,7 @@
 set -eu
 
 # Visual Studio Code
-vscodeenv install 1.66.2
+#vscodeenv install 1.66.2
 
 # Extensions
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.dart-code@3.40.0 --force
@@ -14,7 +14,6 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Gruntfuggly.todo-tree@0.0.215 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Prisma.prisma@4.0.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ThreadHeap.serverless-ide-vscode@0.5.33 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Unity.unity-debug@3.0.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.22 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.14.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bufbuild.vscode-buf@0.5.0 --force
@@ -42,9 +41,7 @@ vscodeenv install 1.66.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vsliveshare.vsliveshare@1.0.5641 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-yaml@1.8.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension rust-lang.rust-analyzer@0.3.1123 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension rust-lang.rust@0.7.8 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension streetsidesoftware.code-spell-checker@2.2.3 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension tht13.html-preview-vscode@0.2.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.19.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension xaver.clang-format@1.9.0 --force
