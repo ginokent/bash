@@ -3,42 +3,42 @@
 set -eu
 
 # Visual Studio Code
-#vscodeenv install 1.66.2
+vscodeenv install 1.69.2
 
 # Extensions
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.dart-code@3.40.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.flutter@3.40.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.dart-code@3.46.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.flutter@3.46.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension DavidAnson.vscode-markdownlint@0.47.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension DiemasMichiels.emulate@1.6.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension GitHub.vscode-pull-request-github@0.40.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension GitHub.vscode-pull-request-github@0.46.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Gruntfuggly.todo-tree@0.0.215 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Prisma.prisma@4.0.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Prisma.prisma@4.1.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.22 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.14.2 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.14.3 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bufbuild.vscode-buf@0.5.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension dustypomerleau.rust-syntax@0.6.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension eamodio.gitlens@12.1.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension eamodio.gitlens@12.1.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension esbenp.prettier-vscode@9.5.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension foxundermoon.shell-format@7.2.2 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.33.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.35.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.terraform@2.23.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ionutvmi.path-autocomplete@1.19.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ionutvmi.path-autocomplete@1.20.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension jebbs.plantuml@2.17.3 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.14.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension monokai.theme-monokai-pro-vscode@1.1.20 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-azuretools.vscode-docker@1.22.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-azuretools.vscode-docker@1.22.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-dotnettools.csharp@1.25.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-kubernetes-tools.vscode-kubernetes-tools@1.3.10 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.python@2022.4.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.vscode-pylance@2022.5.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.python@2022.10.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-python.vscode-pylance@2022.8.10 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vscode-remote.remote-containers@0.241.3 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vscode-remote.remote-ssh-edit@0.80.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vscode-remote.remote-ssh@0.82.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vsliveshare.vsliveshare@1.0.5641 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-yaml@1.8.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension rust-lang.rust-analyzer@0.3.1123 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension streetsidesoftware.code-spell-checker@2.2.3 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.19.5 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vscode-remote.remote-ssh@0.84.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ms-vsliveshare.vsliveshare@1.0.5679 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-yaml@1.9.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension rust-lang.rust-analyzer@0.3.1148 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension streetsidesoftware.code-spell-checker@2.3.4 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.19.6 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension xaver.clang-format@1.9.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yzhang.markdown-all-in-one@3.4.3 --force
