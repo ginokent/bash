@@ -13,7 +13,6 @@ set -eu
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension GitHub.vscode-pull-request-github@0.40.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Gruntfuggly.todo-tree@0.0.215 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Prisma.prisma@4.0.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ThreadHeap.serverless-ide-vscode@0.5.33 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension VisualStudioExptTeam.vscodeintellicode@1.2.22 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.14.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bufbuild.vscode-buf@0.5.0 --force
