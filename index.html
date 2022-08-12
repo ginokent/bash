@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090,SC2009,SC2034,SC2153
+# shellcheck disable=SC1090,SC2002,SC2009,SC2034,SC2153
 cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #ginokent.github.io/bash
@@ -96,9 +96,10 @@ ssh -fN -L "${LOCAL_PORT:?}":"${REMOTE_HOST:?}":"${REMOTE_PORT:?}" "${BASTION_HO
 ssh -fN -L 3306:"${MYSQL_HOSTNAME:?}":3306 "${BASTION_HOST:?}"
 ssh -fN -L 6379:"${REDIS_HOSTNAME:?}":6379 "${BASTION_HOST:?}"
 
-# while ssh : Pseudo-terminal will not be allocated because stdin is not a terminal.
-echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -n -T -- hostname; done
-echo "${HOSTS:?}" | while read -r LINE; do ssh "${LINE:?}" -T -- hostname < /dev/null; done
+# while ssh "Pseudo-terminal will not be allocated because stdin is not a terminal." 対策
+# read で /dev/stdin を使っているので ssh コマンドでは /dev/stdin を /dev/null からリダイレクトする
+cat hosts.txt | while read -r LINE; do ssh -n -T "${LINE:?}" -- hostname; done
+cat hosts.txt | while read -r LINE; do ssh -T "${LINE:?}" -- hostname < /dev/null; done
 
 # rsync : 網羅的なコマンド例。
 ionice -c 3 nice -n 19 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
