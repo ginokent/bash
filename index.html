@@ -386,17 +386,17 @@ tc qdisc del    dev eth0 root
 xcode-select --install
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
-# 侍エンジニア塾への通信をすべて REJECT する
-sudo pfctl -s rules
-sudo tee -a /etc/pf.conf <<"EOF"
+# 侍エンジニア塾 (sejuku.net) への通信をすべて REJECT する cf. https://www.dragonflybsd.org/~aggelos/pf/ja/filter.html
+sudo pfctl -s rules               # 現在の設定を確認
+sudo tee -a /etc/pf.conf <<"EOF"  # REJECT する
 # REJECT sejuku.net
 table <deny_sejuku> const { sejuku.net, corp.sejuku.net, lms.sejuku.net, lp.sejuku.net, www.sejuku.net }
 block return out from any to <deny_sejuku>
 EOF
-sudo pfctl -nf /etc/pf.conf
-sudo pfctl -f /etc/pf.conf
-sudo pfctl -s rules
-sudo pfctl -E
+sudo pfctl -nf /etc/pf.conf       # 設定ファイルに問題がないか dry-run 読み込み
+sudo pfctl -f /etc/pf.conf        # 設定ファイルから読み込み
+sudo pfctl -s rules               # 設定を確認
+sudo pfctl -E                     # パケットフィルターを有効にする
 
 # dotnet-install.sh https://docs.microsoft.com/ja-jp/dotnet/core/tools/dotnet-install-script
 curl -LRSs https://dot.net/v1/dotnet-install.sh | bash
@@ -805,6 +805,7 @@ gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" config configurations activate "$(g
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute instances list --format="json" | jq -r "sort_by(.creationTimestamp)|.[]|[.creationTimestamp,.name]|@tsv"
 # gcloud compute ssh
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" compute ssh --tunnel-through-iap --zone "${GCP_ZONE:?}" "${GCE_INSTANCE:?}"
+ssh -o ProxyCommand="gcloud compute start-iap-tunnel %h %p --listen-on-stdin --zone ${GCP_ZONE:?} --project ${GOOGLE_CLOUD_PROJECT:?}" -l user "${GCE_INSTANCE:?}"
 # gcloud compute ssh portforward
 ssh -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="bash -cx \"gcloud --project ${GOOGLE_CLOUD_PROJECT:?} compute ssh --zone ${GCE_ZONE:?} --tunnel-through-iap %r@%h -- -t -N -L ${LOCAL_PORT:?}:${REMOTE_HOST:?}:${REMOTE_PORT:?}\"" -l "${SSH_USER:?}" "${GCE_INSTANCE:?}"
 # gcloud compute config-ssh
