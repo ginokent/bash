@@ -468,12 +468,11 @@ MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?
 while sleep 1; do MYSQL_PWD="${MYSQL_PWD:?}" mysql -u "${MYSQL_USER:?}" -h "${MYSQL_HOST:?}" -e "SELECT '$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+0900) alive'" -BN ; done
 
 # mysqldump : 指定した DATABASE を backup する。 Unknown table 'COLUMN_STATISTICS' in information_schema (1109) が出たらオプション --skip-column-statistics を付ける
-DUMP_GZ="./${MYSQL_DB:?}_$(date +%Y%m%d_%H%M%S).dump.gz"
-mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --databases "${MYSQL_DB:?}" "${MYSQL_DB_2:?}" | gzip - >"${DUMP_GZ:?}"
-zcat "${DUMP_GZ:?}" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" "${MYSQL_DB:?}"
+mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --databases "${MYSQL_DB:?}" "${MYSQL_DB_2:?}" | gzip - >"${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.gz"
+zcat "${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" "${MYSQL_DB:?}"
 # mysqldump : 全 DATABASE を backup する。 Unknown table 'COLUMN_STATISTICS' in information_schema (1109) が出たらオプション --skip-column-statistics を付ける
-mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --all-databases | gzip - >"${DUMP_GZ:?}"
-zcat all_databases.dump.gz | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}"
+mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --all-databases | gzip - >"${MYSQL_HOST:?}_all.dump.gz"
+zcat "${MYSQL_HOST:?}_all.dump.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}"
 
 # mysql ユーザを追加する
 mysql -e "GRANT ALL PRIVILEGES ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' IDENTIFIED BY '${MYSQL_PWD:?}' WITH GRANT OPTION;"
@@ -666,9 +665,9 @@ sudo usermod -aG docker "$(whoami)"
 # docker : Docker for Windows を WSL1 から利用できるようにするための設定。
 command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
 
-screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty              # docker for mac Docker for Mac の LinuxKit VM の tty に接続する。 2021-07-01 使えなくなってた。
-docker run -it --rm --privileged --pid=host debian nsenter -t 1 -m -u -n -i sh # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
-docker run -it --rm --privileged --pid=host justincormack/nsenter1        # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
+screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty                         # docker for mac Docker for Mac の LinuxKit VM の tty に接続する。 2021-07-01 使えなくなってた。
+docker run -it --rm --privileged --pid=host debian nsenter -t 1 -m -u -i -n -p -F sh # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
+docker run -it --rm --privileged --pid=host justincormack/nsenter1                   # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
 
 # docker-compose : 最新の docker-compose をインストールする。
 sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
