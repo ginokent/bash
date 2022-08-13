@@ -461,7 +461,7 @@ export JAVA_HOME="$(find "$HOME/Library/Application Support/JetBrains/Toolbox/ap
 # performance tuning パフォーマンスチューニング
 # 日々の覚書: MySQLのperformance_schemaでどれくらいの情報が見られるのか / https://yoku0825.blogspot.com/2015/03/mysqlperformanceschema.html
 
-# mysql MYSQL_PWD 環境ヘンスを用いて認証を警告無しで通す
+# mysql MYSQL_PWD 環境変数を用いて認証を警告無しで通す
 MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?}" -e "SELECT VERSION();";
 
 # mysql 死活監視
