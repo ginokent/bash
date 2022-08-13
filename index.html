@@ -126,8 +126,8 @@ openssl req -text -in csr.pem -noout  # CSR Certificate Signing Request の確�
 openssl x509 -req -days "$(echo "365 * 5000" | bc)" -signkey private.pem -in csr.pem -out crt.pem  # 自己証明書の生成
 openssl x509 -text -in crt.pem -noout  # 自己証明書の確認
 openssl req -x509 -sha256 -nodes -days "$(echo "365 * 5000" | bc)" -newkey rsa:2048 -subj /CN=localhost -keyout private.pem -out crt.pem  # 自己証明書の作成
-HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | openssl x509 -noout -dates  # openssl : 証明書期限チェック。
-HOST=google.com && openssl s_client -servername ${HOST:?} -connect ${HOST:?}:443 < /dev/null 2> /dev/null | grep -E "Certificate chain|[is]:"  # openssl : 証明書チェーンチェック。
+certExpires () { openssl s_client -servername "${1:?}" -connect "${1:?}":443 < /dev/null 2> /dev/null | openssl x509 -noout -dates; } && certExpires one.one.one.one  # openssl 証明書期限のチェック
+certChains () { openssl s_client -servername "${1:?}" -connect "${1:?}":443 < /dev/null 2> /dev/null | grep -E "Certificate chain|[is]:"; } && certChains one.one.one.one  # openssl 証明書チェーンのチェック
 
 # QR Code
 zbarimg qrcode.png
