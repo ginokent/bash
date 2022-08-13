@@ -104,8 +104,8 @@ cat hosts.txt | while read -r LINE; do ssh -T "${LINE:?}" -- hostname < /dev/nul
 # rsync : 網羅的なコマンド例。
 ionice -c 3 nice -n 19 rsync -az -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path='ionice -c 3 nice -n 19 rsync' --exclude '.git' --exclude '.gitmodules' "${SSHUSER:?}@${SSHHOST:?}:~/" "/tmp/${SSHUSER:?}_${SSHHOST:?}/"
 
-# difff : diff と sed だけで作られた色付き diff 。
-cdiff() { (R=$(printf '\033[31m');G=$(printf '\033[32m');B=$(printf '\033[36m');W=$(printf '\033[1m');N=$(printf '\033[0m');diff -u "$@"|sed "s/^\(@@..*@@\)$/$B\1$N/g;s/^\(+.*\)$/$G\1$N/g;s/^\(-.*\)$/$R\1$N/g;s/^[^+-]*\(+++ [^ ].*\)/$W\1$N/g;s/^[^+-]*\(--- [^ ].*\)/$W\1$N/g;")} && alias difff=cdiff && export -f cdiff
+# cdiff (difff) : diff と sed だけで作った色付き diff
+cdiff() { (if [ -t 0 ]; then P=printf C="\033" R=$($P "$C\[31m");G=$($P "$C\[32m");B=$($P "$C\[36m");W=$($P "$C\[1m");N=$($P "$C\[0m"); fi; diff -u "$@"|sed "s/^\(@@..*@@\)$/${B-}\1${N-}/;s/^\(+.*\)/${G-}\1${N-}/;s/^\(-.*\)/${R-}\1${N-}/;s/^${G-}\(+++ [^ ].*\)/${W-}\1/;s/^${R-}\(--- [^ ].*\)/${W-}\1/;")} && alias difff=cdiff && export -f cdiff
 
 # whilediff
 whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep "${WHILEDIFF_DURATION:=1}"; done)} && export -f whilediff
