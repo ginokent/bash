@@ -68,7 +68,7 @@ if [ "${EnvASDFIsLoaded:-false}" != true ]; then
       RecExec bash -c "${pre_hook_command:?}"
     fi
   
-    if ! asdf list "${lang_name:?}"; then
+    if ! { asdf list | grep -q "^${lang_name:?}"; }; then  # NOTE: { ! asdf list "${lang_name:?}"; } だと古い bash でうまくいかない
       RecExec asdf plugin-add "${lang_name:?}"
     fi
   
