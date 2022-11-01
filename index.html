@@ -246,7 +246,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILE
 GIT_NAME=ginokent
 GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 git ls-files "*\.go"  # マッチするファイルを ls
-git commit --allow-empty -m "first commit"  # git commit 空コミット
+git commit --allow-empty -m "initial commit"  # git commit 空コミット
 git config --local user.name "${GIT_NAME:?}"  # git Auther, Commiter の name を更新
 git config --local user.email "${GIT_EMAIL:?}"  # git Auther, Commiter の email を更新
 git tag -a 0.0.1 && git push origin 0.0.1   # git tag タグ作成＆リモートにプッシュ
