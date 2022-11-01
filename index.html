@@ -646,10 +646,6 @@ docker run -it --rm --network common redis:2.8 sh -c "redis-cli -h redis_2_8 -p 
 # nats
 docker run -it --rm --network common -p 4222:4222 -p 8222:8222 -p 6222:6222 nats:2.5-alpine
 
-# docker : コンテナから CLI を実行する（ローカル環境を汚さないため）。
-alias     mysql-docker='docker run -it --rm mysql:8.0 mysql'
-alias redis-cli-docker='docker run -it --rm redis:5.0 redis-cli'
-alias       aws-docker='docker run -it --rm -e AWS_PROFILE="${AWS_PROFILE}" -e AWS_REGION="${AWS_PROFILE}" -v ~/.aws:/root/.aws ginokent/awscli aws'
 
 # docker : ビルド時に作成された不要な中間イメージを掃除する。
 docker image ls --filter "dangling=true" -aq | xargs docker image rm
