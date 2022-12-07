@@ -849,7 +849,8 @@ gcloud services enable run.googleapis.com
 # ==================================================
 find . -name "*.go" -exec grep -El "^import [\(\"]" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && go get -u" || true && go mod tidy
 terraform fmt -recursive .
-find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform init && terraform validate"
+find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform init"
+find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform validate"
 
 
 
