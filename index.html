@@ -663,6 +663,8 @@ command -v docker.exe 1>/dev/null && export DOCKER_HOST=tcp://localhost:2375
 screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty                         # docker for mac Docker for Mac の LinuxKit VM の tty に接続する。 2021-07-01 使えなくなってた。
 docker run -it --rm --privileged --pid=host debian nsenter -t 1 -m -u -i -n -p -F sh # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
 docker run -it --rm --privileged --pid=host justincormack/nsenter1                   # docker for mac Docker for Mac の LinuxKit VM の中に sh でログインする。
+tail -n 100 -f ~/Library/Containers/com.docker.docker/Data/log/vm/docker.log         # docker for mac Docker for Mac の docker.log
+tail -n 100 -f ~/Library/Containers/com.docker.docker/Data/log/vm/dockerd.log        # docker for mac Docker for Mac の dockerd.log
 
 # docker-compose : 最新の docker-compose をインストールする。
 sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
