@@ -257,6 +257,8 @@ git branch -a 2>/dev/null | grep -Ev "^\*|^[[:blank:]]+(remotes/|main$|master$)"
 #git filter-branch -f --env-filter "GIT_AUTHOR_NAME='${GIT_NAME:?}'; GIT_AUTHOR_EMAIL='${GIT_EMAIL:?}'; GIT_COMMITTER_NAME='${GIT_NAME:?}'; GIT_COMMITTER_EMAIL='${GIT_EMAIL:?}';" HEAD  # git !!!DANGER!!! 過去の Auther と Commiter を変更
 # git remote show origin リモートリポジトリのデフォルトブランチを取得する
 git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*' | sed 's/[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*//g'
+git pull --all --prune
+git pull --all --prune --rebase
 
 
 
