@@ -687,6 +687,10 @@ curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/t
 # Kubernetes
 # ==================================================
 kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl get nodes -o wide
+kubectl get nodes -o json | jq -c 'paths|join(".")'
+kubectl get pods -o wide
+kubectl get pods -o json | jq -c 'paths|join(".")'
 kubectl config current-context  # ~/.kube/config が向いている context を表示する
 kubectl config get-contexts  # ~/.kube/config が向いている context を表示する
 kubectl rollout restart deployment.apps "${DEPLOYMENT_NAME:?}"  # Deplyment の Pod 再起動
