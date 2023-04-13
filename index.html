@@ -686,6 +686,7 @@ curl -Ss https://github.com/hashicorp/terraform/releases/ | grep -Eo "releases/t
 # ==================================================
 # Kubernetes
 # ==================================================
+kubectl get events --sort-by=.metadata.creationTimestamp
 kubectl config current-context  # ~/.kube/config が向いている context を表示する
 kubectl config get-contexts  # ~/.kube/config が向いている context を表示する
 kubectl rollout restart deployment.apps "${DEPLOYMENT_NAME:?}"  # Deplyment の Pod 再起動
@@ -700,7 +701,7 @@ kubectl exec -n kube-system "$(kubectl -n kube-system get --no-headers pods -o n
 kubectl -n kube-system rollout restart daemonset aws-node
 
 kubectl delete node lima-rancher-desktop
-kubectl -n kube-system delete deployment.apps/metrics-server deployment.apps/local-path-provisioner deployment.apps/coredns deployment.apps/traefik daemonset.apps/svclb-traefik
+#kubectl -n kube-system delete deployment.apps/metrics-server deployment.apps/local-path-provisioner deployment.apps/coredns deployment.apps/traefik daemonset.apps/svclb-traefik
 
 # kubetail regex
 kubetail "^app-[0-9a-z]+-[0-9a-z]+" --regex --context "${KUBECTL_CONTEXT:?}" --namespace default --since 300s
