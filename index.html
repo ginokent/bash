@@ -219,6 +219,13 @@ echo "${PATH:?}:" | while read -d: -r BIN; do ls -1 "${BIN:?}/python"* 2>/dev/nu
 # String to Date Time Oneliner : 文字列 日付時刻 変換用ワンライナー
 python -c "import dateutil.parser; import sys; sys.stdout.write(str(dateutil.parser.parse('$(date +%Y-%m-%dT%H:%M:%S%z)'))+'\n');"
 
+# virtualenv
+VIRTUALENV_DIR=/tmp/virtualenv_dir
+python -m pip install --no-cache-dir --upgrade --user virtualenv
+python -m pip install --no-cache-dir --upgrade virtualenv
+python -m virtualenv "${VIRTUALENV_DIR:?}"
+"${VIRTUALENV_DIR:?}/bin/python" -m pip install --no-cache-dir --upgrade opencv-python dlib numpy
+
 
 
 # ==================================================
