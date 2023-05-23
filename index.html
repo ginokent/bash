@@ -225,6 +225,7 @@ python -m pip install --no-cache-dir --upgrade --user virtualenv
 python -m pip install --no-cache-dir --upgrade virtualenv
 python -m virtualenv "${VIRTUALENV_DIR:?}"
 "${VIRTUALENV_DIR:?}/bin/python" -m pip install --no-cache-dir --upgrade opencv-python dlib numpy
+"${VIRTUALENV_DIR:?}/bin/python" -m pip freeze | tee requirements.txt
 
 
 
