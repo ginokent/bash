@@ -253,6 +253,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILE
 
 GIT_NAME=ginokent
 GIT_EMAIL=29125616+ginokent@users.noreply.github.com
+bash -c "git checkout main && git pull -p --all && git switch $(git branch --contains | cut -d " " -f 2)"
 git checkout main
 git switch main
 git ls-files "*\.go"  # マッチするファイルを ls
