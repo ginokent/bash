@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090,SC2002,SC2009,SC2034,SC2153
+# shellcheck disable=SC1090,SC2002,SC2009,SC2034,SC2153,SC2317
 cat >/dev/null << '#ginokent.github.io/bash'
 <link rel="icon" href="/favicon.ico" type="image/x-icon"><style>body{font-size:0;margin:0}code,pre{font-size:1rem;font-family:'Ricty Diminished',Osaka-Mono,Menlo,Monaco,Consolas,'Courier New','Andale Mono','Ubuntu Mono',monospace}</style><pre><code>##
 #ginokent.github.io/bash
@@ -253,7 +253,7 @@ export GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWUPSTREAM=1 GIT_PS1_SHOWUNTRACKEDFILE
 
 GIT_NAME=ginokent
 GIT_EMAIL=29125616+ginokent@users.noreply.github.com
-bash -c "git checkout main && git pull -p --all && git switch $(git branch --contains | cut -d " " -f 2)"
+sh -c "git checkout main && git pull -p --all && git switch $(git branch --contains | cut -d " " -f 2)"
 git checkout main
 git switch main
 git ls-files "*\.go"  # マッチするファイルを ls
