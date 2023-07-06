@@ -234,10 +234,10 @@ python -m virtualenv "${VIRTUALENV_DIR:?}"
 # ==================================================
 export GOPRIVATE=github.com/ginokent
 
-go env GOCACHE
+: "go キャッシュパス確認" && go env GOCACHE
 : "go キャッシュ削除" && go clean -x -cache -testcache -modcache -fuzzcache
 
-golangci-lint cache status
+: "golangci-lint キャッシュパス確認" && golangci-lint cache status
 : "golangci-lint キャッシュ削除" && golangci-lint cache clean
 
 
