@@ -284,7 +284,7 @@ git pull --all --prune --rebase
 # gh github GitHub
 # ==================================================
 gh issue list --repo ginokent/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
-gh pr view --web || gh pr create --web
+: "GitHub PR を閲覧, 無かったら作成" && (gh pr view --web || gh pr create --web)
 
 
 
