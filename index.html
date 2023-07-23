@@ -55,6 +55,7 @@ bash -c "uname -s | grep -q Linux && curl -LRsS https://get.docker.com/ | bash &
 curl -LR https://github.com/ginokent/cdiff/releases/latest/download/cdiff -o /usr/bin/cdiff && chmod -v +x /usr/bin/cdiff
 curl -LR https://github.com/ginokent/kubectl-wrapper/releases/latest/download/kubectl -o /usr/bin/kubectl && chmod -v +x /usr/bin/kubectl
 curl -LR https://raw.githubusercontent.com/johanhaleby/kubetail/1.6.12/kubetail -o /usr/bin/kubetail && chmod -v +x /usr/bin/kubetail
+curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=kubectl,terraform,protoc,buf VERSENV_PATH=. bash
 
 # yes を聞かれるコマンドの実装
 if [[ " $* " =~ ".* -y .*"|".* --yes .*" ]]; then sh -c "yes y | ${cmd:?}"; fi
@@ -117,8 +118,9 @@ curl -fLRSs https://checkip.amazonaws.com
 throughput() { avgRTT=$(ping -c 10 -s 65507 "${1:?"target"}" | grep rtt | cut -d/ -f5) && mbps=$(echo "scale=2; (65535 * 8 * 2) / ${avgRTT:?} / 1000" | bc) && echo "${mbps:?} Mbps"; }
 
 # openssl
-openssl genpkey -algorithm ed25519 -out private.pem  # 秘密鍵の生成
-openssl genrsa -out private.pem 2048  # 秘密鍵の生成
+: "RSA 秘密鍵の生成" && openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out private.pem
+: "ECDSA 秘密鍵の生成" && openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out private.pem
+: "ED25519 秘密鍵の生成" && openssl genpkey -algorithm ED25519 -out private.pem  # 秘密鍵の生成
 openssl rsa -text -in private.pem -noout  # 秘密鍵の確認
 openssl req -new -key private.pem -out csr.pem  # CSR Certificate Signing Request の生成
 openssl req -text -in csr.pem -noout  # CSR Certificate Signing Request の確認
