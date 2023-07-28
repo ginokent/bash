@@ -602,6 +602,15 @@ PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read
 
 
 # ==================================================
+# spanner
+# ==================================================
+# https://cloud.google.com/spanner/docs/introspection/query-statistics?hl=ja#list_the_queries_that_have_failed_in_a_given_time_period
+: "特定の期間内に失敗したクエリを一覧表示する" && spanner-cli -p "${GOOGLE_CLOUD_PROJECT}" -i "${SPANNER_INSTANCE_ID}" -d "${SPANNER_DATABASE}" -e 'SELECT text, request_tag, interval_end, execution_count, all_failed_execution_count, all_failed_avg_latency_seconds, avg_latency_seconds, avg_rows, avg_bytes, avg_rows_scanned, avg_cpu_seconds FROM SPANNER_SYS.QUERY_STATS_TOP_10MINUTE WHERE all_failed_execution_count > 0 ORDER BY interval_end \G'
+: "特定の期間内に失敗したクエリを一覧表示する" && gcloud --project "${GOOGLE_CLOUD_PROJECT}" spanner databases execute-sql "${SPANNER_DATABASE}" --instance "${SPANNER_INSTANCE_ID}" --sql 'SELECT text, request_tag, interval_end, execution_count, all_failed_execution_count, all_failed_avg_latency_seconds, avg_latency_seconds, avg_rows, avg_bytes, avg_rows_scanned, avg_cpu_seconds FROM SPANNER_SYS.QUERY_STATS_TOP_10MINUTE WHERE all_failed_execution_count > 0 ORDER BY interval_end'
+
+
+
+# ==================================================
 # docker Docker
 # ==================================================
 
