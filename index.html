@@ -837,8 +837,7 @@ gcloud config configurations create "${GCP_CONFIG:?}"
 gcloud config set account "${GCP_ACCOUNT:?}"
 # gcloud auth login : ログインする
 gcloud auth login --no-launch-browser
-# gcloud auth application-default login : ログインし Cloud SDK のデフォルトの認証情報として利用する
-gcloud auth application-default login
+: "ログインし Cloud SDK のデフォルトの認証情報として利用する" && gcloud auth application-default login && export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json
 # gcloud auth revoke : ログアウトする
 gcloud auth revoke
 # gcloud --impersonate-service-account auth print-access-token 死んでもクレデンシャルファイルは発行するな
