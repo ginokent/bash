@@ -263,7 +263,7 @@ GIT_NAME=ginokent
 GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 : "Auther, Commiter の name を更新" && git config --local user.name "${GIT_NAME:?}"
 : "Auther, Commiter の email を更新" && git config --local user.email "${GIT_EMAIL:?}"
-: "main ブランチに切り替えて pull してから元のブランチに戻して pull" && sh -c "git checkout main && git pull -p --all && git switch $(git branch --contains | cut -d " " -f 2) && git pull -p --all"
+: "main ブランチに切り替えて pull してから元のブランチに戻して pull" && sh -c "git checkout main && git pull -p --all && git switch $(git rev-parse --abbrev-ref HEAD) && git pull -p --all"
 : "ブランチ切り替え" && git checkout main
 : "ブランチ切り替え" && git switch main
 : "パターンにマッチするファイルを一覧表示" && git ls-files "*\.go"
