@@ -57,6 +57,9 @@ curl -LR https://github.com/ginokent/kubectl-wrapper/releases/latest/download/ku
 curl -LR https://raw.githubusercontent.com/johanhaleby/kubetail/1.6.12/kubetail -o /usr/bin/kubetail && chmod -v +x /usr/bin/kubetail
 curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=kubectl,terraform,protoc,buf VERSENV_PATH=. bash
 
+
+: "jq ignore" && printf '{"message":"valid json"}\ninvalid json\n' | jq -Rr '. as $line | try fromjson catch $line'
+
 # yes を聞かれるコマンドの実装
 if [[ " $* " =~ ".* -y .*"|".* --yes .*" ]]; then sh -c "yes y | ${cmd:?}"; fi
 
@@ -843,6 +846,7 @@ gcloud auth login --no-launch-browser
 gcloud auth revoke
 # gcloud --impersonate-service-account auth print-access-token 死んでもクレデンシャルファイルは発行するな
 GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud --impersonate-service-account="${SERVICEACCOUNT_NAME:?}@${GOOGLE_CLOUD_PROJECT:?}.iam.gserviceaccount.com" auth print-access-token)
+: "id_token を表示" && gcloud auth print-identity-token
 # gcloud auth activate-service-account : サービスアカウントを用いて認証する
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" auth activate-service-account "${GCP_SERVICE_ACCOUNT}" --key-file "${GOOGLE_APPLICATION_CREDENTIALS:?}"
 # gcloud config set project : プロジェクトを設定する。
