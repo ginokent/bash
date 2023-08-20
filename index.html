@@ -186,6 +186,9 @@ ruby -e "require 'time'; puts Time.parse('$(date +%Y-%m-%dT%H:%M:%S%z)');"
 dig +short A rubygems.org | awk '{printf "%-16s rubygems.org\n", $0}' | sudo tee -a /etc/hosts
 
 
+: "github-linguist リポジトリ内のコードのプログラミング言語使用割合を計測する" && docker run -it --rm -v "$(pwd):/repo" crazymax/linguist:latest
+
+
 
 # ==================================================
 # node nodejs Node.js
