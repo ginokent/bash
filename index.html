@@ -269,9 +269,9 @@ GIT_NAME=ginokent
 GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 : "Auther, Commiter の name を更新" && git config --local user.name "${GIT_NAME:?}"
 : "Auther, Commiter の email を更新" && git config --local user.email "${GIT_EMAIL:?}"
-: "リモート HEAD ブランチを取得" && git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }'
-: "HEAD ブランチに切り替え" && sh -c "git checkout $(git rev-parse --abbrev-ref origin/HEAD | sed s@origin/@@)"
-: "HEAD ブランチに切り替えて pull してから元のブランチに戻して pull" && sh -c "git checkout $(git rev-parse --abbrev-ref origin/HEAD | sed s@origin/@@) && git pull -p --all && git switch $(git rev-parse --abbrev-ref HEAD) && git pull -p --all"
+: "remote head branch を取得" && git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }'
+: "head branch に切り替え" && sh -c "git checkout $(git symbolic-ref HEAD | sed s@refs/heads/@@)"
+: "head branch に checkout して pull してから元のブランチに switch して pull" && sh -c "git checkout $(git symbolic-ref HEAD | sed s@refs/heads/@@) && git pull -p --all && git switch $(git rev-parse --abbrev-ref HEAD) && git pull -p --all"
 : "現在のブランチをバックアップ" && git checkout -b "$(date +"backup-$(git rev-parse --abbrev-ref HEAD)-%Y-%m-%dT%H-%M-%S")"
 : "ブランチ切り替え" && git checkout main
 : "ブランチ切り替え" && git switch main
