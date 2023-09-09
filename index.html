@@ -668,6 +668,7 @@ docker run -i --rm -p 8080:80 nginx
 docker run -i -v "$(pwd -P)/nginx.conf":/etc/nginx/nginx.conf:ro -p 8080:80 nginx
 
 # docker : MySQL Server のコンテナを起動する。
+export MYSQL_DSN="root:password@tcp(127.0.0.1:3306)/testdb"
 docker run -di --rm --name mysql_8_1 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:8.1
 docker run -di --rm --name mysql_8_0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:8.0
 docker run -di --rm --name mysql_5_7 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:5.7
