@@ -3,7 +3,7 @@
 set -eu
 
 # Visual Studio Code
-vscodeenv install 1.78.2
+vscodeenv install 1.82.1
 
 # Extensions
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension Dart-Code.dart-code@3.70.0 --force

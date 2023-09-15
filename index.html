@@ -352,6 +352,8 @@ lsof -i tcp:8080
 # lsof -t プロセス ID だけ出す
 kill "$(lsof -t -i tcp:8080)"
 
+: "Visual Studio Code.app のプロセスをすべて KILL する" && pgrep -fl "Visual Studio Code.app" && pkill -KILL -f "Visual Studio Code.app"
+
 # tcpdump
 sudo tcpdump -G300 -W1 -vvv -l -n -p -s 65535 -w "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
 tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
