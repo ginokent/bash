@@ -473,6 +473,8 @@ scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostnam
 # iCloud
 ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
+: "スクリーンショットの命名を変更する" && defaults write com.apple.screencapture name screenshot
+
 
 
 # ==================================================
