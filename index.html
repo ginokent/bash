@@ -477,6 +477,8 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
 : "ag .git 配下等も検索対象にする" && ag --hidden "my_regex_pattern"
 
+: "mitmproxy の Web UI" && mitmweb --web-host 127.0.0.1 --web-port 43210 --web-open-browser --listen-host 0.0.0.0 --listen-port 4321 --mode reverse:http://0.0.0.0:8000
+
 
 
 # ==================================================
