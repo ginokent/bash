@@ -502,6 +502,8 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 # shellcheck disable=SC2155
 export JAVA_HOME="$(find "$HOME/Library/Application Support/JetBrains/Toolbox/apps/AndroidStudio" -type d -name Home | sort -V | tail -n 1 || true)" && echo "${JAVA_HOME:-}"
 
+flutter run --dart-define="DEBUG=true"  ## Visual Studio Code では Cmd+P から  > Debug: Attach to Flutter on Device  で Flutter にアタッチする
+
 
 # ==================================================
 # mysql MySQL
