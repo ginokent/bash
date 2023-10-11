@@ -169,6 +169,8 @@ tac() {
 echo "${BEFORE//\\n/\\\\n}"
 echo "${BEFORE//\"/\\\"}"
 
+: "bash のプロセス置換による /dev/stdin /dev/stdout /dev/stderr の代替" && bash -c "echo date | cat <(cat <&0) | tee >(cat >&1) | tee >(cat >&2)"
+
 
 
 # ==================================================
