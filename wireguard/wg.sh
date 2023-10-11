@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
+# LISENCE: https://github.com/kunitsucom/wg.sh/blob/HEAD/LICENSE
 set -Eeu -o pipefail
 
 main() {
-  # var: common
   wg_server_nic_name=${WG_SERVER_NIC_NAME:-wg0}
   wg_server_eth_name=${WG_SERVER_ETH_NAME:-eth0}
   wg_server_conf="${WG_CONF_DIR:-.}/${wg_server_nic_name:?}.conf"
