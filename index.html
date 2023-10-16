@@ -905,6 +905,7 @@ gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" container clusters get-credentials 
 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" container clusters get-credentials --region "${GKE_REGION_OR_ZONE:?}" "${GKE_CLUSTER:?}"
 # gcloud logging read
 PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read '(resource.labels.container_name="AAA" OR resource.labels.container_name="BBB") AND "foobar" AND timestamp>="2021-06-15T00:00:00+09:00" AND timestamp<"2021-06-15T23:59:59+09:00"' --order="asc" --format="value(textPayload)"
+PYTHONIOENCODING=UTF-8 gcloud --project "${GOOGLE_CLOUD_PROJECT:?}" logging read --format json "timestamp>=\"$(TZ=UTC python3 -c 'import datetime; print((datetime.datetime.now() + datetime.timedelta(days=-10)).strftime("%FT%T"));')\" AND resource.type=\"gce_instance\" AND log_name=~\"projects/[^/]*/logs/cloudaudit.googleapis.com%2Fsystem_event\" AND protoPayload.methodName=\"compute.instances.preempted\"" | jq -c .[]
 # gcloud gsutil GOOGLE_APPLICATION_CREDENTIALS サービスアカウントの権限確認のために google/cloud-sdk を利用する。
 TEST_KEY=/path/to/key.json ; docker run -it -e GOOGLE_APPLICATION_CREDENTIALS="${TEST_KEY:?}" -v "${TEST_KEY:?}:${TEST_KEY:?}:ro" google/cloud-sdk sh -cx "gcloud auth activate-service-account --key-file ${GOOGLE_APPLICATION_CREDENTIALS:?} && bash -l"
 # gcloud metadata.google.internal
