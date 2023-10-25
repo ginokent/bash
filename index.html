@@ -301,6 +301,21 @@ gh issue list --repo ginokent/todo --search -status:Done --json title --jq 'sort
 : "GitHub PR を閲覧, 無かったら作成" && (gh pr view --web || gh pr create --web)
 : "head ブランチを main にマージ" && WORK_BRANCH=feat-merge-branch-head-into-main REMOTE_HEAD_BRANCH=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git fetch -p --all && git switch "${REMOTE_HEAD_BRANCH:?}" && git branch -d "${WORK_BRANCH:?}" && git checkout -b "${WORK_BRANCH:?}" && git push -u origin "${WORK_BRANCH:?}" && gh pr create --base main --head "${WORK_BRANCH:?}" --title 'feat: Merge branch HEAD into main' --fill && gh pr view --web
 
+# ==================================================
+# GitHub labels
+# ==================================================
+gh label create "BREAKING CHANGE" --description "BREAKING CHANGES" --color 330303
+gh label create "build" --description "Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)" --color 5319E7
+gh label create "ci" --description "Changes to our CI configuration files and scripts (examples: CircleCi, SauceLabs)" --color 53C4EE
+gh label create "docs" --description "Documentation only changes" --color 1B3E44
+gh label create "feat" --description "A new feature" --color 0EAA80
+gh label create "fix" --description "A bug fix" --color 1D76DB
+gh label create "perf" --description "A code change that improves performance" --color A2EEEF
+gh label create "refactor" --description "A code change that neither fixes a bug nor adds a feature" --color C5DEF5
+gh label create "test" --description "Adding missing tests or correcting existing tests" --color 1D76DB
+gh label create "chore" --description "Changes to the build process or auxiliary tools and libraries such as documentation generation" --color 20313F
+
+
 
 # ==================================================
 # Protocol Buffers proto3
