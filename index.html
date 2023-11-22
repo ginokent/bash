@@ -291,6 +291,7 @@ git rev-parse --abbrev-ref HEAD  # git ブランチ名を出力
 git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*' | sed 's/[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*//g'
 git pull --all --prune
 git pull --all --prune --rebase
+git commit -m "docs: Update README.md"
 
 
 
