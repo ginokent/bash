@@ -702,31 +702,21 @@ docker run -di --rm --name mysql_8_1 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=passwor
 docker run -di --rm --name mysql_8_0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:8.0
 docker run -di --rm --name mysql_5_7 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:5.7
 docker run -di --rm --name mysql_5_6 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdb mysql:5.6
-docker run -di --rm --name mysql_8_1 -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" -e MYSQL_DATABASE=testdb mysql:8.1
-docker run -di --rm --name mysql_8_0 -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" -e MYSQL_DATABASE=testdb mysql:8.0
-docker run -di --rm --name mysql_5_7 -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_ROOT_PASSWORD="" -e MYSQL_DATABASE=testdb mysql:5.7
-# docker : MySQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm mysql:8.0 sh -c "mysql -h mysql_8_0 -P 3306 -u root --password=password"
-docker run -it --rm mysql:5.7 sh -c "mysql -h mysql_5_7 -P 3306 -u root --password=password"
-docker run -it --rm mysql:5.6 sh -c "mysql -h mysql_5_6 -P 3306 -u root --password=password"
-# docker : ローカルから docker 上の mysql への接続コマンド。
 mysql -h 127.0.0.1 -P 3306 -u root --password=password
 
 # docker : PostgreSQL Server のコンテナを起動する。
-docker run -di --rm --name postgres_9_6 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6
-# docker : PostgreSQL Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm postgres:9.6 sh -c "PGPASSWORD=password psql -h postgres_9_6 -U postgres"
+docker run -di --rm --name postgres_16 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:16
+docker run -di --rm --name postgres_15 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:15
+docker run -di --rm --name postgres_11 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:11
+docker run -di --rm --name postgres_9 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6
+PGPASSWORD=password psql -h 127.0.0.1 -U postgres
 
 # docker : Redis Server のコンテナを起動する。
 docker run -di --rm --name redis_5_0 -p 6379:6379 redis:5.0
 docker run -di --rm --name redis_4_0 -p 6379:6379 redis:4.0
 docker run -di --rm --name redis_3_2 -p 6379:6379 redis:3.2
 docker run -di --rm --name redis_2_8 -p 6379:6379 redis:2.8
-# docker : Redis Server への接続コマンドをコンテナ上で実行する。
-docker run -it --rm redis:5.0 sh -c "redis-cli -h redis_5_0 -p 6379"
-docker run -it --rm redis:4.0 sh -c "redis-cli -h redis_4_0 -p 6379"
-docker run -it --rm redis:3.2 sh -c "redis-cli -h redis_3_2 -p 6379"
-docker run -it --rm redis:2.8 sh -c "redis-cli -h redis_2_8 -p 6379"
+redis-cli -h 127.0.0.1 -p 6379
 
 # nats
 docker run -it --rm -p 4222:4222 -p 8222:8222 -p 6222:6222 nats:2.5-alpine
