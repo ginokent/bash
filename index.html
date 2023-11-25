@@ -705,15 +705,16 @@ docker run -di --rm --name mysql_5_6 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=passwor
 mysql -h 127.0.0.1 -P 3306 -u root --password=password
 
 # docker : PostgreSQL Server のコンテナを起動する。
-docker run -di --rm --name postgres_16 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:16
-docker run -di --rm --name postgres_15 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:15
-docker run -di --rm --name postgres_11 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:11
-docker run -di --rm --name postgres_9 -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:9.6
-PGPASSWORD=password psql -h 127.0.0.1 -U postgres
+docker run -di --rm --name postgres_16 -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=testdb postgres:16
+docker run -di --rm --name postgres_15 -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=testdb postgres:15
+docker run -di --rm --name postgres_11 -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=testdb postgres:11
+docker run -di --rm --name postgres_9  -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=testdb postgres:9.6
+PGPASSWORD=password psql -h 127.0.0.1 -U postgres testdb
+PGPASSWORD=password pg_dump -h 127.0.0.1 -U postgres -t 'public.test_table' --schema-only testdb
 
 # docker cockroachdb https://hub.docker.com/r/cockroachdb/cockroach
 docker run -di --rm --name cockroachdb_v22 -p 26257:26257 -e COCKROACH_USER=root -e COCKROACH_PASSWORD=password -e COCKROACH_DATABASE=testdb cockroachdb/cockroach:latest-v22.2 start-single-node --http-addr=0.0.0.0:8080 --insecure
-docker run -di --rm --name cockroachdb_v22 -p 26257:26257 -e COCKROACH_USER=root -e COCKROACH_PASSWORD=password -e COCKROACH_DATABASE=testdb cockroachdb/cockroach:latest-v23.1 start-single-node --http-addr=0.0.0.0:8080 --insecure
+docker run -di --rm --name cockroachdb_v23 -p 26257:26257 -e COCKROACH_USER=root -e COCKROACH_PASSWORD=password -e COCKROACH_DATABASE=testdb cockroachdb/cockroach:latest-v23.1 start-single-node --http-addr=0.0.0.0:8080 --insecure
 : "CockroachDB に psql で接続" && PGPASSWORD=password psql -h 127.0.0.1 -p 26257 -U root testdb
 
 # docker : Redis Server のコンテナを起動する。
