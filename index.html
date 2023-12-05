@@ -488,6 +488,9 @@ sudo killall -HUP mDNSResponder
 scutil --get ComputerName ; scutil --get LocalHostName ; scutil --get HostName
 scutil --set ComputerName "${Hostname:?}"; scutil --set LocalHostName "${Hostname:?}"
 
+# Audio Driver
+ls -l /Library/Audio/Plug-Ins/HAL
+
 # iCloud
 ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
