@@ -301,6 +301,7 @@ git commit -m "docs: Update README.md"
 gh issue list --repo ginokent/todo --search -status:Done --json title --jq 'sort_by(.title)|.[]|.title'
 : "GitHub PR を閲覧, 無かったら作成" && (gh pr view --web || gh pr create --web)
 : "head ブランチを main にマージ" && WORK_BRANCH=feat-merge-branch-head-into-main REMOTE_HEAD_BRANCH=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git fetch -p --all && git switch "${REMOTE_HEAD_BRANCH:?}" && git branch -d "${WORK_BRANCH:?}" && git checkout -b "${WORK_BRANCH:?}" && git push -u origin "${WORK_BRANCH:?}" && gh pr create --base main --head "${WORK_BRANCH:?}" --title 'feat: Merge branch HEAD into main' --fill && gh pr view --web
+: "GitHub Actions のすべてのキャッシュを削除" && gh cache list --json id --jq .[].id | xargs -I@ gh cache delete @
 
 # ==================================================
 # GitHub labels
