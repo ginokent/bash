@@ -584,7 +584,8 @@ mysql -e "SELECT GROUP_CONCAT(id) FROM information_schema.PROCESSLIST WHERE time
 mysql -e "KILL ${MYSQL_CONNECTION_ID:?}; -- mysql 接続を殺す"
 mysql -e "SHOW STATUS LIKE 'Conn%'; -- mysql 起動してからの累計接続数を表示する"
 mysql -e "SHOW GLOBAL VARIABLES LIKE 'innodb_read_only'; -- mysql Master か Replica か判定 (Master は OFF, Replica は ON)"
-mysql -e "SELECT @@global.tx_isolation, @@session.tx_isolation; -- mysql transaction isolation level トランザクション分離レベル"
+: "MySQL 5+ でトランザクション分離レベルを確認" && mysql -e "SELECT @@global.tx_isolation, @@session.tx_isolation;"
+: "MySQL 8+ でトランザクション分離レベルを確認" && mysql -e "SELECT @@global.transaction_isolation, @@session.transaction_isolation;"
 mysql -e "SHOW GLOBAL VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolation level トランザクション分離レベル"
 mysql -e "SHOW SESSION VARIABLES LIKE 'tx_isolation'; -- mysql transaction isolation level トランザクション分離レベル"
 
