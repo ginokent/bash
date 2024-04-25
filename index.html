@@ -454,6 +454,7 @@ sudo lsblk && sudo apt update -qqy && sudo apt install -qqy cloud-guest-utils &&
 xcode-select --install
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
+: "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
 : "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
 : "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
