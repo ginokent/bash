@@ -764,8 +764,9 @@ docker run -it --rm --privileged --pid=host justincormack/nsenter1              
 tail -n 100 -f ~/Library/Containers/com.docker.docker/Data/log/vm/docker.log         # docker for mac Docker for Mac の docker.log
 tail -n 100 -f ~/Library/Containers/com.docker.docker/Data/log/vm/dockerd.log        # docker for mac Docker for Mac の dockerd.log
 
-# docker-compose : 最新の docker-compose をインストールする。
-sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
+: "databend (Snowflake Alternative) を起動する" && docker run -p 8000:8000 -e QUERY_DEFAULT_USER=databend -e QUERY_DEFAULT_PASSWORD=databend datafuselabs/databend
+
+: "docker-compose : 最新の docker-compose をインストールする" && sudo curl -LRsS "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose && sudo chmod +x /usr/bin/docker-compose
 
 # docker-compose : `ERROR: readlink /var/lib/docker/overlay2: invalid argument` が出た時に実行する。
 docker-compose down --rmi local
