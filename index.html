@@ -486,7 +486,7 @@ ln -sf "$(find /usr/local/Cellar/mono/[0-9].[0-9]* -maxdepth 0 | sort -V | tail 
 
 : "Mac で ip を確認" && ifconfig | grep inet | grep -Ev " 127\.| ::1| fe80::"
 
-: "Netdata をインストール" && brew install netdata && perl -0pe 's@(<string>-D</string>)\n@\1<string>-i</string><string>127.0.0.1</string>\n@' -i /opt/homebrew/opt/netdata/homebrew.mxcl.netdata.plist && brew services restart netdata
+: "Netdata をインストール" && brew install netdata && perl -0pe 's@(<string>-D</string>)\n@\1<string>-i</string><string>localhost</string>\n@' -i /opt/homebrew/opt/netdata/homebrew.mxcl.netdata.plist && brew services restart netdata
 
 # k9s : kubectl の TUI https://github.com/derailed/k9s
 brew install derailed/k9s/k9s
