@@ -206,9 +206,8 @@ npm install --save-dev eslint prettier
 npm install --save-dev eslint-plugin-simple-import-sort
 
 # npm exec == npx
-npm exec create-react-app myapp --template typescript --use-npm
-npx create-react-app myapp --template typescript --use-npm
-npx create-react-app myapp --template redux-typescript --use-npm
+npx create-next-app@latest myapp --ts --use-npm --no-eslint --app --src-dir --import-alias "@/*" --tailwind
+npm install --save-dev --save-exact @biomejs/biome && npx @biomejs/biome init
 
 # npm run lint
 # {
