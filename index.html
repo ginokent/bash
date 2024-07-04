@@ -455,6 +455,7 @@ xcode-select --install
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 xcrun simctl list
+xcodebuild -downloadPlatform iOS
 
 : "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
