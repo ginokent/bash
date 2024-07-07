@@ -969,6 +969,8 @@ terraform fmt -recursive .
 find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform init"
 find . -name "*.tf" -exec grep -El "^terraform { *(#.*)?" {} \+ | sed "s|/[^/]*$||" | sort -u | xargs -t -P 10 -I {} bash -c "cd {} && terraform validate"
 
+terraform state pull > tmp.tfstate
+terraform plan -out=tfplan.out
 
 
 # ==================================================
