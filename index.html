@@ -464,6 +464,8 @@ xcodebuild -downloadPlatform iOS
 : "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && rvictl -s "${UUID:?}"
 : "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
 
+: "Mac の Memory, Swap 使用量の確認" && sysctl vm.swapusage
+
 # 侍エンジニア塾 (sejuku.net) への通信をすべて REJECT する cf. https://www.dragonflybsd.org/~aggelos/pf/ja/filter.html
 sudo pfctl -s rules               # 現在の設定を確認
 sudo tee -a /etc/pf.conf <<"EOF"  # REJECT する
