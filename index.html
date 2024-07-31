@@ -465,6 +465,7 @@ xcodebuild -downloadPlatform iOS
 : "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
 
 : "Mac の Memory, Swap 使用量の確認" && sysctl vm.swapusage
+: "Mac の Memory の非アクティブ領域を強制的に解放する" && sudo purge
 
 # 侍エンジニア塾 (sejuku.net) への通信をすべて REJECT する cf. https://www.dragonflybsd.org/~aggelos/pf/ja/filter.html
 sudo pfctl -s rules               # 現在の設定を確認
