@@ -278,6 +278,7 @@ GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 : "head branch に checkout して pull してから元のブランチに switch して pull" && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git pull -p --all
 : "head branch に checkout して pull してから元のブランチに switch して rebase" && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git rebase "${REMOTE_HEAD:-main}"
 : "現在のブランチをバックアップ" && git checkout -b "$(date +"backup-$(git rev-parse --abbrev-ref HEAD)-%Y-%m-%dT%H-%M-%S")"
+: "現在のブランチをバックアップ" && git checkout -b "$(date +"backup-$(git rev-parse --abbrev-ref HEAD)-%Y-%m-%dT%H-%M-%S")" && git push && git switch -
 : "ブランチ切り替え" && git checkout main
 : "ブランチ切り替え" && git switch main
 : "パターンにマッチするファイルを一覧表示" && git ls-files "*\.go"
