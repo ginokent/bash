@@ -58,7 +58,7 @@ curl -LR https://raw.githubusercontent.com/johanhaleby/kubetail/1.6.12/kubetail 
 curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/install.sh | VERSENV_SCRIPTS=kubectl,terraform,protoc,buf VERSENV_PATH=. bash
 
 
-: "jq ignore" && printf '{"message":"valid json"}\ninvalid json\n' | jq -Rr '. as $line | try fromjson catch $line'
+: "jq ignore" && printf '{"message":"valid json"}\ninvalid json\n' | jq -Rr '. as $line | try (fromjson | .) catch $line'
 
 # yes を聞かれるコマンドの実装
 if [[ " $* " =~ ".* -y .*"|".* --yes .*" ]]; then sh -c "yes y | ${cmd:?}"; fi
