@@ -29,8 +29,10 @@ vscodeenv install 1.86.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.vscode-pull-request-github@0.72.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension golang.go@0.41.4 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension gruntfuggly.todo-tree@0.0.226 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.terraform@2.30.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.hcl@0.5.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension hashicorp.terraform@2.32.3 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension ionutvmi.path-autocomplete@1.25.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension jinliming2.vscode-go-template@0.2.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mads-hartmann.bash-ide-vscode@1.39.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension mechatroner.rainbow-csv@3.12.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension modular-mojotools.vscode-mojo@0.4.0 --force
@@ -69,6 +71,6 @@ vscodeenv install 1.86.2
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension vsls-contrib.gistfs@0.6.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension wholroyd.jinja@0.0.8 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension xaver.clang-format@1.9.0 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yoavbls.pretty-ts-errors@0.5.2 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yoavbls.pretty-ts-errors@0.6.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension yzhang.markdown-all-in-one@3.5.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension zxh404.vscode-proto3@0.5.5 --force
