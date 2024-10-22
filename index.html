@@ -371,12 +371,12 @@ apt-get clean && rm -rf /var/lib/apt/lists/*
 # for installing tmux
 sudo yum install -y libevent-devel ncurses-devel && cd /usr/local/src && sudo wget https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz && sudo tar xfz tmux-3.2a.tar.gz && cd tmux-3.2a && ./configure && sudo make && sudo make install
 
-# lsof このファイルをどのプロセスが使っているか
-lsof /bin/bash
-# lsof -i このポートをどのプロセスが使っているか
-lsof -i tcp:8080
-# lsof -t プロセス ID だけ出す
-kill "$(lsof -t -i tcp:8080)"
+: "lsof このファイルをどのプロセスが使っているか" && lsof /bin/bash
+: "lsof -i このポートをどのプロセスが使っているか" && lsof -i tcp:8080
+: "lsof -t プロセス ID だけ出す" && kill "$(lsof -t -i tcp:8080)"
+
+: "宛先の UDP ポートが空いているか確認" && nc -z google.com -t 9443 -v
+: "宛先の TCP ポートが空いているか確認" && nc -z google.com -u 443 -v
 
 : "Visual Studio Code.app のプロセスをすべて KILL する" && pgrep -fl "Visual Studio Code.app" && pkill -KILL -f "Visual Studio Code.app"
 
