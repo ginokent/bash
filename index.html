@@ -115,7 +115,6 @@ cdiff() { (if [ -t 0 ]; then P=printf C="\033" R=$($P "$C\[31m");G=$($P "$C\[32m
 whilediff () {(while :; do after=$("$@"); cdiff <(echo "${before}") <(echo "${after}"); before="${after}"; sleep "${WHILEDIFF_DURATION:=1}"; done)} && export -f whilediff
 
 # myip checkip
-curl -fLRSs -w '\n' https://domains.google.com/checkip
 curl -fLRSs https://checkip.amazonaws.com
 
 #
@@ -330,6 +329,13 @@ gh label create --force "chore" --description "Changes to the build process or a
 # ==================================================
 # empty.proto とか timestamp.proto とかの定義ファイルが置いてある protoc の include/google/protobuf の場所
 ls -l ~/.cache/versenv/protoc/*/include/google/protobuf/*.proto
+
+
+
+# ==================================================
+# gRPC
+# ==================================================
+printf '\x00\x00\x00\x00\x00' | curl -v -s --http2 -H "Content-Type: application/grpc" -H "TE: trailers" --data-binary @- --output - "${GRPC_ENDPOINT:?}/grpc.health.v1.Health/Check" | hexdump -C
 
 
 
