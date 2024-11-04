@@ -387,8 +387,8 @@ sudo yum install -y libevent-devel ncurses-devel && cd /usr/local/src && sudo wg
 : "Visual Studio Code.app のプロセスをすべて KILL する" && pgrep -fl "Visual Studio Code.app" && pkill -KILL -f "Visual Studio Code.app"
 
 # tcpdump
-sudo tcpdump -G300 -W1 -vvv -l -n -p -s 65535 -w "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
-tshark -r "${HOSTNAME}_%Y%m%dT%H%M%S.pcap"
+sudo tcpdump -i eth0 -vvv -p -l -s 65535 -G300 -W1 -w "eth0_%Y%m%dT%H%M%S.pcap"
+tshark -r eth0.pcap
 
 # nm
 nm /usr/lib/libcrypto.*
@@ -466,10 +466,11 @@ xcodebuild -downloadPlatform iOS
 
 : "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
-: "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
-: "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
-: "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && rvictl -s "${UUID:?}"
-: "Mac 上の WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
+: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
+: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
+: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -s "${UUID:?}"
+: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
+: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo tcpdump -i rvi0 -vvv -p -l -s 65535 -G300 -W1 -w "rvi0_%Y%m%dT%H%M%S.pcap"
 
 : "Mac の Memory, Swap 使用量の確認" && sysctl vm.swapusage
 : "Mac の Memory の非アクティブ領域を強制的に解放する" && sudo purge
