@@ -550,6 +550,7 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 : "Mac で Windows のインストールメディアを作成 共通" && rsync -vha --exclude=sources/install.wim /Volumes/CCCOMA_X64FRE_JA-JP_DV9/* /Volumes/WIN11USB
 : "Mac で Windows のインストールメディアを作成 共通" && brew install wimlib
 : "Mac で Windows のインストールメディアを作成 共通" && wimlib-imagex split /Volumes/CCCOMA_X64FRE_JA-JP_DV9/sources/install.wim /Volumes/WIN11USB/sources/install.swm 3800
+: "Mac で Windows のインストールメディアを作成 共通" && diskutil unmountDisk /dev/disk2
 
 
 
