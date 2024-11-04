@@ -541,6 +541,19 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
 
 # ==================================================
+# Mac で Windows のインストールメディアを作成
+# ==================================================
+: "Mac で Windows のインストールメディアを作成 共通" && diskutil list
+: "Mac で Windows のインストールメディアを作成 UEFI" && diskutil eraseDisk MS-DOS "WIN11USB" MBR /dev/disk2
+: "Mac で Windows のインストールメディアを作成 BIOS" && diskutil eraseDisk MS-DOS "WIN11USB" GPT /dev/disk2
+: "Mac で Windows のインストールメディアを作成 共通" && hdiutil mount ~/Downloads/Win11_24H2_Japanese_x64.iso
+: "Mac で Windows のインストールメディアを作成 共通" && rsync -vha --exclude=sources/install.wim /Volumes/CCCOMA_X64FRE_JA-JP_DV9/* /Volumes/WIN11USB
+: "Mac で Windows のインストールメディアを作成 共通" && brew install wimlib
+: "Mac で Windows のインストールメディアを作成 共通" && wimlib-imagex split /Volumes/CCCOMA_X64FRE_JA-JP_DV9/sources/install.wim /Volumes/WIN11USB/sources/install.swm 3800
+
+
+
+# ==================================================
 # android Android
 # ==================================================
 # Windows : %LOCALAPPDATA%\JetBrains\Toolbox\apps\AndroidStudio
@@ -562,6 +575,7 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 export JAVA_HOME="$(find "$HOME/Library/Application Support/JetBrains/Toolbox/apps/AndroidStudio" -type d -name Home | sort -V | tail -n 1 || true)" && echo "${JAVA_HOME:-}"
 
 flutter run --dart-define="DEBUG=true"  ## Visual Studio Code では Cmd+P から  > Debug: Attach to Flutter on Device  で Flutter にアタッチする
+
 
 
 # ==================================================
