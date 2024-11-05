@@ -544,14 +544,15 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 # Mac で Windows のインストールメディアを作成
 # ==================================================
 : "Mac で Windows のインストールメディアを作成 共通" && diskutil list
-: "Mac で Windows のインストールメディアを作成 UEFI" && diskutil eraseDisk MS-DOS "WIN11USB" MBR /dev/disk2
-: "Mac で Windows のインストールメディアを作成 BIOS" && diskutil eraseDisk MS-DOS "WIN11USB" GPT /dev/disk2
+: "Mac で Windows のインストールメディアを作成 UEFI" && diskutil eraseDisk MS-DOS "WIN11USB" MBR /dev/diskN
+: "Mac で Windows のインストールメディアを作成 BIOS" && diskutil eraseDisk MS-DOS "WIN11USB" GPT /dev/diskN
 : "Mac で Windows のインストールメディアを作成 共通" && #hdiutil mount ~/Downloads/Win11_24H2_Japanese_x64.iso
 : "Mac で Windows のインストールメディアを作成 共通" && #rsync -vha --exclude=sources/install.wim /Volumes/CCCOMA_X64FRE_JA-JP_DV9/* /Volumes/WIN11USB
 : "Mac で Windows のインストールメディアを作成 共通" && #brew install wimlib
 : "Mac で Windows のインストールメディアを作成 共通" && #wimlib-imagex split /Volumes/CCCOMA_X64FRE_JA-JP_DV9/sources/install.wim /Volumes/WIN11USB/sources/install.swm 3800
-: "Mac で Windows のインストールメディアを作成 共通" && diskutil unmountDisk /dev/disk2
-: "Mac で Windows のインストールメディアを作成 共通" && sudo dd if=~/shared/Win10_22H2_Japanese_x64v1.iso of=/dev/disk2 bs=4096 status=progress
+: "Mac で Windows のインストールメディアを作成 共通" && diskutil unmountDisk /dev/diskN
+: "Mac で Windows のインストールメディアを作成 共通" && sudo dd if=~/shared/Win10_22H2_Japanese_x64v1.iso of=/dev/diskN bs=4096 status=progress
+: "Mac で Windows のインストールメディアを作成 共通" && diskutil eject /dev/diskN
 
 
 
