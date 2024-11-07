@@ -461,12 +461,14 @@ sudo lsblk && sudo apt update -qqy && sudo apt install -qqy cloud-guest-utils &&
 
 
 # ==================================================
-# Mac
+# Mac / macOS
 # ==================================================
 
 # xcode XCode
 xcode-select --install
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
+: "Rosetta 2 をインストール" && softwareupdate --install-rosetta --agree-to-license
 
 xcrun simctl list
 xcodebuild -downloadPlatform iOS
