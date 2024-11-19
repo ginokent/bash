@@ -482,6 +482,7 @@ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 xcrun simctl list
 xcodebuild -downloadPlatform iOS
 
+: "Mac の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
 : "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
 : "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
