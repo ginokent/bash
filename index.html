@@ -214,9 +214,10 @@ npm install --save-dev eslint prettier
 npm install --save-dev eslint-plugin-simple-import-sort
 
 # npm exec == npx
-npx create-next-app@latest myapp --ts --use-npm --no-eslint --app --src-dir --import-alias "@/*" --tailwind
+npx create-next-app@latest MyApp --ts --use-npm --no-eslint --app --src-dir --import-alias "@/*" --tailwind
 npm install --save-dev --save-exact @biomejs/biome && npx @biomejs/biome init
-npm install @capacitor/core @capacitor/cli && npx cap init "My App" com.example.myapp --web-dir=out && npm install @capacitor/ios @capacitor/android && npx cap add android && npx cap add ios
+npm install @capacitor/core @capacitor/cli && npx cap init "My App" com.example.MyApp --web-dir=out && npm install @capacitor/ios @capacitor/android && npx cap add android && npx cap add ios
+npm create vite@latest MyApp -- --template react-ts
 
 # npm run lint
 # {
