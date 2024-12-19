@@ -137,6 +137,7 @@ certChains () { openssl s_client -servername "${1:?}" -connect "${1:?}":443 < /d
 zbarimg qrcode.png
 
 # ffmpeg
+ffmpeg -i input.mov -r 10 output.gif
 ffmpeg -ss HH:MM:SS -to HH:MM:SS -i input.mp4 -c copy output.mp4
 ffmpeg -ss seconds_from_start -t duration -i input.mp4 -c copy output.mp4
 
