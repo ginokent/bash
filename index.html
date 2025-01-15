@@ -312,6 +312,7 @@ git remote show origin | grep -E '[[:blank:]]*HEAD[[:blank:]]branch:[[:blank:]]*
 git pull --all --prune
 git pull --all --prune --rebase
 git commit -m "docs: Update README.md"
+: "pre-push を迂回" && (mv "$(git rev-parse --show-toplevel)/.git/hooks/pre-push"{,.bak}; git push -f; mv git "$(rev-parse --show-toplevel)/.git/hooks/pre-push"{.bak,})
 
 
 
