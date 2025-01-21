@@ -616,11 +616,11 @@ MYSQL_PWD="${MYSQL_PWD:?}" mysql --user="${MYSQL_USER:?}" --host="${MYSQL_HOST:?
 while sleep 1; do MYSQL_PWD="${MYSQL_PWD:?}" mysql -u "${MYSQL_USER:?}" -h "${MYSQL_HOST:?}" -e "SELECT '$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+0900) alive'" -BN ; done
 
 # mysqldump : 指定した DATABASE を backup する。 Unknown table 'COLUMN_STATISTICS' in information_schema (1109) が出たらオプション --skip-column-statistics を付ける
-mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --databases "${MYSQL_DB:?}" "${MYSQL_DB_2:?}" | gzip - >"${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.gz"
-zcat "${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" "${MYSQL_DB:?}"
+mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --databases "${MYSQL_DB:?}" "${MYSQL_DB_2:?}" | gzip - >"${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.sql.gz"
+zcat "${MYSQL_HOST:?}_${MYSQL_DB:?}.dump.sql.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" "${MYSQL_DB:?}"
 # mysqldump : 全 DATABASE を backup する。 Unknown table 'COLUMN_STATISTICS' in information_schema (1109) が出たらオプション --skip-column-statistics を付ける
-mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --all-databases | gzip - >"${MYSQL_HOST:?}_all.dump.gz"
-zcat "${MYSQL_HOST:?}_all.dump.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}"
+mysqldump --routines --hex-blob --single-transaction --set-gtid-purged=OFF --default-character-set=utf8mb4 --host="${MYSQL_HOST:?}" --port="${MYSQL_PORT:?}" --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}" --all-databases | gzip - >"${MYSQL_HOST:?}_all.dump.sql.gz"
+zcat "${MYSQL_HOST:?}_all.dump.sql.gz" | mysql --user="${MYSQL_USER:?}" --password="${MYSQL_PWD:?}"
 
 # mysql ユーザを追加する
 mysql -e "GRANT ALL PRIVILEGES ON '${MYSQL_DB:?}'.'${TABLE:?}' TO '${MYSQL_USER2:?}'@'${MYSQL_USER2_HOST:?}' IDENTIFIED BY '${MYSQL_PWD:?}' WITH GRANT OPTION;"
