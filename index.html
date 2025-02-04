@@ -480,8 +480,12 @@ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 : "Rosetta 2 をインストール" && softwareupdate --install-rosetta --agree-to-license
 
-xcrun simctl list
-xcodebuild -downloadPlatform iOS
+: "iOS 等の runtime や Simulator の device などの一覧を表示する" && xcrun simctl list
+: "iOS Simulator デバイスの一覧を表示する" && xcrun simctl list devices
+: "iOS Simulator ランタイムの一覧を表示する" && xcrun simctl list runtimes
+: "iOS Simulator の runtime をダウンロード" && xcodebuild -downloadPlatform iOS
+: "iOS や watchOS などの全てのプラットフォームの runtime をダウンロード" && xcodebuild -downloadAllPlatforms
+: "iPhone 16 Pro で iOS 18.1 の Simulator を作成" && xcrun simctl create iPhone16Pro com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro com.apple.CoreSimulator.SimRuntime.iOS-18-1
 
 : "Mac の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
 : "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
@@ -497,6 +501,8 @@ xcodebuild -downloadPlatform iOS
 
 : "Mac の Memory, Swap 使用量の確認" && sysctl vm.swapusage
 : "Mac の Memory の非アクティブ領域を強制的に解放する" && sudo purge
+
+: "Mac の vmstat" && vm_stat 1
 
 # 侍エンジニア塾 (sejuku.net) への通信をすべて REJECT する cf. https://www.dragonflybsd.org/~aggelos/pf/ja/filter.html
 sudo pfctl -s rules               # 現在の設定を確認
