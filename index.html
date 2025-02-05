@@ -264,8 +264,11 @@ export GOPRIVATE=github.com/ginokent
 # Rust rust rs
 # ==================================================
 curl -LRSs https://raw.githubusercontent.com/github/gitignore/refs/heads/main/Rust.gitignore >> .gitignore
-rustup target add aarch64-apple-ios-sim
-
+: "Rust aarch64 向け iOS および Simulator ターゲットを追加" && rustup target add aarch64-apple-ios aarch64-apple-ios-sim
+: "Rust x86_64 向け iOS Simulator ターゲットを追加" && rustup target add x86_64-apple-ios
+: "Rust aarch64 向け Android ターゲットを追加" && rustup target add aarch64-linux-android
+: "Rust cargo ndk サブコマンドをインストール" && cargo install cargo-ndk
+: "Rust arm64 向け Android ビルド" && cargo ndk -t arm64-v8a -o android_example/app/src/main/jniLibs build
 
 
 # ==================================================
