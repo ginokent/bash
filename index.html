@@ -491,6 +491,8 @@ sudo xcode-select --switch /Applications/Xcode.app
 : "iOS や watchOS などの全てのプラットフォームの runtime をダウンロード" && xcodebuild -downloadAllPlatforms
 : "iPhone 16 Pro で iOS 18.1 の Simulator を作成" && xcrun simctl create iPhone16Pro com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro com.apple.CoreSimulator.SimRuntime.iOS-18-1
 
+: "ライブラリがどの CPU arch 向きにビルドされているか確認" && lipo -info libfoobar.dylib
+
 : "Mac の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
 : "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
