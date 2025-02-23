@@ -484,11 +484,14 @@ sudo xcode-select --switch /Applications/Xcode.app
 
 : "Rosetta 2 をインストール" && softwareupdate --install-rosetta --agree-to-license
 
-: "iOS 等の runtime や Simulator の device などの一覧を表示する" && xcrun simctl list
-: "iOS Simulator デバイスの一覧を表示する" && xcrun simctl list devices
-: "iOS Simulator ランタイムの一覧を表示する" && xcrun simctl list runtimes
-: "iOS Simulator の runtime をダウンロード" && xcodebuild -downloadPlatform iOS
-: "iOS や watchOS などの全てのプラットフォームの runtime をダウンロード" && xcodebuild -downloadAllPlatforms
+: "iPhone iOS 等の runtime や Simulator の device などの一覧を表示する" && xcrun simctl list
+: "iPhone iOS Simulator デバイスの一覧を表示する" && xcrun simctl list devices
+: "iPhone iOS Simulator デバイスのタイプ一覧を表示する" && xcrun simctl list devicetypes
+: "iPhone iOS Simulator ランタイムの一覧を表示する" && xcrun simctl list runtimes
+: "iPhone iOS watchOS などの全てのプラットフォームの runtime をダウンロード" && xcodebuild -downloadAllPlatforms
+: "iPhone iOS Simulator の runtime をダウンロード" && xcodebuild -downloadPlatform iOS
+: "iPhone iOS Simulator の runtime をバージョンを指定してダウンロード" && xcodebuild -downloadPlatform iOS -buildVersion 18.1
+: "iPhone iOS Simulator SDK の場所" && ls -l /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs
 : "iPhone 16 Pro で iOS 18.1 の Simulator を作成" && xcrun simctl create iPhone16Pro com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro com.apple.CoreSimulator.SimRuntime.iOS-18-1
 
 : "ライブラリがどの CPU arch 向きにビルドされているか確認" && lipo -info libfoobar.dylib
