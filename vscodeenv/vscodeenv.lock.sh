@@ -3,14 +3,14 @@
 set -eu
 
 # Visual Studio Code
-vscodeenv install 1.95.3
+vscodeenv install 1.97.2
 
 # Extensions
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension aws-scripting-guy.cform@0.0.24 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bdavs.expect@1.0.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bierner.markdown-mermaid@1.21.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension bufbuild.vscode-buf@0.5.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension corschenzi.mermaid-graphical-editor@0.4.3 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension corschenzi.mermaid-graphical-editor@0.4.5 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension dart-code.dart-code@3.80.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension dart-code.flutter@3.80.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension davidanson.vscode-markdownlint@0.53.0 --force
@@ -22,9 +22,8 @@ vscodeenv install 1.95.3
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension fastly.vscode-fastly-vcl@2.0.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension figma.figma-vscode-extension@0.3.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension foxundermoon.shell-format@7.2.5 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension geequlim.godot-tools@1.3.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.copilot-chat@0.7.1 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.copilot@1.245.0 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.copilot-chat@0.24.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.copilot@1.271.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.remotehub@0.62.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.vscode-github-actions@0.26.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension github.vscode-pull-request-github@0.72.0 --force
@@ -56,8 +55,10 @@ vscodeenv install 1.95.3
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-xml@0.26.1 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension redhat.vscode-yaml@1.14.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension rust-lang.rust-analyzer@0.3.2146 --force
-'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension sswg.swift-lang@1.11.4 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension saoudrizwan.claude-dev@3.1.11 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension streetsidesoftware.code-spell-checker@3.0.1 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension sweetpad.sweetpad@0.1.53 --force
+'/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension swiftlang.swift-vscode@2.0.2 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension tekumara.typos-vscode@0.1.32 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension timonwong.shellcheck@0.35.0 --force
 '/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code' --install-extension twxs.cmake@0.0.17 --force
