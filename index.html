@@ -536,7 +536,7 @@ sudo bash -cx "rm -v -rf /Library/Frameworks/Mono.framework; pkgutil --forget co
 #
 ln -sf "$(find /usr/local/Cellar/mono/[0-9].[0-9]* -maxdepth 0 | sort -V | tail -n 1)" /usr/local/Cellar/mono/latest
 
-: "Mac で ip を確認" && ifconfig | grep inet | grep -Ev " 127\.| ::1| fe80::"
+: "Mac で ip を確認" && ifconfig | grep inet | grep -Ev ' 127\.| ::1| fe80::' | cut -d' ' -f2
 
 : "Netdata をインストール" && brew install netdata && perl -0pe 's@(<string>-D</string>)\n@\1<string>-i</string><string>localhost</string>\n@' -i /opt/homebrew/opt/netdata/homebrew.mxcl.netdata.plist && brew services restart netdata
 
@@ -567,10 +567,10 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
 : "ag .git 配下等も検索対象にする" && ag --hidden "my_regex_pattern"
 
-: "mitmproxy の Web UI" && mitmweb --web-host 127.0.0.1 --web-port 43210 --web-open-browser --listen-host 0.0.0.0 --listen-port 4321 --mode reverse:http://0.0.0.0:8000
-: "mitmproxy で macOS の通信 (別途 システム設定 > 一般 > ログイン項目と拡張機能 > ネットワーク拡張機能 から許可が必要)" && open x-apple.systempreferences:com.apple.LoginItems-Settings.extension && open 'https://mitm.it/#macOS' && mitmweb --server --mode local
-: "mitmproxy 用のルート証明書取得" && curl -k https://mitm.it/cert/pem -o ~/Downloads/mitmproxy-ca-cert.pem
-: "mitmproxy 用のルート証明書を Keychain にインストール" && sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain ~/Downloads/mitmproxy-ca-cert.pem
+: "mitmproxy iOS 盗聴用 証明書構成 http://mitm.it/#iOS を開く必要あり" && ifconfig | grep inet | grep -Ev ' 127\.| ::1| fe80::' | cut -d' ' -f2 && mitmweb --web-host 127.0.0.1 --web-port 8081 --web-open-browser --listen-host 0.0.0.0 --listen-port 8080 --mode regular
+: "mitmproxy macOS の通信を盗聴 (別途 システム設定 > 一般 > ログイン項目と拡張機能 > ネットワーク拡張機能 から許可が必要)" && open x-apple.systempreferences:com.apple.LoginItems-Settings.extension && open 'https://mitm.it/#macOS' && mitmweb --server --web-host 127.0.0.1 --listen-host 127.0.0.1 --mode local
+: "mitmproxy macOS のルート証明書を取得" && curl -k https://mitm.it/cert/pem -o ~/Downloads/mitmproxy-ca-cert.pem
+: "mitmproxy macOS の Keychain にルート証明書をインストール" && sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain ~/Downloads/mitmproxy-ca-cert.pem
 
 : "MenuBarMonitor.app のログを tail -f" && log stream --level info --style compact  --predicate 'process == "MenuBarMonitor"'
 
