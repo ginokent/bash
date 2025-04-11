@@ -568,6 +568,9 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 : "ag .git 配下等も検索対象にする" && ag --hidden "my_regex_pattern"
 
 : "mitmproxy の Web UI" && mitmweb --web-host 127.0.0.1 --web-port 43210 --web-open-browser --listen-host 0.0.0.0 --listen-port 4321 --mode reverse:http://0.0.0.0:8000
+: "mitmproxy で macOS の通信 (別途 システム設定 > 一般 > ログイン項目と拡張機能 > ネットワーク拡張機能 から許可が必要)" && open x-apple.systempreferences:com.apple.LoginItems-Settings.extension && open 'https://mitm.it/#macOS' && mitmweb --server --mode local
+: "mitmproxy 用のルート証明書取得" && curl -k https://mitm.it/cert/pem -o ~/Downloads/mitmproxy-ca-cert.pem
+: "mitmproxy 用のルート証明書を Keychain にインストール" && sudo security add-trusted-cert -d -p ssl -p basic -k /Library/Keychains/System.keychain ~/Downloads/mitmproxy-ca-cert.pem
 
 : "MenuBarMonitor.app のログを tail -f" && log stream --level info --style compact  --predicate 'process == "MenuBarMonitor"'
 
