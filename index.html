@@ -574,6 +574,8 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs ~/iCloud
 
 : "MenuBarMonitor.app のログを tail -f" && log stream --level info --style compact  --predicate 'process == "MenuBarMonitor"'
 
+: "AltTab.app を再起動" && pkill -f AltTab.app ; open -a /Applications/AltTab.app
+
 
 
 # ==================================================
