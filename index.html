@@ -293,8 +293,8 @@ GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 : "remote head branch を取得" && git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }'
 : "head branch に切り替え" && git checkout "$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }')"
 : "head branch を rebase" && git rebase "$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }')"
-: "head branch に checkout して pull してから元のブランチに switch して pull" && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git pull -p --all
-: "head branch に checkout して pull してから元のブランチに switch して rebase" && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git rebase "${REMOTE_HEAD:-main}"
+: "head branch に checkout して pull してから元のブランチに switch して pull" && git stash && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git pull -p --all
+: "head branch に checkout して pull してから元のブランチに switch して rebase" && git stash && REMOTE_HEAD=$(git remote show origin | awk -F': ' '/HEAD branch: / { print $2 }') && git checkout "${REMOTE_HEAD:-main}" && git pull -p --all && git switch - && git rebase "${REMOTE_HEAD:-main}"
 : "現在のブランチをバックアップ" && git checkout -b "$(date +"backup-$(git rev-parse --abbrev-ref HEAD)-%Y-%m-%dT%H-%M-%S")"
 : "現在のブランチをバックアップ" && git checkout -b "$(date +"backup-$(git rev-parse --abbrev-ref HEAD)-%Y-%m-%dT%H-%M-%S")" && git push && git switch -
 : "ブランチ切り替え" && git checkout main
