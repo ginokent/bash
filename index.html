@@ -315,6 +315,7 @@ git pull --all --prune --autostash
 git pull --all --prune --rebase --autostash
 git commit -m "docs: Update README.md"
 : "pre-push を迂回" && (mv "$(git rev-parse --show-toplevel)/.git/hooks/pre-push"{,.bak}; git push -f; mv "$(git rev-parse --show-toplevel)/.git/hooks/pre-push"{.bak,})
+: "git archive リポジトリを zip" && git archive HEAD --output="$(basename -- "$(git rev-parse --show-toplevel)")_$(git log -1 --format='%H').zip"
 
 
 
