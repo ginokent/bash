@@ -399,6 +399,7 @@ apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # for installing tmux
 sudo yum install -y libevent-devel ncurses-devel && cd /usr/local/src && sudo wget https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz && sudo tar xfz tmux-3.2a.tar.gz && cd tmux-3.2a && ./configure && sudo make && sudo make install
+tmux attach -t "$(tmux tmux list-sessions | head -n 1 | cut -d: -f1)"
 
 : "lsof このファイルをどのプロセスが使っているか" && lsof /bin/bash
 : "lsof -i このポートをどのプロセスが使っているか" && lsof -i tcp:8080
@@ -503,6 +504,10 @@ sudo xcode-select --switch /Applications/Xcode.app
 
 : "Mac のスリープを無効化" && sudo pmset -a disablesleep 1; pmset -g
 : "Mac のスリープを有効化" && sudo pmset -a disablesleep 0; pmset -g
+
+: "Mac のデフォルトルート情報を取得" && route -n get 0.0.0.0
+: "Mac のデフォルトゲートウェイの変更" && sudo route change -net 0.0.0.0/0 192.168.1.1
+: "Mac の静的ルート設定を削除" && sudo route -n flush
 
 : "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
 : "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
