@@ -499,26 +499,26 @@ sudo xcode-select --switch /Applications/Xcode.app
 
 : "ライブラリがどの CPU arch 向きにビルドされているか確認" && lipo -info libfoobar.dylib
 
-: "Mac の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
-: "Mac の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
+: "macOS の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
+: "macOS の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
-: "Mac のスリープを無効化" && sudo pmset -a disablesleep 1; pmset -g
-: "Mac のスリープを有効化" && sudo pmset -a disablesleep 0; pmset -g
+: "macOS のスリープを無効化" && sudo pmset -a disablesleep 1; pmset -g
+: "macOS のスリープを有効化" && sudo pmset -a disablesleep 0; pmset -g
 
-: "Mac のデフォルトルート情報を取得" && route -n get 0.0.0.0
-: "Mac のデフォルトゲートウェイの変更" && sudo route change -net 0.0.0.0/0 192.168.1.1
-: "Mac の静的ルート設定を削除" && sudo route -n flush
+: "macOS のデフォルトゲートウェイ default gateway 情報を取得" && route -n get 0.0.0.0
+: "macOS のデフォルトゲートウェイ default gateway の変更" && sudo route change -net 0.0.0.0/0 192.168.1.1
+: "macOS の静的ルート設定を削除" && sudo route -n flush
 
-: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
-: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
-: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -s "${UUID:?}"
-: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
-: "Mac の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo tcpdump -i rvi0 -vvv -p -l -s 65535 -G300 -W1 -w "rvi0_%Y%m%dT%H%M%S.pcap"
+: "macOS の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.rpmuxd.plist
+: "macOS の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo launchctl list com.apple.rpmux
+: "macOS の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -s "${UUID:?}"
+: "macOS の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && rvictl -l
+: "macOS の tcpdump, WireShark で iPhone のパケットキャプチャするための準備" && sudo tcpdump -i rvi0 -vvv -p -l -s 65535 -G300 -W1 -w "rvi0_%Y%m%dT%H%M%S.pcap"
 
-: "Mac の Memory, Swap 使用量の確認" && sysctl vm.swapusage
-: "Mac の Memory の非アクティブ領域を強制的に解放する" && sudo purge
+: "macOS の Memory, Swap 使用量の確認" && sysctl vm.swapusage
+: "macOS の Memory の非アクティブ領域を強制的に解放する" && sudo purge
 
-: "Mac の vmstat" && vm_stat 1
+: "macOS の vmstat" && vm_stat 1
 
 # 侍エンジニア塾 (sejuku.net) への通信をすべて REJECT する cf. https://www.dragonflybsd.org/~aggelos/pf/ja/filter.html
 sudo pfctl -s rules               # 現在の設定を確認
@@ -543,22 +543,18 @@ sudo bash -cx "rm -v -rf /Library/Frameworks/Mono.framework; pkgutil --forget co
 #
 ln -sf "$(find /usr/local/Cellar/mono/[0-9].[0-9]* -maxdepth 0 | sort -V | tail -n 1)" /usr/local/Cellar/mono/latest
 
-: "Mac で ip を確認" && ifconfig | grep inet | grep -Ev ' 127\.| ::1| fe80::' | cut -d' ' -f2
+: "macOS で ip を確認" && ifconfig | grep inet | grep -Ev ' 127\.| ::1| fe80::' | cut -d' ' -f2
 
 : "Netdata をインストール" && brew install netdata && perl -0pe 's@(<string>-D</string>)\n@\1<string>-i</string><string>localhost</string>\n@' -i /opt/homebrew/opt/netdata/homebrew.mxcl.netdata.plist && brew services restart netdata
 
 # k9s : kubectl の TUI https://github.com/derailed/k9s
 brew install derailed/k9s/k9s
 
-# mac Mac / brew
-brew install bash bash-completion coreutils make
-
 # sslscan https://github.com/rbsec/sslscan
-brew install sslscan
 sslscan --no-fallback --no-renegotiation --no-compression --no-heartbleed --no-ciphersuites --no-groups example.com
 
 # mac Mac で DNS キャッシュクリア
-sudo killall -HUP mDNSResponder
+: "macOS で DNS キャッシュクリア" && sudo killall -HUP mDNSResponder
 
 # mac Mac のホスト名変更
 scutil --get ComputerName ; scutil --get LocalHostName ; scutil --get HostName
@@ -592,18 +588,18 @@ swift package init --type executable
 
 
 # ==================================================
-# Mac で Windows のインストールメディアを作成
+# macOS で Windows のインストールメディアを作成
 # ==================================================
-: "Mac で Windows のインストールメディアを作成 共通" && diskutil list
-: "Mac で Windows のインストールメディアを作成 UEFI" && diskutil eraseDisk MS-DOS "WIN11USB" MBR /dev/diskN
-: "Mac で Windows のインストールメディアを作成 BIOS" && diskutil eraseDisk MS-DOS "WIN11USB" GPT /dev/diskN
-: "Mac で Windows のインストールメディアを作成 共通" && #hdiutil mount ~/Downloads/Win11_24H2_Japanese_x64.iso
-: "Mac で Windows のインストールメディアを作成 共通" && #rsync -vha --exclude=sources/install.wim /Volumes/CCCOMA_X64FRE_JA-JP_DV9/* /Volumes/WIN11USB
-: "Mac で Windows のインストールメディアを作成 共通" && #brew install wimlib
-: "Mac で Windows のインストールメディアを作成 共通" && #wimlib-imagex split /Volumes/CCCOMA_X64FRE_JA-JP_DV9/sources/install.wim /Volumes/WIN11USB/sources/install.swm 3800
-: "Mac で Windows のインストールメディアを作成 共通" && diskutil unmountDisk /dev/diskN
-: "Mac で Windows のインストールメディアを作成 共通" && sudo dd if=~/shared/Win10_22H2_Japanese_x64v1.iso of=/dev/diskN bs=4096 status=progress
-: "Mac で Windows のインストールメディアを作成 共通" && diskutil eject /dev/diskN
+: "macOS で Windows のインストールメディアを作成 共通" && diskutil list
+: "macOS で Windows のインストールメディアを作成 UEFI" && diskutil eraseDisk MS-DOS "WIN11USB" MBR /dev/diskN
+: "macOS で Windows のインストールメディアを作成 BIOS" && diskutil eraseDisk MS-DOS "WIN11USB" GPT /dev/diskN
+: "macOS で Windows のインストールメディアを作成 共通" && #hdiutil mount ~/Downloads/Win11_24H2_Japanese_x64.iso
+: "macOS で Windows のインストールメディアを作成 共通" && #rsync -vha --exclude=sources/install.wim /Volumes/CCCOMA_X64FRE_JA-JP_DV9/* /Volumes/WIN11USB
+: "macOS で Windows のインストールメディアを作成 共通" && #brew install wimlib
+: "macOS で Windows のインストールメディアを作成 共通" && #wimlib-imagex split /Volumes/CCCOMA_X64FRE_JA-JP_DV9/sources/install.wim /Volumes/WIN11USB/sources/install.swm 3800
+: "macOS で Windows のインストールメディアを作成 共通" && diskutil unmountDisk /dev/diskN
+: "macOS で Windows のインストールメディアを作成 共通" && sudo dd if=~/shared/Win10_22H2_Japanese_x64v1.iso of=/dev/diskN bs=4096 status=progress
+: "macOS で Windows のインストールメディアを作成 共通" && diskutil eject /dev/diskN
 
 
 
