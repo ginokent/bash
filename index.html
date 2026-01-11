@@ -502,6 +502,9 @@ sudo xcode-select --switch /Applications/Xcode.app
 : "macOS の CPU の core 数や搭載 memory 量などを確認する" && system_profiler SPHardwareDataType
 : "macOS の仮想オーディオデバイスの削除" && ls -l /Library/Audio/Plug-Ins/HAL ~/Library/Audio/Plug-Ins/HAL
 
+: "macOS Wi-Fi の MTU を取得" && networksetup -getMTU Wi-Fi
+: "macOS Wi-Fi の MTU を設定" && sudo networksetup -setMTU Wi-Fi 1400
+
 : "macOS のスリープを無効化" && sudo pmset -a disablesleep 1; pmset -g
 : "macOS のスリープを有効化" && sudo pmset -a disablesleep 0; pmset -g
 
