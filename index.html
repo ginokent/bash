@@ -301,7 +301,7 @@ GIT_EMAIL=29125616+ginokent@users.noreply.github.com
 : "ブランチ切り替え" && git checkout main
 : "ブランチ切り替え" && git switch main
 : "パターンにマッチするファイルを一覧表示" && git ls-files "*\.go"
-: "空コミット" && git commit --allow-empty -m "initial commit"
+: "空コミット" && git commit --allow-empty -m "chore: initial commit"
 : "タグを一覧表示" && git tag --list | sort -V
 : "タグ作成＆リモートにプッシュ" && git tag -a 0.0.1 && git push origin 0.0.1
 : "タグ削除＆リモートにプッシュ" && git tag -d 0.0.1 && git push origin :0.0.1
