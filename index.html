@@ -60,6 +60,8 @@ curl --tlsv1.2 -fLRSs https://raw.githubusercontent.com/versenv/versenv/HEAD/ins
 
 : "jq ignore" && printf '{"message":"valid json"}\ninvalid json\n' | jq -Rr '. as $line | try (fromjson | .) catch $line'
 
+: "1 秒間隔で JST の date" && sh -c 'i=0; while sleep 1; do i=$((i+1)); TZ=UTC-9 date +"%Y-%m-%dT%H:%M:%S+09:00 $i"; done'
+
 # yes を聞かれるコマンドの実装
 if [[ " $* " =~ ".* -y .*"|".* --yes .*" ]]; then sh -c "yes y | ${cmd:?}"; fi
 
