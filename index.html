@@ -248,6 +248,8 @@ python -m virtualenv "${VIRTUALENV_DIR:?}"
 "${VIRTUALENV_DIR:?}/bin/python" -m pip install --no-cache-dir --upgrade opencv-python dlib numpy
 "${VIRTUALENV_DIR:?}/bin/python" -m pip freeze | tee requirements.txt
 
+: "カレントディレクトリ配下を Web サーバーとして公開する" && python -m http.server 8000 --bind 127.0.0.1
+
 
 
 # ==================================================
