@@ -426,8 +426,8 @@ nm /usr/lib/libcrypto.*
 # apt まとめてインストールするためのコマンドを生成する。
 curl -LRsS https://ginokent.github.io/bash/ | grep "^apt-get update && apt-get install -y " | awk "\$0=\$7" | tr "\n" " " | sed "s/^/apt-get update \&\& apt-get install -y /; s/ $//"
 
-# du : ルートディレクトリより 1 階層掘って使用量を出力する。
-du -h -d 1 --exclude=/proc /
+: "ルートディレクトリ配下を 1 階層掘って使用量を出力" && du -h -d 1 --exclude=/proc /
+: "ホームディレクトリ配下を 1 階層掘って使用量を出力" && du -h -d 1 ~/
 
 # ps STAT 列に書いてあることの意味
 man ps
